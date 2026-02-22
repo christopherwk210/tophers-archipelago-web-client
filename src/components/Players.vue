@@ -26,6 +26,11 @@ import { state } from '@/state';
 </template>
 
 <style scoped>
+.players {
+  overflow: auto;
+  padding-right: 1em;
+}
+
 fieldset {
   margin-bottom: 1em;
 }
