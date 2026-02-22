@@ -50,7 +50,7 @@ function isUserAtBottom(container: HTMLElement) {
     <div style="opacity: 0.75; font-style: italic;" v-if="sending">Sending: {{ nextSay }}</div>
   </div>
   <div class="input">
-    <input ref="sayInput" :disabled="sending" @keydown.enter="sendMessage" placeholder="Type here..." v-model="say" id="say" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
+    <input ref="sayInput" @keydown.enter="sendMessage" placeholder="Type here..." v-model="say" id="say" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
   </div>
 </template>
 
