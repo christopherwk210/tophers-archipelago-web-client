@@ -135,7 +135,7 @@ async function cancel() {
         <div class="status-bar">
           <p class="status-bar-field">Powered by <a href="https://archipelago.gg/">Archipelago</a></p>
           <p class="status-bar-field">Made by <a href="https://topheranselmo.com/">topher</a></p>
-          <p class="status-bar-field"><a href="#">Source code</a></p>
+          <p class="status-bar-field"><a href="https://github.com/christopherwk210/tophers-archipelago-web-client">Source code</a></p>
         </div>
       </div>
     </template>
