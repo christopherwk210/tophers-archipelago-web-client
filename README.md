@@ -5,11 +5,13 @@ My goal with this project is to provide a simple way to chat with other players 
 Features:
 
 - Mobile support
-- Messages are parsed & color coded
+- Messages are parsed & color coded nicely
 - Saves previously entered information for future visits
-- Can automatically resume connections
-- Supports basic markdown bolding and italics
-- Automatically converts URLs to clickable links
+- Can automatically resume connections after refreshing
+- Supports basic markdown bolding and italics for user chat messages
+- Automatically converts URLs in user chat messages to clickable links
+- Well formatted hints table
+- Users table that shows current player status (connected, completed, etc.)
 
 Libraries:
 
