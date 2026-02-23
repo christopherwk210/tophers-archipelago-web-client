@@ -10,8 +10,16 @@ const messagesElement = useTemplateRef('messagesElement');
 const sending = ref(false);
 const nextSay = ref('');
 
+const lastSent = ref('');
+
 async function sendMessage() {
   if (sending.value || say.value.trim().length === 0) return;
+
+  if (say.value === '/clear') {
+    messages.value = [];
+    say.value = '';
+    return;
+  }
 
   nextSay.value = say.value;
   say.value = '';
@@ -19,6 +27,8 @@ async function sendMessage() {
   sending.value = true;
   await client.messages.say(nextSay.value);
   sending.value = false;
+
+  lastSent.value = nextSay.value;
 
   if (sayInput.value) {
     sayInput.value.focus();
@@ -46,6 +56,17 @@ function isUserAtBottom(container: HTMLElement) {
   const threshold = 50; 
   return container.scrollHeight - container.scrollTop <= container.offsetHeight + threshold;
 }
+
+async function recall(event: Event) {
+  if (say.value.trim().length === 0 && lastSent.value.trim().length > 0) {
+    say.value = lastSent.value;
+    await new Promise(resolve => setTimeout(resolve, 10)); // Wait for DOM update
+    const target = event.target as HTMLInputElement;
+    if (target) {
+      target.selectionStart = target.selectionEnd = target.value.length;
+    }
+  }
+}
 </script>
 
 <template>
@@ -54,7 +75,18 @@ function isUserAtBottom(container: HTMLElement) {
     <div style="opacity: 0.75; font-style: italic;" v-if="sending">Sending: {{ nextSay }}</div>
   </div>
   <div class="input">
-    <input ref="sayInput" @keydown.enter="sendMessage" placeholder="Type here..." v-model="say" id="say" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
+    <input
+      ref="sayInput"
+      @keydown.enter="sendMessage"
+      @keydown.arrow-up="recall"
+      placeholder="Type here..."
+      v-model="say"
+      id="say"
+      type="text"
+      spellcheck="false"
+      autocomplete="off"
+      autocapitalize="none"
+    />
   </div>
 </template>
 

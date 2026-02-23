@@ -7,6 +7,7 @@ import Chat from '@/components/Chat.vue';
 import Hints from '@/components/Hints.vue';
 import { clientStatuses } from 'archipelago.js';
 import Players from '@/components/Players.vue';
+import Help from '@/components/Help.vue';
 
 const router = useRouter();
 
@@ -33,7 +34,8 @@ function logout() {
 const tabs = ref([
   'Chat',
   'Hints',
-  'Players'
+  'Players',
+  'Help'
 ]);
 const selectedTabIndex = ref(0);
 const selectedTab = computed<string>(() => tabs.value[selectedTabIndex.value]!);
@@ -112,6 +114,7 @@ watch(selectedTab, async () => {
           <div class="window-body" v-show="selectedTab === 'Chat'"><Chat /></div>
           <div class="window-body" v-show="selectedTab === 'Hints'"><Hints /></div>
           <div class="window-body" v-show="selectedTab === 'Players'"><Players /></div>
+          <div class="window-body" v-show="selectedTab === 'Help'"><Help /></div>
         </div>
       </div>
     </div>
