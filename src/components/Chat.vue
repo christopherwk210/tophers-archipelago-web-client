@@ -112,7 +112,7 @@ input {
 }
 
 .message {
-  margin-bottom: 0.5em;
+  margin-bottom: 1em;
   white-space: pre-wrap;
 }
 </style>

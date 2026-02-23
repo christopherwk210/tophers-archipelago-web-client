@@ -5,6 +5,8 @@ import question from '@/assets/icons/question.png';
 import info from '@/assets/icons/info.png';
 import user from '@/assets/icons/user.png';
 import check from '@/assets/icons/check.png';
+import warning from '@/assets/icons/warning.png';
+import warningFill from '@/assets/icons/warning-fill.png';
 
 // export type Message = { text: string; nodes: MessageNode[]; };
 // export const messages = ref<Message[]>([]);
@@ -58,7 +60,7 @@ client.messages.on('itemHinted', (text, item, found, nodes) => {
 });
 
 export function formattedHintMessage(item: Item, found: boolean) {
-  let output = `<strong>${item.receiver.alias}</strong>'s <em>"${item.name}"</em> is at <em>"${item.locationName}"</em> in <strong>${item.sender.alias}</strong>'s world.`;
+  let output = `<strong>${item.receiver.alias}</strong>'s <em style="color: blue;">${item.name}</em> is at <em style="color: #8b008b;">${item.locationName}</em> in <strong>${item.sender.alias}</strong>'s world.`;
 
   if (found) {
     output = `<img class="inline-img" src="${check}">${output}`;
@@ -73,9 +75,15 @@ export function formattedHintMessage(item: Item, found: boolean) {
 client.messages.on('itemSent', (text, item, nodes) => {
   let output = `<strong>${item.sender.alias}</strong>`;
   if (item.sender.alias === item.receiver.alias && item.sender.slot === item.receiver.slot) {
-    output += ` found their item <em>"${item.name}"</em>! (${item.locationName})`;
+    output = `<img class="inline-img" src="${warning}">${output}`;
+    output += ` found their item <em style="color: blue;">${item.name}</em> (<span style="color: #8b008b;">${item.locationName}</span>)`;
   } else {
-    output += ` sent <em>"${item.name}"</em> (${item.locationName}) to <strong>${item.receiver.alias}</strong>!`;
+    if (item.receiver.alias === client.players.self.alias && item.receiver.slot === client.players.self.slot) {
+      output = `<img class="inline-img" src="${warningFill}">${output}`;
+    } else {
+      output = `<img class="inline-img" src="${warning}">${output}`;
+    }
+    output += ` sent <em style="color: blue;">${item.name}</em> (<span style="color: #8b008b;">${item.locationName}</span>) to <strong>${item.receiver.alias}</strong>`;
   }
 
   messages.value.push(output);
@@ -118,7 +126,7 @@ client.messages.on('chat', (message, player, nodes) => {
   });
 
   message = basicMarkdownToHtml(message.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
-  messages.value.push(out + message);
+  messages.value.push(`<img class="inline-img" style="opacity: 0; pointer-events: none;" src="${info}">${out}${message}`);
 })
 
 function nodesToText(nodes: MessageNode[]) {
