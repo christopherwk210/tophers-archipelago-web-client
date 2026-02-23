@@ -26,10 +26,7 @@ function sortByColumn(column: 'name' | 'game' | 'status' | 'team') {
 
 <template>
   <div class="players">
-    <template v-if="state.players.length === 0">
-      <p>Loading players, please wait...</p>
-    </template>
-    <div class="sunken-panel" v-else>
+    <div class="sunken-panel">
       <table class="interactive">
         <thead>
           <tr>

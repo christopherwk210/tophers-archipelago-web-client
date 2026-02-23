@@ -20,6 +20,7 @@ Features:
 - Well formatted & sortable hints table
 - Sortable users table that shows current player status (connected, completed, etc.)
 - Message recall by pressing the up arrow
+- Integrated sortable tracking table for collected items and location checks
 
 Libraries:
 

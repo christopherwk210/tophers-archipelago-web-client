@@ -28,6 +28,13 @@ function sortByColumn(column: 'found' | 'player' | 'item' | 'location') {
 
 <template>
   <div class="hints">
+    <div>
+      <button :disabled="state.hintPoints < state.hintCost" @click="state.buyingItemHint = true">Buy item hint</button>
+    </div>
+    <div style="display: flex; justify-content: space-between; font-size: 14px">
+      <span>Hint cost: {{ state.hintCost }}</span>
+      <span>Available points: {{ state.hintPoints }}</span>
+    </div>
     <div class="sunken-panel">
       <table class="interactive">
         <thead>

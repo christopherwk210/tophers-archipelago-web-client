@@ -166,3 +166,7 @@ export async function login(url: string, slot: string, password?: string) {
   const options = password ? { password } : undefined;
   return await safeCall(client.login(url, slot, undefined, options));
 }
+
+if (import.meta.env.DEV) {
+  (window as any).client = client;
+}

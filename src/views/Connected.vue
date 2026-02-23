@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { client, formattedHintMessage } from '@/archipelago';
 import { useRouter } from 'vue-router';
-import { state, type LocalPlayer } from '@/state';
+import { state, type LocalPlayer, appTabs, selectedTab } from '@/state';
 import { computed, markRaw, ref, watch } from 'vue';
 import Chat from '@/components/Chat.vue';
 import Hints from '@/components/Hints.vue';
 import { clientStatuses } from 'archipelago.js';
 import Players from '@/components/Players.vue';
 import Help from '@/components/Help.vue';
+import Tracker from '@/components/Tracker.vue';
 
 const router = useRouter();
 
@@ -31,17 +32,11 @@ function logout() {
   router.push('/');
 }
 
-const tabs = ref([
-  'Chat',
-  'Hints',
-  'Players',
-  'Help'
-]);
-const selectedTabIndex = ref(0);
-const selectedTab = computed<string>(() => tabs.value[selectedTabIndex.value]!);
-
 watch(selectedTab, async () => {
   if (selectedTab.value === 'Hints') {
+    state.value.hintCost = client.room.hintCost;
+    state.value.hintPoints = client.room.hintPoints;
+
     const hints = await client.players.self.fetchHints().catch(() => [])
     state.value.hints = hints.map(hint => {
       // return formattedHintMessage(hint.item, hint.found);
@@ -91,6 +86,31 @@ watch(selectedTab, async () => {
 
     players.push(...results);
     state.value.players = players;
+  } else if (selectedTab.value === 'Tracker') {
+    state.value.items.collected = client.items.received.map(item => {
+      return {
+        name: item.name,
+        location: item.locationName,
+        locationGame: item.locationGame,
+        sender: item.sender.alias
+      };
+    });
+
+    state.value.locations = client.room.missingLocations.map(location => {
+      const locationName = client.package.lookupLocationName(client.game, location, true)
+      return {
+        name: locationName,
+        checked: false
+      };
+    });
+
+    state.value.locations.push(...client.room.checkedLocations.map(location => {
+      const locationName = client.package.lookupLocationName(client.game, location, true)
+      return {
+        name: locationName,
+        checked: true
+      };
+    }));
   }
 });
 </script>
@@ -106,14 +126,15 @@ watch(selectedTab, async () => {
       </div>
       <div class="window-body">
         <menu role="tablist">
-          <li role="tab" v-for="(tab, index) of tabs" :aria-selected="selectedTabIndex === index">
-            <a @click="selectedTabIndex = index">{{ tab }}</a>
+          <li role="tab" v-for="(tab, index) of appTabs.tabs" :aria-selected="appTabs.selectedTabIndex === index">
+            <a @click="appTabs.selectedTabIndex = index">{{ tab }}</a>
           </li>
         </menu>
         <div class="window" role="tabpanel" style="overflow: hidden;">
           <div class="window-body" v-show="selectedTab === 'Chat'"><Chat /></div>
           <div class="window-body" v-show="selectedTab === 'Hints'"><Hints /></div>
           <div class="window-body" v-show="selectedTab === 'Players'"><Players /></div>
+          <div class="window-body" v-show="selectedTab === 'Tracker'"><Tracker /></div>
           <div class="window-body" v-show="selectedTab === 'Help'"><Help /></div>
         </div>
       </div>
@@ -167,6 +188,12 @@ input {
 }
 
 @media (max-width: 500px) {
+  .connected {
+    padding: 0;
+  }
+}
+
+@media (max-height: 500px) {
   .connected {
     padding: 0;
   }

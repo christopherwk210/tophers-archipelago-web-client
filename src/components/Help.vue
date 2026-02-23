@@ -31,8 +31,7 @@
       <legend><strong>Hints</strong></legend>
       
       <p class="mt-0">
-        Once there has been a generated hint related to you, it will appear in the Hints tab. When viewing hints,
-        you can click on the column headers to sort the table by that column.
+        Once there has been a generated hint related to you, it will appear in the Hints tab.
       </p>
 
       <p class="mb-0">
@@ -43,13 +42,28 @@
     <fieldset class="mt-3">
       <legend><strong>Players</strong></legend>
       
-      <p class="mt-0">
+      <p class="mt-0 mb-0">
         The Players tab will show a table of all registered players, the game they are playing, and their current status.
-        Just like the Hints tab, clicking the column headers will sort the table by that column.
+      </p>
+    </fieldset>
+
+    <fieldset class="mt-3">
+      <legend><strong>Tracker</strong></legend>
+      
+      <p class="mt-0 mb-0">
+        The Tracker tab shows you all collected items, and all locations and whether they are checked or not.
+      </p>
+    </fieldset>
+
+    <fieldset class="mt-3">
+      <legend><strong>General</strong></legend>
+      
+      <p class="mt-0 ">
+        All tables can be sorted by clicking on the column headers.
       </p>
 
       <p class="mb-0">
-        Note that the information in this tab does not update live. To refresh the list, simply go to another tab and then back to Players.
+        Other than the Chat tab, each section only updates when you switch to it. To refresh any list, simply go to another tab and then back to the desired tab.
       </p>
     </fieldset>
   </div>

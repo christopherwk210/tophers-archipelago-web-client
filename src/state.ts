@@ -1,5 +1,5 @@
-import type { Hint } from 'archipelago.js';
-import { ref } from 'vue';
+import type { Hint, Item } from 'archipelago.js';
+import { computed, ref } from 'vue';
 
 export interface LocalPlayer {
   name: string;
@@ -7,6 +7,20 @@ export interface LocalPlayer {
   game: string;
   team: number;
 }
+
+export const appTabs = ref({
+  tabs: [
+    'Chat',
+    'Hints',
+    'Players',
+    'Tracker',
+    'Help'
+  ],
+  selectedTabIndex: 0
+});
+
+export const selectedTab = computed<string>(() => appTabs.value.tabs[appTabs.value.selectedTabIndex]!);
+
 
 export const state = ref({
   mySlot: '',
@@ -16,5 +30,21 @@ export const state = ref({
     player: string;
     location: string;
   }[],
-  players: [] as LocalPlayer[]
+  hintPoints: 0,
+  hintCost: 0,
+  players: [] as LocalPlayer[],
+  items: {
+    collected: [] as {
+      name: string;
+      location: string;
+      locationGame: string;
+      sender: string;
+    }[]
+  },
+  locations: [] as {
+    name: string;
+    checked: boolean;
+  }[],
+
+  buyingItemHint: false
 });
