@@ -25,19 +25,23 @@ async function sendMessage() {
   }
 }
 
-watch([sending, messages], async () => {
-  if (messagesElement.value) {
-    // If we are already scrolled to the bottom
-    if (isUserAtBottom(messagesElement.value)) {
-      await nextTick();
+watch(
+  () => messages.value.length,
+  async () => {
+    const el = messagesElement.value;
+    if (!el) return;
 
-      // Scroll to the bottom of the messages element
-      messagesElement.value.scrollTop = messagesElement.value.scrollHeight;
+    const atBottom = isUserAtBottom(el);
+
+    if (atBottom) {
+      await nextTick();
+      el.scrollTop = el.scrollHeight;
     }
   }
-});
+);
 
 function isUserAtBottom(container: HTMLElement) {
+  
   // A small threshold can prevent issues with margins/borders
   const threshold = 50; 
   return container.scrollHeight - container.scrollTop <= container.offsetHeight + threshold;
