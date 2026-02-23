@@ -17,7 +17,7 @@ Features:
 - Can automatically resume connections after refreshing
 - Supports basic markdown bolding and italics for user chat messages
 - Automatically converts URLs in user chat messages to clickable links
-- Well formatted hints table
+- Well formatted & sortable hints table
 - Users table that shows current player status (connected, completed, etc.)
 
 Libraries:
