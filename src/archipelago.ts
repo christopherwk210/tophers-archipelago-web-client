@@ -40,13 +40,13 @@ client.messages.on('countdown', (text, value, nodes) => {
 });
 
 client.messages.on('disconnected', (text, player, nodes) => {
-  const joinedMessage = nodesToText(nodes)
-  messages.value.push(joinedMessage);
+  let output = `<strong>${player.alias}</strong> has disconnected.`;
+  messages.value.push(output);
 });
 
 client.messages.on('goaled', (text, player, nodes) => {
-  const joinedMessage = nodesToText(nodes)
-  messages.value.push(joinedMessage);
+  let output = `<strong>${player.alias}</strong> (Team ${player.team + 1}) has completed their goal!`;
+  messages.value.push(output);
 });
 
 client.messages.on('itemCheated', (text, item, nodes) => {
@@ -72,8 +72,14 @@ export function formattedHintMessage(item: Item, found: boolean) {
 }
 
 client.messages.on('itemSent', (text, item, nodes) => {
-  const joinedMessage = nodesToText(nodes)
-  messages.value.push(joinedMessage);
+  let output = `<strong>${item.sender.alias}</strong>`;
+  if (item.sender.alias === item.receiver.alias && item.sender.slot === item.receiver.slot) {
+    output += ` found their item <em>"${item.name}"</em>! (${item.locationName})`;
+  } else {
+    output += ` sent <em>"${item.name}"</em> (${item.locationName}) to <strong>${item.receiver.alias}</strong>!`;
+  }
+
+  messages.value.push(output);
 });
 
 client.messages.on('released', (text, player, nodes) => {
@@ -82,6 +88,8 @@ client.messages.on('released', (text, player, nodes) => {
 });
 
 client.messages.on('serverChat', (message, nodes) => {
+  console.log('SERVER SENT')
+  console.log(message)
   const joinedMessage = nodesToText(nodes)
   messages.value.push(joinedMessage);
 });
