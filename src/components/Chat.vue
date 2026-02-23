@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { client, messages } from '@/archipelago';
+import type { SayPacket } from 'archipelago.js';
 import { nextTick, ref, useTemplateRef, watch } from 'vue';
 
 const say = ref('');
@@ -21,11 +22,18 @@ async function sendMessage() {
     return;
   }
 
-  nextSay.value = say.value;
+  nextSay.value = say.value.trim();
   say.value = '';
 
   sending.value = true;
-  await client.messages.say(nextSay.value);
+
+  if (nextSay.value.startsWith('!admin')) {
+    const request: SayPacket = { cmd: 'Say', text: nextSay.value };
+    client.socket.send(request);
+  } else {
+    await client.messages.say(nextSay.value).catch(() => {})
+  }
+
   sending.value = false;
 
   lastSent.value = nextSay.value;
