@@ -35,7 +35,7 @@
       </p>
 
       <p class="mb-0">
-        To generate hints, use the <strong>!hint</strong> command.
+        To buy hints, you can use the <strong>"Buy item hint"</strong> button or use the <strong>!hint</strong> command.
       </p>
     </fieldset>
 
