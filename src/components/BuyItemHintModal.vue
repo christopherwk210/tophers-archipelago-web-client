@@ -13,7 +13,7 @@ watch(() => state.value.buyingItemHint, () => {
       return;
     }
 
-    items.value = Object.keys(pkg.itemTable);
+    items.value = Object.keys(pkg.itemTable).sort();
     selectedItem.value = items.value[0] || null;
   }
 });

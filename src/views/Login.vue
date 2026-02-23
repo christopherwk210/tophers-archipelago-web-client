@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { login, messages } from '@/archipelago';
 import { useRoute, useRouter } from 'vue-router';
-import { state as appState } from '@/state';
+import { state as appState, appTabs } from '@/state';
 
 const router = useRouter();
 const route = useRoute();
@@ -31,6 +31,8 @@ if (route.query.url && route.query.slot) {
 }
 
 async function connect() {
+  appTabs.value.selectedTabIndex = 0;
+
   connectRetryButtonVisible.value = false;
   clearTimeout(connectRetryTimeout.value);
   connectRetryTimeout.value = undefined;
