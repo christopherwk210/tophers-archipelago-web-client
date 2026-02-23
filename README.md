@@ -7,7 +7,7 @@
 ![](./media/screenshot1.png)  |  ![](./media/screenshot2.png)
 ![](./media/screenshot3.png)  |  ![](./media/screenshot4.png)
 
-My goal with this project is to provide a simple way to chat with other players in an Archipelago instance from any web capable device.
+My goal with this project is to provide a nice way to chat with other players in an Archipelago instance from any web capable device.
 
 Features:
 
@@ -19,6 +19,7 @@ Features:
 - Automatically converts URLs in user chat messages to clickable links
 - Well formatted & sortable hints table
 - Users table that shows current player status (connected, completed, etc.)
+- Message recall by pressing the up arrow
 
 Libraries:
 
