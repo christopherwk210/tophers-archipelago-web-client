@@ -44,7 +44,8 @@
       <legend><strong>Players</strong></legend>
       
       <p class="mt-0">
-        The Players tab will show a list of all registered players, the game they are playing, and their current status.
+        The Players tab will show a table of all registered players, the game they are playing, and their current status.
+        Just like the Hints tab, clicking the column headers will sort the table by that column.
       </p>
 
       <p class="mb-0">

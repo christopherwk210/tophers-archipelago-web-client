@@ -18,7 +18,7 @@ Features:
 - Supports basic markdown bolding and italics for user chat messages
 - Automatically converts URLs in user chat messages to clickable links
 - Well formatted & sortable hints table
-- Users table that shows current player status (connected, completed, etc.)
+- Sortable users table that shows current player status (connected, completed, etc.)
 - Message recall by pressing the up arrow
 
 Libraries:

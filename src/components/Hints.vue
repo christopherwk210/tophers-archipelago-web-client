@@ -40,7 +40,7 @@ function sortByColumn(column: 'found' | 'player' | 'item' | 'location') {
         </thead>
         <tbody>
           <tr v-for="(hint, index) of sortedHints" @click="selectedRow = index" :class="{ highlighted: selectedRow === index }">
-            <td><img :src="hint.found ? check : minus"></td>
+            <td style="text-align: center"><img :src="hint.found ? check : minus"></td>
             <td><strong>{{ hint.player }}</strong></td>
             <td>{{ hint.item }}</td>
             <td v-html="hint.location"></td>
@@ -58,6 +58,10 @@ function sortByColumn(column: 'found' | 'player' | 'item' | 'location') {
   flex-direction: column;
   gap: 0.5em;
   flex: 1;
+}
+
+table {
+  width: 100%;
 }
 
 .sunken-panel {

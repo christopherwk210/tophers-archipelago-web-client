@@ -30,8 +30,7 @@ client.messages.on('collected', (text, player, nodes) => {
 client.messages.on('connected', (text, player, tags, nodes) => {
   const msg = `${player.alias} has joined!`;
 
-  messages.value.push(`<img class="inline-img" src="${user}"><span style="color: #006400">${msg}</span>`);
-  messages.value.push(`<span style="color: #006400">${player.game} - Team ${player.team + 1}</span>`);
+  messages.value.push(`<img class="inline-img" src="${user}"><span style="color: #006400">${msg} (${player.game} - Team ${player.team + 1})</span>`);
 });
 
 client.messages.on('countdown', (text, value, nodes) => {
