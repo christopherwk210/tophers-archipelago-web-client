@@ -5,8 +5,8 @@ import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 
 const collectedSelectedRow = ref(-1);
-const collectedSortBy = ref<'name' | 'sender' | 'locationGame' | 'location'>('name');
-const collectedSortOrder = ref<'asc' | 'desc'>('asc');
+const collectedSortBy = ref<'name' | 'sender' | 'locationGame' | 'location' | 'order'>('order');
+const collectedSortOrder = ref<'asc' | 'desc'>('desc');
 const collectedSorted = computed(() => {
   return [...state.value.items.collected].sort((a, b) => {
     const modifier = collectedSortOrder.value === 'asc' ? 1 : -1;
@@ -16,7 +16,7 @@ const collectedSorted = computed(() => {
   });
 });
 
-function collectedSortByColumn(column: 'name' | 'sender' | 'locationGame' | 'location') {
+function collectedSortByColumn(column: 'name' | 'sender' | 'locationGame' | 'location' | 'order') {
   if (collectedSortBy.value === column) {
     collectedSortOrder.value = collectedSortOrder.value === 'asc' ? 'desc' : 'asc';
   } else {
@@ -76,6 +76,7 @@ const selectedTab = computed<string>(() => tabs.value[selectedTabIndex.value]!);
             <thead>
               <tr>
                 <th></th>
+                <th @click="collectedSortByColumn('order')">Order</th>
                 <th @click="collectedSortByColumn('name')">Name</th>
                 <th @click="collectedSortByColumn('sender')">Finder</th>
                 <th @click="collectedSortByColumn('locationGame')">Source Game</th>
@@ -85,6 +86,7 @@ const selectedTab = computed<string>(() => tabs.value[selectedTabIndex.value]!);
             <tbody>
               <tr v-for="(item, index) of collectedSorted" @click="collectedSelectedRow = index" :class="{ highlighted: collectedSelectedRow === index }">
                 <td><img :src="check"></td>
+                <td>{{ item.order }}</td>
                 <td>{{ item.name }}</td>
                 <td><strong>{{ item.sender }}</strong></td>
                 <td>{{ item.locationGame }}</td>

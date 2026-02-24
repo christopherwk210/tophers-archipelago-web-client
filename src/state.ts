@@ -39,6 +39,7 @@ export const state = ref({
       location: string;
       locationGame: string;
       sender: string;
+      order: number;
     }[]
   },
   locations: [] as {

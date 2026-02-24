@@ -87,12 +87,13 @@ watch(selectedTab, async () => {
     players.push(...results);
     state.value.players = players;
   } else if (selectedTab.value === 'Tracker') {
-    state.value.items.collected = client.items.received.map(item => {
+    state.value.items.collected = client.items.received.map((item, itemIndex) => {
       return {
         name: item.name,
         location: item.locationName,
         locationGame: item.locationGame,
-        sender: item.sender.alias
+        sender: item.sender.alias,
+        order: itemIndex
       };
     });
 
