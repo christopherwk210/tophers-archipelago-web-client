@@ -1,5 +1,5 @@
 import type { Hint, Item } from 'archipelago.js';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 export interface LocalPlayer {
   name: string;
@@ -14,7 +14,7 @@ export const appTabs = ref({
     'Hints',
     'Players',
     'Tracker',
-    'Help'
+    'More'
   ],
   selectedTabIndex: 0
 });
@@ -49,3 +49,10 @@ export const state = ref({
 
   buyingItemHint: false
 });
+
+export const settings = ref({
+  notificationsItemSent: true,
+  notificationsPlayerConnected: true,
+  notificationsVolume: 0.5,
+  generalAutoReconnect: true
+} satisfies Record<string, any>);

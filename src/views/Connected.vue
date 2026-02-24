@@ -1,31 +1,35 @@
 <script setup lang="ts">
 import { client, formattedHintMessage } from '@/archipelago';
 import { useRouter } from 'vue-router';
-import { state, type LocalPlayer, appTabs, selectedTab } from '@/state';
+import { state, type LocalPlayer, appTabs, selectedTab, settings } from '@/state';
 import { computed, markRaw, ref, watch } from 'vue';
 import Chat from '@/components/Chat.vue';
 import Hints from '@/components/Hints.vue';
 import { clientStatuses } from 'archipelago.js';
 import Players from '@/components/Players.vue';
-import Help from '@/components/Help.vue';
 import Tracker from '@/components/Tracker.vue';
+import More from '@/components/More.vue';
 
 const router = useRouter();
 
 if (!client.authenticated) {
-  const localStorageKey = 'tawc';
-  const url = localStorage.getItem(`${localStorageKey}:url`) || '';
-  const slot = localStorage.getItem(`${localStorageKey}:slot`) || '';
-  const password = localStorage.getItem(`${localStorageKey}:password`) || '';
-
-  const queryParams = new URLSearchParams();
-  queryParams.set('url', url);
-  queryParams.set('slot', slot);
-  if (password) {
-    queryParams.set('password', password);
+  if (settings.value.generalAutoReconnect) {
+    const localStorageKey = 'tawc';
+    const url = localStorage.getItem(`${localStorageKey}:url`) || '';
+    const slot = localStorage.getItem(`${localStorageKey}:slot`) || '';
+    const password = localStorage.getItem(`${localStorageKey}:password`) || '';
+  
+    const queryParams = new URLSearchParams();
+    queryParams.set('url', url);
+    queryParams.set('slot', slot);
+    if (password) {
+      queryParams.set('password', password);
+    }
+  
+    router.push(`/?${queryParams.toString()}`);
+  } else {
+    router.push('/');
   }
-
-  router.push(`/?${queryParams.toString()}`);
 }
 
 function logout() {
@@ -136,7 +140,7 @@ watch(selectedTab, async () => {
           <div class="window-body" v-show="selectedTab === 'Hints'"><Hints /></div>
           <div class="window-body" v-show="selectedTab === 'Players'"><Players /></div>
           <div class="window-body" v-show="selectedTab === 'Tracker'"><Tracker /></div>
-          <div class="window-body" v-show="selectedTab === 'Help'"><Help /></div>
+          <div class="window-body" v-show="selectedTab === 'More'"><More /></div>
         </div>
       </div>
     </div>

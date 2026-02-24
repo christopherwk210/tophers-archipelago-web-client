@@ -7,6 +7,8 @@ import user from '@/assets/icons/user.png';
 import check from '@/assets/icons/check.png';
 import warning from '@/assets/icons/warning.png';
 import warningFill from '@/assets/icons/warning-fill.png';
+import { sounds } from './audio';
+import { settings } from './state';
 
 // export type Message = { text: string; nodes: MessageNode[]; };
 // export const messages = ref<Message[]>([]);
@@ -30,6 +32,7 @@ client.messages.on('collected', (text, player, nodes) => {
 });
 
 client.messages.on('connected', (text, player, tags, nodes) => {
+  if (settings.value.notificationsPlayerConnected) sounds.chimes.play();
   const msg = `${player.alias} has joined!`;
 
   messages.value.push(`<img class="inline-img" src="${user}"><span style="color: #006400">${msg} (${player.game} - Team ${player.team + 1})</span>`);
@@ -73,17 +76,24 @@ export function formattedHintMessage(item: Item, found: boolean) {
 }
 
 client.messages.on('itemSent', (text, item, nodes) => {
+  let isForMe = false;
   let output = `<strong>${item.sender.alias}</strong>`;
   if (item.sender.alias === item.receiver.alias && item.sender.slot === item.receiver.slot) {
     output = `<img class="inline-img" src="${warning}">${output}`;
     output += ` found their item <em style="color: blue;">${item.name}</em> (<span style="color: #8b008b;">${item.locationName}</span>)`;
   } else {
-    if (item.receiver.alias === client.players.self.alias && item.receiver.slot === client.players.self.slot) {
+    isForMe = item.receiver.alias === client.players.self.alias && item.receiver.slot === client.players.self.slot;
+    if (isForMe) {
       output = `<img class="inline-img" src="${warningFill}">${output}`;
     } else {
       output = `<img class="inline-img" src="${warning}">${output}`;
     }
     output += ` sent <em style="color: blue;">${item.name}</em> (<span style="color: #8b008b;">${item.locationName}</span>) to <strong>${item.receiver.alias}</strong>`;
+  }
+
+  if (isForMe) {
+    if (settings.value.notificationsItemSent) sounds.notify.play();
+    output = `<div style="background: wheat; padding: 0.5em 0;">${output}</div>`;
   }
 
   messages.value.push(output);
