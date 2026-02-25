@@ -1,8 +1,13 @@
 import { Client } from 'archipelago.js';
 import { MessageParsing } from '../state/chat';
-import { safeCall } from './async-utils';
+import { safeAsync, type SafePromiseError } from './async-utils';
+import { ref } from 'vue';
 
 export const client = new Client();
+
+// Setup necessary for manual caching
+export const datapackageChecksums = ref<Record<string, string>>({});
+client.options.autoFetchDataPackage = false;
 
 client.messages.on('connected', (text, player, tags, nodes) => MessageParsing.addConnectedMessage(player));
 client.messages.on('disconnected', (text, player, nodes) => MessageParsing.addDisconnectedMessage(player));
@@ -25,7 +30,23 @@ client.messages.on('collected', (text, player, nodes) => MessageParsing.addUncla
 /** Logs in a user with the server */
 export async function login(url: string, slot: string, password?: string) {
   const options = password ? { password } : undefined;
-  return await safeCall(client.login(url, slot, undefined, options));
+
+  // Archipelago.js does not expose checksums anywhere, but we need this
+  // for caching reasons so we can manually connect first to get them
+  const { data, success } = await safeAsync(client.socket.connect(url));
+  if (!success) {
+    return {
+      success: false,
+      data: null,
+      error: new Error(),
+      message: 'Failed to connect to server'
+    } as SafePromiseError;
+  }
+
+  datapackageChecksums.value = data.datapackage_checksums;
+
+  // Login only after we have our checksums
+  return await safeAsync(client.login(url, slot, undefined, options));
 }
 
 // Expose client to console during development

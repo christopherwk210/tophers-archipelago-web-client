@@ -1,5 +1,17 @@
-/** Promise wrapper to remove the need for catching errors */
-export async function safeCall<T>(promise: Promise<T>) {
+export interface SafePromiseSuccess<T> {
+  success: true;
+  data: T;
+}
+
+export interface SafePromiseError {
+  success: false;
+  data: null;
+  error: Error;
+  message: string;
+}
+
+/** Promise wrapper to remove the need for try/catch blocks */
+export async function safeAsync<T>(promise: Promise<T>): Promise<SafePromiseSuccess<T> | SafePromiseError> {
   try {
     const data = await promise;
 

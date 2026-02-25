@@ -1,11 +1,29 @@
 <script setup lang="ts">
 import { sounds } from '@/lib/audio';
+import { resetCache } from '@/lib/cache';
 import { settings } from '@/state/settings';
+
+function clearCache() {
+  const confirmation = confirm('Are you sure you want to clear the cache? This will re-download all data packages from the server and reload the page.');
+  if (confirmation) {
+    resetCache();
+    window.location.reload();
+  }
+}
 </script>
 
 <template>
   <div class="inner-container">
     <fieldset>
+      <legend><strong>General</strong></legend>
+      
+      <div class="check-row">
+        <input v-model="settings.generalAutoReconnect" type="checkbox" id="attemptReconnect">
+        <label for="attemptReconnect">Attempt to reconnect automatically on page refresh</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="mt-3">
       <legend><strong>Notifications</strong></legend>
       <div class="field-row" style="max-width: 300px; margin-bottom: 1em;">
         <label for="volume">Volume:</label>
@@ -30,14 +48,11 @@ import { settings } from '@/state/settings';
         </div>
       </div>
     </fieldset>
-    
+
     <fieldset class="mt-3">
-      <legend><strong>General</strong></legend>
+      <legend><strong>Misc</strong></legend>
       
-      <div class="check-row">
-        <input v-model="settings.generalAutoReconnect" type="checkbox" id="attemptReconnect">
-        <label for="attemptReconnect">Attempt to reconnect automatically on page refresh</label>
-      </div>
+      <button @click="clearCache()">Clear cache</button>
     </fieldset>
   </div>
 </template>
