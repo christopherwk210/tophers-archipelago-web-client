@@ -11,11 +11,14 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "7.css": "^0.21.1",
     "98.css": "^0.1.21",
     "archipelago.js": "^2.0.4",
     "howler": "^2.2.4",
+    "js-confetti": "^0.13.1",
     "vue": "^3.5.28",
-    "vue-router": "^5.0.2"
+    "vue-router": "^5.0.2",
+    "xp.css": "^0.2.6"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

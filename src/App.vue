@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { client } from './archipelago';
 import BuyItemHintModal from './components/BuyItemHintModal.vue';
 import { watch } from 'vue';
-import { settings } from './state';
+import { settings } from './state/settings';
+import { AppStorage } from './lib/storage';
 
-const localStorageKey = 'tawc:user-settings';
-
+// Automatically store settings when they change
 watch(settings, () => {
-  localStorage.setItem(localStorageKey, JSON.stringify(settings.value));
+  AppStorage.setJSON('settings', settings.value);
   Howler.volume(settings.value.notificationsVolume);
 }, { deep: true });
 </script>

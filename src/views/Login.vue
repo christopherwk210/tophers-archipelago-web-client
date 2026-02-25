@@ -1,24 +1,33 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { login, messages } from '@/archipelago';
+import { login } from '@/lib/archipelago';
 import { useRoute, useRouter } from 'vue-router';
-import { state as appState, appTabs } from '@/state';
+import { AppStorage } from '@/lib/storage';
+import { AppTab, appTabManager } from '@/state/tabs';
+import { self } from '@/state/self';
 
 const router = useRouter();
 const route = useRoute();
 
-const localStorageKey = 'tawc';
+// Form bindings
+const url = ref(AppStorage.get('url') || '');
+const slot = ref(AppStorage.get('slot') || '');
+const password = ref(AppStorage.get('password') || '');
 
-const url = ref(localStorage.getItem(`${localStorageKey}:url`) || '');
-const slot = ref(localStorage.getItem(`${localStorageKey}:slot`) || '');
-const password = ref(localStorage.getItem(`${localStorageKey}:password`) || '');
-
+// Controls the "retry" button appearing during a connection
 const connectRetryButtonVisible = ref(false);
 const connectRetryTimeout = ref<any>();
+const connectRetryTime = 10_000;
 
-const state = ref<'idle' | 'connecting'>('idle');
+// When true, shows the loading window and hides the login form
+const connecting = ref(false);
+
+// When not an empty string, display error message on the login window
 const error = ref('');
 
+// You can automatically log in by setting the url & slot (& optionally the password) via query parameters:
+// https://topheranselmo.com/archipelago/#/?url=archipelago.gg:12345&slot=my_name
+// This is primarily used for automatically reconnecting after a page refresh, but could also be used by users to bookmark their login information
 if (route.query.url && route.query.slot) {
   url.value = route.query.url as string;
   slot.value = route.query.slot as string;
@@ -27,51 +36,61 @@ if (route.query.url && route.query.slot) {
     password.value = route.query.password as string;
   }
 
+  // Attempt immediate connection after parsing query params
   connect();
 }
 
+// Attempts to connect to the server
 async function connect() {
-  appTabs.value.selectedTabIndex = 0;
+  // Always open to the chat tab
+  appTabManager.currentTabIndex.value = AppTab.CHAT;
 
+  // Hide the retry button and reset it's timeout
   connectRetryButtonVisible.value = false;
   clearTimeout(connectRetryTimeout.value);
   connectRetryTimeout.value = undefined;
 
+  // Ensure error message is empty
   error.value = '';
 
+  // Specifically use undefined instead of an empty string if there's no password to satisfy archipeligo.js
   let passwordValue = password.value.length > 0 ? password.value : undefined;
 
-  state.value = 'connecting';
+  // Set our "loading" state to switch the UI
+  connecting.value = true;
 
+  // Show the retry button after a timeout
   connectRetryTimeout.value = setTimeout(() => {
     connectRetryButtonVisible.value = true;
-  }, 10_000);
+  }, connectRetryTime);
 
+  // Attempt the login
   const response = await login(url.value, slot.value, passwordValue);
-  state.value = 'idle';
 
-  if (response.success) {
-    localStorage.setItem(`${localStorageKey}:url`, url.value);
-    localStorage.setItem(`${localStorageKey}:slot`, slot.value);
-    localStorage.setItem(`${localStorageKey}:password`, password.value);
+  // Reset the loading state
+  connecting.value = false;
 
-    appState.value.mySlot = slot.value;
+  // Don't need this anymore
+  clearTimeout(connectRetryTimeout.value);
 
-    router.push('/connected');
-  } else {
+  if (!response.success) {
     error.value = response.message || 'Unknown error';
+    return;
   }
+
+  // Save form fields for future sessions
+  AppStorage.set('url', url.value);
+  AppStorage.set('slot', slot.value);
+  AppStorage.set('password', password.value);
+
+  self.slot = slot.value;
+
+  // Go to the main screen
+  router.push('/connected');
 }
 
 async function retry() {
-  const queryParams = new URLSearchParams();
-  queryParams.set('url', url.value);
-  queryParams.set('slot', slot.value);
-  if (password.value) {
-    queryParams.set('password', password.value);
-  }
-
-  await router.push(`/?${queryParams.toString()}`);
+  await router.push({ name: 'Login', query: { url: url.value, slot: slot.value, password: password.value } });
   window.location.reload();
 }
 
@@ -85,13 +104,13 @@ async function cancel() {
   <div class="login">
     <h1>Topher's Archipelago Web Client</h1>
 
-    <template v-if="state === 'connecting'">
+    <template v-if="connecting">
       <div class="window">
         <div class="title-bar">
           <div class="title-bar-text">Connecting, please wait...</div>
         </div>
         <div class="window-body">
-          <img src="@/assets/file_copy.gif">
+          <img src="@/assets/images/file_copy.gif">
           <div class="mt-3 progress-indicator segmented">
             <span class="progress-indicator-bar"></span>
           </div>
@@ -103,7 +122,7 @@ async function cancel() {
       </div>
     </template>
 
-    <template v-else-if="state === 'idle'">
+    <template v-else>
       <div class="window">
         <div class="title-bar">
           <div class="title-bar-text">Login</div>

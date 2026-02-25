@@ -1,28 +1,21 @@
 import '98.css';
-import '@/assets/main.css';
+import '@/assets/styles/main.css';
 
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { settings } from './state';
+import { AppStorage } from './lib/storage';
+import { settings } from './state/settings';
 
-const localStorageKey = 'tawc:user-settings';
+// Load local settings
+const savedSettings = AppStorage.getJSON<any>('settings') || {};
+settings.value = { ...settings.value, ...savedSettings };
 
-const savedSettings = localStorage.getItem(localStorageKey);
-if (savedSettings) {
-  let parsedSettings = {};
-  try {
-    parsedSettings = JSON.parse(savedSettings);
-  } catch (error) {
-    console.error('Error parsing saved settings:', error);
-  }
-  settings.value = { ...settings.value, ...parsedSettings };
+// Apply saved volume
+Howler.volume(settings.value.notificationsVolume);
 
-  Howler.volume(settings.value.notificationsVolume);
-}
+const app = createApp(App);
 
-const app = createApp(App)
+app.use(router);
 
-app.use(router)
-
-app.mount('#app')
+app.mount('#app');

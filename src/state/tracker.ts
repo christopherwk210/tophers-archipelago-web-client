@@ -1,0 +1,50 @@
+import { client } from '@/lib/archipelago';
+import { reactive } from 'vue';
+
+export interface TrackerItem {
+  name: string;
+  location: string;
+  locationGame: string;
+  sender: string;
+  order: number;
+}
+
+export interface TrackerLocation {
+  name: string;
+  checked: boolean;
+}
+
+export const tracker = reactive({
+  collected: [] as TrackerItem[],
+  locations: [] as TrackerLocation[],
+});
+
+export function loadLocations() {
+  tracker.locations = client.room.missingLocations.map(location => {
+    const locationName = client.package.lookupLocationName(client.game, location, true)
+    return {
+      name: locationName,
+      checked: false
+    } as TrackerLocation;
+  });
+
+  tracker.locations.push(...client.room.checkedLocations.map(location => {
+    const locationName = client.package.lookupLocationName(client.game, location, true)
+    return {
+      name: locationName,
+      checked: true
+    } as TrackerLocation;
+  }));
+}
+
+export function loadCollectedItems() {
+  tracker.collected = client.items.received.map((item, itemIndex) => {
+    return {
+      name: item.name,
+      location: item.locationName,
+      locationGame: item.locationGame,
+      sender: item.sender.alias,
+      order: itemIndex
+    } as TrackerItem;
+  });
+}

@@ -1,39 +1,43 @@
 <script setup lang="ts">
-import { client } from '@/archipelago';
-import { state, appTabs } from '@/state';
+import { client } from '@/lib/archipelago';
+import { appTabManager, AppTab } from '@/state/tabs';
+import { ui } from '@/state/ui';
 import { ref, watch } from 'vue';
+import { sendMessage } from '@/state/chat';
+import { hints } from '@/state/hints';
 
 const items = ref<string[]>([]);
-
-watch(() => state.value.buyingItemHint, () => {
-  if (state.value.buyingItemHint) {
-    const pkg = client.package.findPackage(client.players.self.game);
-    if (!pkg) {
-      state.value.buyingItemHint = false;
-      return;
-    }
-
-    items.value = Object.keys(pkg.itemTable).sort();
-    selectedItem.value = items.value[0] || null;
-  }
-});
-
 const selectedItem = ref<string | null>(null);
 
+watch(() => ui.modals.buyItemHint, () => {
+  if (!ui.modals.buyItemHint) return;
+  
+  // Find the package for the current user
+  const pkg = client.package.findPackage(client.players.self.game);
+  if (!pkg) {
+    ui.modals.buyItemHint = false;
+    return;
+  }
+
+  // Sort the items list and apply to UI
+  items.value = Object.keys(pkg.itemTable).sort();
+  selectedItem.value = items.value[0] || null;
+});
+
 function purchase() {
-  appTabs.value.selectedTabIndex = 0;
-  client.messages.say(`!hint ${selectedItem.value}`);
-  state.value.buyingItemHint = false;
+  appTabManager.currentTabIndex.value = AppTab.CHAT;
+  sendMessage(`!hint ${selectedItem.value}`);
+  ui.modals.buyItemHint = false;
 }
 </script>
 
 <template>
-  <div class="buy-item-hint" v-if="state.buyingItemHint">
+  <div class="buy-item-hint" v-if="ui.modals.buyItemHint">
     <div class="window">
       <div class="title-bar">
         <div class="title-bar-text">Buy item hint</div>
         <div class="title-bar-controls">
-          <button aria-label="Close" @click="state.buyingItemHint = false"></button>
+          <button aria-label="Close" @click="ui.modals.buyItemHint = false"></button>
         </div>
       </div>
       <div class="window-body">
@@ -43,8 +47,8 @@ function purchase() {
         </select>
 
         <div style="margin: 1em 0; font-size: 14px">
-          <div>Hint cost: {{ state.hintCost }}</div>
-          <div>Available points: {{ state.hintPoints }}</div>
+          <div>Hint cost: {{ hints.cost }}</div>
+          <div>Available points: {{ hints.points }}</div>
         </div>
 
         <div style="display: flex; justify-content: center;">

@@ -11,7 +11,7 @@ My goal with this project is to provide a nice way to chat with other players in
 
 Features:
 
-- Mobile support
+- Mobile browser support
 - Messages are parsed & color coded nicely
 - Saves previously entered information for future visits
 - Can automatically resume connections after refreshing
