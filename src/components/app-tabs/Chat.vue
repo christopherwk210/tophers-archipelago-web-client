@@ -94,8 +94,8 @@ onActivated(() => {
         <img class="inline-img" :src="info"><em style="color: teal;">{{ message.content }}</em>
       </div>
 
-      <!-- Player chat messages -->
-      <div v-else-if="message.type === 'item-sent'" class="message">
+      <!-- Item sent -->
+      <div v-else-if="message.type === 'item-sent'" class="message" :class="{ 'item-for-me': message.isForMe }">
         <img class="inline-img" :src="message.isForMe ? warningFill : warning">
         <strong>{{ message.sender }}</strong>
 
@@ -176,5 +176,10 @@ input {
   height: 1em;
   align-self: center;
   margin-right: 0.25em;
+}
+
+.item-for-me {
+  background: wheat;
+  padding: 0.5em 0;
 }
 </style>
