@@ -1,4 +1,6 @@
-import { ref } from 'vue';
+import { AppStorage } from '@/lib/storage';
+import { ref, watch } from 'vue';
+import { Howler } from 'howler';
 
 export const settings = ref({
   // Hint settings
@@ -12,3 +14,15 @@ export const settings = ref({
   // General settings
   generalAutoReconnect: true
 } satisfies Record<string, any>);
+
+// Automatically store settings when they change
+watch(settings, () => {
+  AppStorage.setJSON('settings', settings.value);
+  Howler.volume(settings.value.notificationsVolume);
+}, { deep: true });
+
+export function loadSettings() {
+  const savedSettings = AppStorage.getJSON<any>('settings') || {};
+  settings.value = { ...settings.value, ...savedSettings };
+  Howler.volume(settings.value.notificationsVolume);
+}

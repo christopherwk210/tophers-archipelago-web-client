@@ -5,6 +5,7 @@ const localStorageKeys = {
   slot: `${localStorageKeyBase}:slot`,
   password: `${localStorageKeyBase}:password`,
   settings: `${localStorageKeyBase}:user-settings`,
+  theme: `${localStorageKeyBase}:theme`
 };
 
 export namespace AppStorage {

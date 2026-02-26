@@ -1,15 +1,7 @@
 <script setup lang="ts">
-import { watch } from 'vue';
-import { settings } from '@/state/settings';
-import { AppStorage } from '@/lib/storage';
 import BuyItemHintModal from '@/components/modals/BuyItemHintModal.vue';
 import BuyLocationHintModal from '@/components/modals/BuyLocationHintModal.vue';
-
-// Automatically store settings when they change
-watch(settings, () => {
-  AppStorage.setJSON('settings', settings.value);
-  Howler.volume(settings.value.notificationsVolume);
-}, { deep: true });
+import ExportThemeModal from './components/modals/ExportThemeModal.vue';
 </script>
 
 <template>
@@ -17,6 +9,7 @@ watch(settings, () => {
 
   <BuyItemHintModal />
   <BuyLocationHintModal />
+  <ExportThemeModal />
 </template>
 
 <style scoped></style>

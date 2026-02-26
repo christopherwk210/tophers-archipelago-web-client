@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@vueuse/core": "^14.2.1",
     "7.css": "^0.21.1",
     "98.css": "^0.1.21",
     "archipelago.js": "^2.0.4",

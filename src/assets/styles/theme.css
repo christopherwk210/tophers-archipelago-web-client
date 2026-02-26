@@ -1,16 +1,16 @@
 :root {
-  --theme-location: rgb(139, 0, 139);
+  --theme-location: #8b008b;
 
   --theme-item-normal: #5d920c;
-  --theme-item-useful: blue;
+  --theme-item-useful: #0000ff;
   --theme-item-progression: #ef23ef;
-  --theme-item-trap: red;
+  --theme-item-trap: #ff0000;
 
-  --theme-player-you: black;
-  --theme-player-other: rgb(0, 0, 0);
+  --theme-player-you: #000000;
+  --theme-player-other: #000000;
 
-  --theme-text-help: teal;
-  --theme-text-join: rgb(0, 100, 0);
+  --theme-text-help: #008080;
+  --theme-text-join: #006400;
 
   --theme-font-size: 16px;
 }

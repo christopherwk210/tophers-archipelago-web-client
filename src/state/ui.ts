@@ -4,6 +4,7 @@ import type { TrackerLocation } from './tracker';
 export const ui = reactive({
   modals: {
     buyItemHint: false,
-    buyLocationHint: undefined as TrackerLocation | undefined
+    buyLocationHint: undefined as TrackerLocation | undefined,
+    exportTheme: false as false | string
   }
 });
