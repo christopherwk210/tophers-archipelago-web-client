@@ -107,4 +107,5 @@ select {
 
 table>tbody>tr.highlighted {
   background-color: #d9d9d9 !important;
+  color: initial !important;
 }
