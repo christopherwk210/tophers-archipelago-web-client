@@ -4,6 +4,11 @@ import { appTabManager } from '@/state/tabs';
 import { self } from '@/state/self';
 import { updatePackageCache } from '@/lib/cache';
 import { loadHints } from '@/state/hints';
+import { loadCollectedItems } from '@/state/tracker';
+import { useIntervalFn } from '@vueuse/core';
+import { client } from '@/lib/archipelago';
+import { AppStorage } from '@/lib/storage';
+import { settings } from '@/state/settings';
 
 const router = useRouter();
 
@@ -14,8 +19,28 @@ function logout() {
 const Tabs = appTabManager.createVueComponent();
 
 // Initialization
-updatePackageCache();
-loadHints();
+async function init() {
+  await updatePackageCache();
+  loadHints();
+  loadCollectedItems();
+}
+
+// Every 20 minutes, check if we're still logged in
+useIntervalFn(() => {
+  if (!client.authenticated || !client.socket.connected) {
+    if (!settings.value.generalAutoReconnect) {
+      router.push('/');
+    } else {
+      const url = AppStorage.get('url');
+      const slot = AppStorage.get('slot');
+      const password = AppStorage.get('password');
+
+      router.push({ name: 'Login', query: { url, slot, password } });
+    }
+  }
+}, 1000 * 60 * 20);
+
+init();
 </script>
 
 <template>

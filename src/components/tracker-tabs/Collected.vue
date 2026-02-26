@@ -4,6 +4,7 @@ import AppTable, { type Column } from '@/components/AppTable.vue';
 import { loadCollectedItems, tracker } from '@/state/tracker';
 import check from '@/assets/icons/check.png';
 import { getItemStyles, getPlayerStyles } from '@/lib/theme';
+import { useRouter } from 'vue-router';
 
 onActivated(() => {
   loadCollectedItems();
