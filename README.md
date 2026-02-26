@@ -21,7 +21,7 @@ Features:
 - Sortable users table that shows current player status (connected, completed, etc.)
 - Message recall by pressing the up arrow
 - Integrated sortable tracking table for collected items and location checks
-- Automated item hint buying through UI
+- Automated item & location hint buying through UI
 - Permanent data package caching for speedy load times and reduced traffic to the server
 
 Libraries:
