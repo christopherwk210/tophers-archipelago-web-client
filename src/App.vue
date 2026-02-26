@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import BuyItemHintModal from './components/BuyItemHintModal.vue';
 import { watch } from 'vue';
-import { settings } from './state/settings';
-import { AppStorage } from './lib/storage';
+import { settings } from '@/state/settings';
+import { AppStorage } from '@/lib/storage';
+import BuyItemHintModal from '@/components/modals/BuyItemHintModal.vue';
+import BuyLocationHintModal from '@/components/modals/BuyLocationHintModal.vue';
 
 // Automatically store settings when they change
 watch(settings, () => {
@@ -13,7 +14,9 @@ watch(settings, () => {
 
 <template>
   <RouterView />
+
   <BuyItemHintModal />
+  <BuyLocationHintModal />
 </template>
 
 <style scoped></style>

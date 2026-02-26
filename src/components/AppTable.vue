@@ -7,6 +7,10 @@ export interface Column {
   sortable?: boolean;
 }
 
+const emit = defineEmits<{
+  (e: 'rowSelected', row: any): void;
+}>();
+
 const props = withDefaults(defineProps<{
   columns: Column[];
   data: any[];
@@ -36,6 +40,11 @@ function sortByColumn(column: string) {
     sortOrder.value = 'asc';
   }
 }
+
+function rowClicked(index: number, item: any) {
+  selectedRow.value = index;
+  emit('rowSelected', item);
+}
 </script>
 
 <template>
@@ -46,7 +55,7 @@ function sortByColumn(column: string) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) of sortedData" @click="selectedRow = index" :class="{ highlighted: selectedRow === index }">
+      <tr v-for="(item, index) of sortedData" @click="rowClicked(index, item)" :class="{ highlighted: selectedRow === index }">
         <slot :name="column.key" :item="item" v-for="column of columns">
           <td>{{ item[column.key] }}</td>
         </slot>

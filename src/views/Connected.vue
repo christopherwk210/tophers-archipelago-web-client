@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { appTabManager } from '@/state/tabs';
 import { self } from '@/state/self';
 import { updatePackageCache } from '@/lib/cache';
+import { loadHints } from '@/state/hints';
 
 const router = useRouter();
 
@@ -12,7 +13,9 @@ function logout() {
 
 const Tabs = appTabManager.createVueComponent();
 
+// Initialization
 updatePackageCache();
+loadHints();
 </script>
 
 <template>
