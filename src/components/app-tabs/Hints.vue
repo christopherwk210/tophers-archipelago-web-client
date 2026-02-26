@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onActivated } from 'vue';
+import { computed, onActivated } from 'vue';
 import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 import { ui } from '@/state/ui';
 import { hints, loadHints } from '@/state/hints';
 import AppTable, { type Column } from '@/components/AppTable.vue';
+import { settings } from '@/state/settings';
 
 onActivated(async () => {
   loadHints();
@@ -17,19 +18,30 @@ const columns: Column[] = [
   { label: 'Owner', key: 'owner' },
   { label: 'Location', key: 'location' }
 ];
+
+const filteredHints = computed(() => {
+  if (settings.value.hintsFilterFound) {
+    return hints.list.filter(hint => !hint.found);
+  }
+  return hints.list;
+});
 </script>
 
 <template>
   <div class="hints">
-    <div>
+    <div class="actions">
       <button :disabled="hints.points < hints.cost" @click="ui.modals.buyItemHint = true">Buy item hint</button>
+      <div class="check-row" style="margin: 0.5em 0;">
+        <input v-model="settings.hintsFilterFound" type="checkbox" id="filterFound">
+        <label for="filterFound">Hide found hints</label>
+      </div>
     </div>
     <div style="display: flex; justify-content: space-between; font-size: 14px">
       <span>Hint cost: {{ hints.cost }}</span>
       <span>Available points: {{ hints.points }}</span>
     </div>
     <div class="sunken-panel">
-      <AppTable :columns="columns" :data="hints.list" default-sort-by="player">
+      <AppTable :columns="columns" :data="filteredHints" default-sort-by="player">
         <template #found="{ item }">
           <td style="text-align: center"><img :src="item.found ? check : minus"></td>
         </template>
@@ -57,5 +69,10 @@ const columns: Column[] = [
 
 .sunken-panel {
   flex: 1;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
