@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sounds } from '@/lib/audio';
+import { playSound } from '@/lib/audio';
 import { resetCache } from '@/lib/cache';
 import { settings } from '@/state/settings';
 
@@ -33,7 +33,7 @@ function clearCache() {
       </div>
 
       <div class="check-row">
-        <button @click="() => sounds.notify.play()" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
+        <button @click="() => playSound('notify')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
         <div>
           <input v-model="settings.notificationsItemSent" type="checkbox" id="itemSentNotification">
           <label for="itemSentNotification">Play a sound when someone has sent you an item</label>
@@ -41,7 +41,7 @@ function clearCache() {
       </div>
 
       <div class="check-row">
-        <button @click="() => sounds.chimes.play()" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
+        <button @click="() => playSound('chimes')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
         <div>
           <input v-model="settings.notificationsPlayerConnected" type="checkbox" id="connectNotification">
           <label for="connectNotification">Play a sound when someone connects</label>

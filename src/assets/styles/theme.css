@@ -1,0 +1,16 @@
+:root {
+  --theme-location: rgb(139, 0, 139);
+
+  --theme-item-normal: #5d920c;
+  --theme-item-useful: blue;
+  --theme-item-progression: #ef23ef;
+  --theme-item-trap: red;
+
+  --theme-player-you: black;
+  --theme-player-other: rgb(0, 0, 0);
+
+  --theme-text-help: teal;
+  --theme-text-join: rgb(0, 100, 0);
+
+  --theme-font-size: 16px;
+}

@@ -29,7 +29,7 @@ function purchase() {
 
         <strong>{{ ui.modals.buyLocationHint.name }}</strong>
 
-        <div style="margin: 1em 0; font-size: 14px">
+        <div style="margin: 1em 0; font-size: 0.875em">
           <div>Hint cost: {{ hints.cost }}</div>
           <div>Available points: {{ hints.points }}</div>
         </div>

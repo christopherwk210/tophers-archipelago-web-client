@@ -23,6 +23,7 @@ Features:
 - Integrated sortable tracking table for collected items and location checks
 - Automated item & location hint buying through UI
 - Permanent data package caching for speedy load times and reduced traffic to the server
+- Custom colors and theme options
 
 Libraries:
 

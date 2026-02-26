@@ -1,4 +1,4 @@
-import { Client } from 'archipelago.js';
+import { Client, Item } from 'archipelago.js';
 import { MessageParsing } from '../state/chat';
 import { safeAsync, type SafePromiseError } from './async-utils';
 import { ref } from 'vue';
@@ -47,6 +47,20 @@ export async function login(url: string, slot: string, password?: string) {
 
   // Login only after we have our checksums
   return await safeAsync(client.login(url, slot, undefined, options));
+}
+
+export enum ItemClass {
+  NORMAL,
+  USEFUL,
+  PROGRESSION,
+  TRAP
+}
+
+export function getItemClass(item: Item) {
+  if (item.useful) return ItemClass.USEFUL;
+  if (item.progression) return ItemClass.PROGRESSION;
+  if (item.trap) return ItemClass.TRAP;
+  return ItemClass.NORMAL;
 }
 
 // Expose client to console during development

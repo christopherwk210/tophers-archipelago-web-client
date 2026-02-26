@@ -35,6 +35,10 @@ function buyLocationHint() {
         <template #checked="{ item }">
           <td style="text-align: center"><img :src="item.checked ? check : minus"></td>
         </template>
+
+        <template #name="{ item }">
+          <td style="color: var(--theme-location)">{{ item.name }}</td>
+        </template>
       </AppTable>
     </div>
   </div>

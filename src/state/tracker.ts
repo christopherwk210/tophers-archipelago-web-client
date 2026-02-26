@@ -1,8 +1,9 @@
-import { client } from '@/lib/archipelago';
+import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import { reactive } from 'vue';
 
 export interface TrackerItem {
   name: string;
+  class: ItemClass,
   location: string;
   locationGame: string;
   sender: string;
@@ -41,6 +42,7 @@ export function loadCollectedItems() {
   tracker.collected = client.items.received.map((item, itemIndex) => {
     return {
       name: item.name,
+      class: getItemClass(item),
       location: item.locationName,
       locationGame: item.locationGame,
       sender: item.sender.alias,

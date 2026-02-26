@@ -2,6 +2,7 @@
 import { loadPlayers, players } from '@/state/players';
 import { onActivated } from 'vue';
 import AppTable, { type Column } from '@/components/AppTable.vue';
+import { getPlayerStyles } from '@/lib/theme';
 
 onActivated(async () => {
   loadPlayers();
@@ -24,7 +25,7 @@ const columns: Column[] = [
         </template>
 
         <template #name="{ item }">
-          <td><strong>{{ item.name }}</strong></td>
+          <td><strong :style="getPlayerStyles(item.name)">{{ item.name }}</strong></td>
         </template>
 
         <template #status="{ item }">

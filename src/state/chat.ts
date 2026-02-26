@@ -1,8 +1,8 @@
-import { client } from '@/lib/archipelago';
+import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import type { Item, MessageNode, Player, SayPacket } from 'archipelago.js';
 import { reactive } from 'vue';
 import { settings } from './settings';
-import { sounds } from '@/lib/audio';
+import { playSound } from '@/lib/audio';
 import { jsConfetti } from '@/lib/confetti';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
@@ -28,6 +28,7 @@ export namespace MessageParsing {
     receiverSlot: number;
     itemName: string;
     itemLocationName: string;
+    itemClass: ItemClass;
     isForMe: boolean;
     isGift: boolean;
   }
@@ -38,6 +39,7 @@ export namespace MessageParsing {
     sender: string;
     itemName: string;
     itemLocation: string;
+    itemClass: ItemClass;
     found: boolean;
   }
 
@@ -147,7 +149,7 @@ export namespace MessageParsing {
     const isGift = !(item.sender.alias === item.receiver.alias && item.sender.slot === item.receiver.slot);
 
     if (isForMe && settings.value.notificationsItemSent) {
-      sounds.notify.play();
+      playSound('notify');
     }
 
     chat.messages.push({
@@ -158,6 +160,7 @@ export namespace MessageParsing {
       receiverSlot: item.receiver.slot,
       itemName: item.name,
       itemLocationName: item.locationName,
+      itemClass: getItemClass(item),
       isForMe,
       isGift
     });
@@ -171,6 +174,7 @@ export namespace MessageParsing {
       receiver: item.receiver.alias,
       itemName: item.name,
       itemLocation: item.locationName,
+      itemClass: getItemClass(item),
       found
     });
   }
@@ -187,7 +191,7 @@ export namespace MessageParsing {
   }
 
   export function addConnectedMessage(player: Player) {
-    if (settings.value.notificationsPlayerConnected) sounds.chimes.play();
+    if (settings.value.notificationsPlayerConnected) playSound('chimes');
 
     chat.messages.push({
       type: 'connected',

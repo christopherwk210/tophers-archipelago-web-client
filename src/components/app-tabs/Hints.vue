@@ -6,6 +6,7 @@ import { ui } from '@/state/ui';
 import { hints, loadHints } from '@/state/hints';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { settings } from '@/state/settings';
+import { getPlayerStyles, getItemStyles } from '@/lib/theme';
 
 onActivated(async () => {
   loadHints();
@@ -36,7 +37,7 @@ const filteredHints = computed(() => {
         <label for="filterFound">Hide found hints</label>
       </div>
     </div>
-    <div style="display: flex; justify-content: space-between; font-size: 14px">
+    <div style="display: flex; justify-content: space-between; font-size: 0.875em;">
       <span>Hint cost: {{ hints.cost }}</span>
       <span>Available points: {{ hints.points }}</span>
     </div>
@@ -47,11 +48,19 @@ const filteredHints = computed(() => {
         </template>
 
         <template #player="{ item }">
-          <td><strong>{{ item.player }}</strong></td>
+          <td><strong :style="getPlayerStyles(item.player)">{{ item.player }}</strong></td>
         </template>
 
         <template #owner="{ item }">
-          <td><strong>{{ item.owner }}</strong></td>
+          <td><strong :style="getPlayerStyles(item.player)">{{ item.owner }}</strong></td>
+        </template>
+
+        <template #item="{ item }">
+          <td :style="getItemStyles(item.itemClass)">{{ item.item }}</td>
+        </template>
+
+        <template #location="{ item }">
+          <td style="color: var(--theme-location)">{{ item.location }}</td>
         </template>
       </AppTable>
     </div>

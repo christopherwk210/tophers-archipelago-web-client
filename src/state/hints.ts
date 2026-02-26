@@ -1,8 +1,9 @@
-import { client } from '@/lib/archipelago';
+import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import { reactive } from 'vue';
 
 export interface LocalHint {
   item: string;
+  itemClass: ItemClass;
   found: boolean;
   player: string;
   location: string;
@@ -23,6 +24,7 @@ export async function loadHints() {
   hints.list = list.map(hint => {
     return {
       item: hint.item.name,
+      itemClass: getItemClass(hint.item),
       found: hint.found,
       player: hint.item.receiver.alias,
       location: hint.item.locationName,

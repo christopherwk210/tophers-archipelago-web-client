@@ -3,6 +3,7 @@ import { onActivated } from 'vue';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { loadCollectedItems, tracker } from '@/state/tracker';
 import check from '@/assets/icons/check.png';
+import { getItemStyles, getPlayerStyles } from '@/lib/theme';
 
 onActivated(() => {
   loadCollectedItems();
@@ -12,7 +13,7 @@ const columns: Column[] = [
   { label: '', key: '_check_image' },
   { label: 'Order', key: 'order' },
   { label: 'Name', key: 'name' },
-  { label: 'Sender', key: 'Finder' },
+  { label: 'Sender', key: 'sender' },
   { label: 'Source Game', key: 'locationGame' },
   { label: 'Location', key: 'location' }
 ];
@@ -27,7 +28,15 @@ const columns: Column[] = [
         </template>
 
         <template #sender="{ item }">
-          <td><strong>{{ item.sender }}</strong></td>
+          <td><strong :style="getPlayerStyles(item.sender)">{{ item.sender }}</strong></td>
+        </template>
+
+        <template #location="{ item }">
+          <td style="color: var(--theme-location)">{{ item.location }}</td>
+        </template>
+
+        <template #name="{ item }">
+          <td :style="getItemStyles(item.class)">{{ item.name }}</td>
         </template>
       </AppTable>
     </div>
