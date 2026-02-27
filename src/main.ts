@@ -1,5 +1,6 @@
 import '98.css';
 import '@/assets/styles/theme.css';
+import 'tippy.js/dist/tippy.css';
 import '@/assets/styles/main.css';
 
 import { createApp } from 'vue';

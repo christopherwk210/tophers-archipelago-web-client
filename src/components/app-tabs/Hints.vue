@@ -7,6 +7,8 @@ import { hints, loadHints } from '@/state/hints';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { settings } from '@/state/settings';
 import { getPlayerStyles, getItemStyles } from '@/lib/theme';
+import PlayerName from '../text-elements/PlayerName.vue';
+import ItemName from '../text-elements/ItemName.vue';
 
 onActivated(async () => {
   loadHints();
@@ -48,15 +50,15 @@ const filteredHints = computed(() => {
         </template>
 
         <template #player="{ item }">
-          <td><strong :style="getPlayerStyles(item.player)">{{ item.player }}</strong></td>
+          <td><PlayerName :alias="item.player" :slot="item.slot" :game="item.game" /></td>
         </template>
 
         <template #owner="{ item }">
-          <td><strong :style="getPlayerStyles(item.player)">{{ item.owner }}</strong></td>
+          <td><PlayerName :alias="item.owner" :slot="item.ownerSlot" :game="item.ownerGame" /></td>
         </template>
 
         <template #item="{ item }">
-          <td :style="getItemStyles(item.itemClass)">{{ item.item }}</td>
+          <td><ItemName :iclass="item.itemClass" :name="item.item" /></td>
         </template>
 
         <template #location="{ item }">

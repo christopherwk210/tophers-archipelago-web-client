@@ -3,8 +3,8 @@ import { onActivated } from 'vue';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { loadCollectedItems, tracker } from '@/state/tracker';
 import check from '@/assets/icons/check.png';
-import { getItemStyles, getPlayerStyles } from '@/lib/theme';
-import { useRouter } from 'vue-router';
+import PlayerName from '../text-elements/PlayerName.vue';
+import ItemName from '../text-elements/ItemName.vue';
 
 onActivated(() => {
   loadCollectedItems();
@@ -29,7 +29,7 @@ const columns: Column[] = [
         </template>
 
         <template #sender="{ item }">
-          <td><strong :style="getPlayerStyles(item.sender)">{{ item.sender }}</strong></td>
+          <td><PlayerName :alias="item.sender" :slot="item.senderSlot" :game="item.senderGame" /></td>
         </template>
 
         <template #location="{ item }">
@@ -37,7 +37,7 @@ const columns: Column[] = [
         </template>
 
         <template #name="{ item }">
-          <td :style="getItemStyles(item.class)">{{ item.name }}</td>
+          <td><ItemName :iclass="item.class" :name="item.name" /></td>
         </template>
       </AppTable>
     </div>

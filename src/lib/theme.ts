@@ -1,12 +1,10 @@
 import { client, ItemClass } from './archipelago';
 
-function isAliasMe(player: string) {
-  return player === client.players.self.alias;
-}
+export function getPlayerStyles(slot: number) {
+  const isMe = slot === client.players.self.slot;
 
-export function getPlayerStyles(player: string) {
   return {
-    color: isAliasMe(player) ? 'var(--theme-player-you)' : 'var(--theme-player-other)'
+    color: isMe ? 'var(--theme-player-you)' : 'var(--theme-player-other)'
   };
 }
 

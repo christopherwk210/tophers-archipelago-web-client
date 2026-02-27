@@ -12,6 +12,8 @@ import check from '@/assets/icons/check.png';
 import warning from '@/assets/icons/warning.png';
 import warningFill from '@/assets/icons/warning-fill.png';
 import world from '@/assets/icons/world.png';
+import PlayerName from '../text-elements/PlayerName.vue';
+import ItemName from '../text-elements/ItemName.vue';
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -82,7 +84,7 @@ function onScroll() {
       <div v-else-if="message.type === 'player-chat'" class="message">
         <!-- This icon is invisible just to keep the message aligned with other messages that do have icons -->
         <img class="inline-img" style="opacity: 0; pointer-events: none;" :src="info">
-        <strong :style="getPlayerStyles(message.player)">{{ message.player }}</strong>: <span v-html="message.content"></span>
+        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />: <span v-html="message.content"></span>
       </div>
 
       <!-- User command message -->
@@ -98,39 +100,39 @@ function onScroll() {
       <!-- Item sent -->
       <div v-else-if="message.type === 'item-sent'" class="message" :class="{ 'item-for-me': message.isForMe }">
         <img class="inline-img" :src="message.isForMe ? warningFill : warning">
-        <strong :style="getPlayerStyles(message.sender)">{{ message.sender }}</strong>
+        <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />
 
         <template v-if="message.isGift">
-          sent <em :style="getItemStyles(message.itemClass)">{{ message.itemName }}</em> (<span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>) to <strong :style="getPlayerStyles(message.receiver)">{{ message.receiver }}</strong>
+          sent <ItemName :iclass="message.itemClass" :name="message.itemName" /> (<span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>) to <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />
         </template>
 
         <template v-else>
-          found their item <em :style="getItemStyles(message.itemClass)">{{ message.itemName }}</em> (<span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>)
+          found their item <ItemName :iclass="message.itemClass" :name="message.itemName" /> (<span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>)
         </template>
       </div>
 
       <!-- Item hinted -->
       <div v-else-if="message.type === 'item-hinted'" class="message">
         <img class="inline-img" :src="message.found ? check : question">
-        <strong :style="getPlayerStyles(message.receiver)">{{ message.receiver }}</strong>'s <em  :style="getItemStyles(message.itemClass)">{{ message.itemName }}</em> is at <em style="color: var(--theme-location);">{{ message.itemLocation }}</em> in <strong :style="getPlayerStyles(message.sender)">{{ message.sender }}</strong>'s world.
+        <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />'s <ItemName :iclass="message.itemClass" :name="message.itemName" /> is at <em style="color: var(--theme-location);">{{ message.itemLocation }}</em> in <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />'s world.
         <span v-if="message.found" style="color: green;">(found)</span>
       </div>
 
       <!-- Goaled -->
       <div v-else-if="message.type === 'goaled'" class="message">
         <img class="inline-img" :src="world">
-        <strong :style="getPlayerStyles(message.player)">{{ message.player }}</strong> (Team {{ message.team }}) has completed their goal!
+        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> (Team {{ message.team }}) has completed their goal!
       </div>
 
       <!-- Connected -->
       <div v-else-if="message.type === 'connected'" class="message">
         <img class="inline-img" :src="user">
-        <span style="color: var(--theme-text-join)"><strong :style="getPlayerStyles(message.player)">{{ message.player }}</strong> has joined! ({{ message.game }} - Team {{ message.team }})</span>
+        <span style="color: var(--theme-text-join)"><PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> has joined! (Team {{ message.team }})</span>
       </div>
 
       <!-- Disconnected -->
       <div v-else-if="message.type === 'disconnected'" class="message">
-        <strong :style="getPlayerStyles(message.player)">{{ message.player }}</strong> has disconnected.
+        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> has disconnected.
       </div>
     </template>
 

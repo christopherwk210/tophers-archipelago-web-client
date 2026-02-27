@@ -27,8 +27,12 @@ export async function loadHints() {
       itemClass: getItemClass(hint.item),
       found: hint.found,
       player: hint.item.receiver.alias,
+      slot: hint.item.receiver.slot,
+      game: hint.item.receiver.game,
       location: hint.item.locationName,
-      owner: hint.item.sender.alias
+      owner: hint.item.sender.alias,
+      ownerSlot: hint.item.sender.slot,
+      ownerGame: hint.item.sender.game
     };
   });
 }

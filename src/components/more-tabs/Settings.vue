@@ -40,10 +40,20 @@ watch(themeFontSize, () => updateFontSize());
   <div class="inner-container">
     <fieldset>
       <legend><strong>General</strong></legend>
-      
-      <div class="check-row">
+
+      <div style="margin-top: 0.5em" class="check-row">
         <input v-model="settings.generalAutoReconnect" type="checkbox" id="attemptReconnect">
         <label for="attemptReconnect">Attempt to reconnect automatically on page refresh</label>
+      </div>
+
+      <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.generalShowPlayerTooltips" type="checkbox" id="enablePlayerTooltips">
+        <label for="enablePlayerTooltips">Enable player tooltips</label>
+      </div>
+
+      <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.generalShowItemTooltips" type="checkbox" id="enableItemTooltips">
+        <label for="enableItemTooltips">Enable item tooltips</label>
       </div>
     </fieldset>
 

@@ -18,14 +18,18 @@ export namespace MessageParsing {
   interface ChatMessagePlayerChat extends ChatMessageContentBase {
     type: 'player-chat';
     player: string;
+    slot: number;
+    game: string;
   }
 
   interface ChatMessageItemSent extends ChatMessageBase {
     type: 'item-sent';
     sender: string;
-    receiver: string;
     senderSlot: number;
+    senderGame: string;
+    receiver: string;
     receiverSlot: number;
+    receiverGame: string;
     itemName: string;
     itemLocationName: string;
     itemClass: ItemClass;
@@ -36,7 +40,11 @@ export namespace MessageParsing {
   interface ChatMessageItemHinted extends ChatMessageBase {
     type: 'item-hinted';
     receiver: string;
+    receiverGame: string;
+    receiverSlot: number;
     sender: string;
+    senderGame: string;
+    senderSlot: number;
     itemName: string;
     itemLocation: string;
     itemClass: ItemClass;
@@ -46,12 +54,15 @@ export namespace MessageParsing {
   interface ChatMessageGoaled extends ChatMessageBase {
     type: 'goaled';
     player: string;
+    slot: number;
+    game: string;
     team: number;
   }
 
   interface ChatMessageConnected extends ChatMessageBase {
     type: 'connected';
     player: string;
+    slot: number;
     game: string;
     team: number;
   }
@@ -59,6 +70,8 @@ export namespace MessageParsing {
   interface ChatMessageDisconnected extends ChatMessageBase {
     type: 'disconnected';
     player: string;
+    slot: number;
+    game: string;
   }
 
   interface ChatMessageUnclassified extends ChatMessageContentBase { type: 'none'; }
@@ -121,7 +134,9 @@ export namespace MessageParsing {
     chat.messages.push({
       type: 'player-chat',
       player: player.alias,
-      content: message
+      content: message,
+      slot: player.slot,
+      game: player.game
     });
   }
 
@@ -155,6 +170,8 @@ export namespace MessageParsing {
     chat.messages.push({
       type: 'item-sent',
       sender: item.sender.alias,
+      senderGame: item.sender.game,
+      receiverGame: item.receiver.game,
       receiver: item.receiver.alias,
       senderSlot: item.sender.slot,
       receiverSlot: item.receiver.slot,
@@ -175,7 +192,11 @@ export namespace MessageParsing {
       itemName: item.name,
       itemLocation: item.locationName,
       itemClass: getItemClass(item),
-      found
+      found,
+      receiverGame: item.receiver.game,
+      receiverSlot: item.receiver.slot,
+      senderGame: item.sender.game,
+      senderSlot: item.sender.slot,
     });
   }
 
@@ -186,6 +207,8 @@ export namespace MessageParsing {
     chat.messages.push({
       type: 'goaled',
       player: player.alias,
+      slot: player.slot,
+      game: player.game,
       team: player.team + 1
     });
   }
@@ -196,6 +219,7 @@ export namespace MessageParsing {
     chat.messages.push({
       type: 'connected',
       player: player.alias,
+      slot: player.slot,
       game: player.game,
       team: player.team + 1
     });
@@ -204,7 +228,9 @@ export namespace MessageParsing {
   export function addDisconnectedMessage(player: Player) {
     chat.messages.push({
       type: 'disconnected',
-      player: player.alias
+      player: player.alias,
+      slot: player.slot,
+      game: player.game
     });
   }
 }

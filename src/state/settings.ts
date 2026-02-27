@@ -12,7 +12,9 @@ export const settings = ref({
   notificationsVolume: 0.5,
 
   // General settings
-  generalAutoReconnect: true
+  generalAutoReconnect: true,
+  generalShowPlayerTooltips: true,
+  generalShowItemTooltips: true
 } satisfies Record<string, any>);
 
 // Automatically store settings when they change

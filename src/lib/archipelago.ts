@@ -63,6 +63,19 @@ export function getItemClass(item: Item) {
   return ItemClass.NORMAL;
 }
 
+export function itemClassToString(itemClass: ItemClass) {
+  switch (itemClass) {
+    case ItemClass.PROGRESSION:
+      return 'Progression';
+    case ItemClass.USEFUL:
+      return 'Useful';
+    case ItemClass.TRAP:
+      return 'Trap';
+    default:
+      return 'Normal';
+  }
+}
+
 // Expose client to console during development
 if (import.meta.env.DEV) {
   (window as any).client = client;

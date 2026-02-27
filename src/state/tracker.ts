@@ -46,6 +46,8 @@ export function loadCollectedItems() {
       location: item.locationName,
       locationGame: item.locationGame,
       sender: item.sender.alias,
+      senderSlot: item.sender.slot,
+      senderGame: item.sender.game,
       order: itemIndex
     } as TrackerItem;
   });

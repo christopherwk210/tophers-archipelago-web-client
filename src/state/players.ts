@@ -47,6 +47,7 @@ export async function loadPlayers() {
         name: player.alias,
         status: status !== null ? clientStatusMap[status] : '',
         game: player.game,
+        slot: player.slot,
         team: player.team
       } as LocalPlayer;
     })
