@@ -8,6 +8,10 @@ export const settings = ref({
 
   // Notification settings
   notificationsItemSent: true,
+  notificationsItemSentNormal: true,
+  notificationsItemSentUseful: true,
+  notificationsItemSentProgression: true,
+  notificationsItemSentTrap: true,
   notificationsPlayerConnected: true,
   notificationsVolume: 0.5,
 

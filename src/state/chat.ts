@@ -162,9 +162,26 @@ export namespace MessageParsing {
   export function addItemSentMessage(item: Item) {
     const isForMe = item.receiver.name === client.players.self.name && item.receiver.slot === client.players.self.slot;
     const isGift = !(item.sender.alias === item.receiver.alias && item.sender.slot === item.receiver.slot);
+    const itemClass = getItemClass(item);
 
     if (isForMe && settings.value.notificationsItemSent) {
-      playSound('notify');
+      switch (itemClass) {
+        case ItemClass.NORMAL:
+          if (settings.value.notificationsItemSentNormal) playSound('notify');
+          break;
+        case ItemClass.USEFUL:
+          if (settings.value.notificationsItemSentUseful) playSound('notify');
+          break;
+        case ItemClass.PROGRESSION:
+          if (settings.value.notificationsItemSentProgression) playSound('notify');
+          break;
+        case ItemClass.TRAP:
+          if (settings.value.notificationsItemSentTrap) playSound('notify');
+          break;
+        default:
+          playSound('notify');
+          break;
+      }
     }
 
     chat.messages.push({
@@ -177,7 +194,7 @@ export namespace MessageParsing {
       receiverSlot: item.receiver.slot,
       itemName: item.name,
       itemLocationName: item.locationName,
-      itemClass: getItemClass(item),
+      itemClass,
       isForMe,
       isGift
     });

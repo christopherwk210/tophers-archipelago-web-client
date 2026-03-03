@@ -67,6 +67,14 @@ watch(themeFontSize, () => updateFontSize());
       </div>
 
       <div class="check-row">
+        <button @click="() => playSound('chimes')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
+        <div>
+          <input v-model="settings.notificationsPlayerConnected" type="checkbox" id="connectNotification">
+          <label for="connectNotification">Play a sound when someone connects</label>
+        </div>
+      </div>
+
+      <div class="check-row">
         <button @click="() => playSound('notify')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
         <div>
           <input v-model="settings.notificationsItemSent" type="checkbox" id="itemSentNotification">
@@ -74,11 +82,35 @@ watch(themeFontSize, () => updateFontSize());
         </div>
       </div>
 
-      <div class="check-row">
-        <button @click="() => playSound('chimes')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
-        <div>
-          <input v-model="settings.notificationsPlayerConnected" type="checkbox" id="connectNotification">
-          <label for="connectNotification">Play a sound when someone connects</label>
+      <div style="margin-top: 1em">
+        <label>Only notify me for these types of items:</label>
+  
+        <div class="check-row" style="padding-left: 1em; margin-top: 0.5em">
+          <div>
+            <input :disabled="!settings.notificationsItemSent" v-model="settings.notificationsItemSentNormal" type="checkbox" id="itemSentNotificationNormal">
+            <label for="itemSentNotificationNormal">Normal</label>
+          </div>
+        </div>
+
+        <div class="check-row" style="padding-left: 1em; margin-top: 0.5em">
+          <div>
+            <input :disabled="!settings.notificationsItemSent" v-model="settings.notificationsItemSentUseful" type="checkbox" id="itemSentNotificationUseful">
+            <label for="itemSentNotificationUseful">Useful</label>
+          </div>
+        </div>
+
+        <div class="check-row" style="padding-left: 1em; margin-top: 0.5em">
+          <div>
+            <input :disabled="!settings.notificationsItemSent" v-model="settings.notificationsItemSentProgression" type="checkbox" id="itemSentNotificationProgression">
+            <label for="itemSentNotificationProgression">Progression</label>
+          </div>
+        </div>
+
+        <div class="check-row" style="padding-left: 1em; margin-top: 0.5em">
+          <div>
+            <input :disabled="!settings.notificationsItemSent" v-model="settings.notificationsItemSentTrap" type="checkbox" id="itemSentNotificationTrap">
+            <label for="itemSentNotificationTrap">Trap</label>
+          </div>
         </div>
       </div>
     </fieldset>
