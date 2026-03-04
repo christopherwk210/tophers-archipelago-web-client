@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onActivated, ref } from 'vue';
+import { computed, onActivated, ref } from 'vue';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { loadLocations, tracker, type TrackerLocation } from '@/state/tracker';
 import check from '@/assets/icons/check.png';
@@ -11,7 +11,7 @@ onActivated(() => {
 });
 
 const columns: Column[] = [
-  { label: 'Checked', key: 'checked' },
+  { label: 'Checked', key: 'checked', style: 'width: 100px;' },
   { label: 'Name', key: 'name' }
 ];
 
@@ -21,6 +21,11 @@ function buyLocationHint() {
   if (!selectedLocation.value) return;
   ui.modals.buyLocationHint = selectedLocation.value;
 }
+
+const search = ref('');
+const filteredLocations = computed(() => {
+  return tracker.locations.filter(location => location.name.toLowerCase().includes(search.value.toLowerCase()));
+});
 </script>
 
 <template>
@@ -30,8 +35,11 @@ function buyLocationHint() {
       <span v-else>{{ selectedLocation.name }}</span>
       <button :disabled="!selectedLocation" @click="buyLocationHint()">Buy location hint</button>
     </div>
+    <div>
+      <input v-model="search" style="margin-right: auto" placeholder="Search locations..." type="text">
+    </div>
     <div class="sunken-panel">
-      <AppTable :columns="columns" :data="tracker.locations" default-sort-by="checked" @row-selected="selectedLocation = $event">
+      <AppTable :columns="columns" :data="filteredLocations" default-sort-by="checked" @row-selected="selectedLocation = $event">
         <template #checked="{ item }">
           <td style="text-align: center"><img :src="item.checked ? check : minus"></td>
         </template>
@@ -76,5 +84,10 @@ td {
   opacity: 0.5;
   pointer-events: none;
   user-select: none;
+}
+
+input {
+  padding: 0 0.5em !important;
+  width: 100%;
 }
 </style>

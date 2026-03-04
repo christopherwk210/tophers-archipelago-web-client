@@ -5,6 +5,7 @@ export interface Column {
   label: string;
   key: string;
   sortable?: boolean;
+  style?: string;
 }
 
 const emit = defineEmits<{
@@ -51,7 +52,9 @@ function rowClicked(index: number, item: any) {
   <table class="app-table">
     <thead>
       <tr>
-        <th v-for="column of columns" @click="column.sortable !== false ? sortByColumn(column.key) : () => {}">{{ column.label }}</th>
+        <template v-for="column of columns">
+          <th :style="column.style || {}" @click="column.sortable !== false ? sortByColumn(column.key) : () => {}">{{ column.label }}</th>
+        </template>
       </tr>
     </thead>
     <tbody>
