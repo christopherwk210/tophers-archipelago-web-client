@@ -5,6 +5,7 @@ import { loadLocations, tracker, type TrackerLocation } from '@/state/tracker';
 import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 import { ui } from '@/state/ui';
+import { settings } from '@/state/settings';
 
 onActivated(() => {
   loadLocations();
@@ -24,13 +25,24 @@ function buyLocationHint() {
 
 const search = ref('');
 const filteredLocations = computed(() => {
-  return tracker.locations.filter(location => location.name.toLowerCase().includes(search.value.toLowerCase()));
+  const filteredLocations = tracker.locations.filter(location => location.name.toLowerCase().includes(search.value.toLowerCase()));
+
+  if (settings.value.locationHintFilterFound) {
+    return filteredLocations.filter(location => !location.checked);
+  }
+
+  return filteredLocations;
 });
 </script>
 
 <template>
   <div class="locations">
     <div class="actions">
+      <div class="check-row" style="margin-right: auto">
+        <input v-model="settings.locationHintFilterFound" type="checkbox" id="filterFound">
+        <label for="filterFound">Hide checked locations</label>
+      </div>
+
       <em v-if="!selectedLocation">Select a location</em>
       <span v-else>{{ selectedLocation.name }}</span>
       <button :disabled="!selectedLocation" @click="buyLocationHint()">Buy location hint</button>

@@ -5,6 +5,7 @@ import { Howler } from 'howler';
 export const settings = ref({
   // Hint settings
   hintsFilterFound: false,
+  locationHintFilterFound: false,
 
   // Notification settings
   notificationsItemSent: true,
