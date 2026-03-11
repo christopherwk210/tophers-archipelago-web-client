@@ -3,9 +3,11 @@ import Settings from '@/components/more-tabs/Settings.vue';
 import Help from '@/components/more-tabs/Help.vue';
 import { TabManager } from '@/lib/tab-manager';
 import type { ComponentTab } from '@/state/tabs';
+import Accounts from '../more-tabs/Accounts.vue';
 
 const tabManager = new TabManager([
   { label: 'Settings', component: Settings },
+  { label: 'Accounts', component: Accounts },
   { label: 'Help', component: Help }
 ] as const satisfies ComponentTab[]);
 

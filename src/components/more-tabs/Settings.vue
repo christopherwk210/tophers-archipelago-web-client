@@ -5,6 +5,7 @@ import { settings } from '@/state/settings';
 import { useCssVar, useDebounceFn } from '@vueuse/core';
 import { ref, watch } from 'vue';
 import ThemeSettings from '../ThemeSettings.vue';
+import { AppStorage } from '@/lib/storage';
 
 function clearCache() {
   const confirmation = confirm('Are you sure you want to clear the cache? This will re-download all data packages from the server and reload the page.');
@@ -34,6 +35,9 @@ const updateFontSize = useDebounceFn(() => {
 }, 500)
 
 watch(themeFontSize, () => updateFontSize());
+
+const url = ref(AppStorage.get('url') || '');
+const slot = ref(AppStorage.get('slot') || '');
 </script>
 
 <template>
@@ -119,7 +123,7 @@ watch(themeFontSize, () => updateFontSize());
 
     <fieldset class="mt-3">
       <legend><strong>Misc</strong></legend>
-      
+
       <button @click="clearCache()">Clear cache</button>
     </fieldset>
   </div>

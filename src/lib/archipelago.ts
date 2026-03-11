@@ -31,6 +31,8 @@ client.messages.on('collected', (text, player, nodes) => MessageParsing.addUncla
 export async function login(url: string, slot: string, password?: string) {
   const options = password ? { password } : undefined;
 
+  client.socket.disconnect();
+
   // Archipelago.js does not expose checksums anywhere, but we need this
   // for caching reasons so we can manually connect first to get them
   const { data, success } = await safeAsync(client.socket.connect(url));
