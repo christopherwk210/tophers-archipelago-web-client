@@ -32,7 +32,7 @@ export namespace MessageParsing {
     receiverGame: string;
     itemName: string;
     itemLocationName: string;
-    itemClass: ItemClass;
+    itemClass: ItemClass[];
     isForMe: boolean;
     isGift: boolean;
   }
@@ -47,7 +47,7 @@ export namespace MessageParsing {
     senderSlot: number;
     itemName: string;
     itemLocation: string;
-    itemClass: ItemClass;
+    itemClass: ItemClass[];
     found: boolean;
   }
 
@@ -165,22 +165,14 @@ export namespace MessageParsing {
     const itemClass = getItemClass(item);
 
     if (isForMe && settings.value.notificationsItemSent) {
-      switch (itemClass) {
-        case ItemClass.NORMAL:
-          if (settings.value.notificationsItemSentNormal) playSound('notify');
-          break;
-        case ItemClass.USEFUL:
-          if (settings.value.notificationsItemSentUseful) playSound('notify');
-          break;
-        case ItemClass.PROGRESSION:
-          if (settings.value.notificationsItemSentProgression) playSound('notify');
-          break;
-        case ItemClass.TRAP:
-          if (settings.value.notificationsItemSentTrap) playSound('notify');
-          break;
-        default:
-          playSound('notify');
-          break;
+      if (itemClass.includes(ItemClass.PROGRESSION)) {
+        if (settings.value.notificationsItemSentProgression) playSound('notify');
+      } else if (itemClass.includes(ItemClass.USEFUL)) {
+        if (settings.value.notificationsItemSentUseful) playSound('notify');
+      } else if (itemClass.includes(ItemClass.TRAP)) {
+        if (settings.value.notificationsItemSentTrap) playSound('notify');
+      } else {
+        if (settings.value.notificationsItemSentNormal) playSound('notify');
       }
     }
 

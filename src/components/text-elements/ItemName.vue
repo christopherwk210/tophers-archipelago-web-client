@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { itemClassToString, type ItemClass } from '@/lib/archipelago';
+import { itemClassToString, sortItemClasses, type ItemClass } from '@/lib/archipelago';
 import { getItemStyles } from '@/lib/theme';
 import { settings } from '@/state/settings';
 import tippy, { type Instance } from 'tippy.js';
@@ -10,16 +10,20 @@ const tippyInstance = ref<Instance>();
 
 const props = defineProps<{
   name: string;
-  iclass: ItemClass;
+  iclass: ItemClass[];
 }>();
 
 function createTippy() {
+  if (props.iclass.length > 1) {
+    console.log('Multiple item classes:', props.iclass, props.name);
+  }
+
   if (tippyInstance.value) tippyInstance.value.destroy();
   tippyInstance.value = undefined;
 
   if (element.value && settings.value.generalShowItemTooltips) {
     tippyInstance.value = tippy(element.value, {
-      content: itemClassToString(props.iclass),
+      content: sortItemClasses(props.iclass).map(itemClassToString).join(', '),
       theme: 'light',
       arrow: true,
       duration: 100
@@ -35,7 +39,7 @@ onBeforeUnmount(() => {
 });
 
 watch(() => props.iclass, () => {
-  if (tippyInstance.value) tippyInstance.value.setContent(itemClassToString(props.iclass));
+  if (tippyInstance.value) tippyInstance.value.setContent(sortItemClasses(props.iclass).map(itemClassToString).join(', '));
 });
 </script>
 

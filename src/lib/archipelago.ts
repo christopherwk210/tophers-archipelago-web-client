@@ -59,10 +59,17 @@ export enum ItemClass {
 }
 
 export function getItemClass(item: Item) {
-  if (item.useful) return ItemClass.USEFUL;
-  if (item.progression) return ItemClass.PROGRESSION;
-  if (item.trap) return ItemClass.TRAP;
-  return ItemClass.NORMAL;
+  const classes = [];
+  if (item.useful) classes.push(ItemClass.USEFUL);
+  if (item.progression) classes.push(ItemClass.PROGRESSION);
+  if (item.trap) classes.push(ItemClass.TRAP);
+  if (classes.length === 0) classes.push(ItemClass.NORMAL);
+  return classes;
+}
+
+export function sortItemClasses(itemClasses: ItemClass[]) {
+  const ORDER = [ItemClass.PROGRESSION, ItemClass.USEFUL, ItemClass.TRAP, ItemClass.NORMAL];
+  return itemClasses.slice().sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 }
 
 export function itemClassToString(itemClass: ItemClass) {
