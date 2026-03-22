@@ -3,7 +3,7 @@ import { reactive } from 'vue';
 
 export interface TrackerItem {
   name: string;
-  class: ItemClass,
+  class: ItemClass[];
   location: string;
   locationGame: string;
   sender: string;

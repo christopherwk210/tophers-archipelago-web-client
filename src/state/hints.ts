@@ -3,7 +3,7 @@ import { reactive } from 'vue';
 
 export interface LocalHint {
   item: string;
-  itemClass: ItemClass;
+  itemClass: ItemClass[];
   found: boolean;
   player: string;
   location: string;
