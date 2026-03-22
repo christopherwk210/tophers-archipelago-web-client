@@ -7,6 +7,7 @@ import { computed, ref, watch } from 'vue';
 const url = ref('');
 const slot = ref('');
 const password = ref('');
+const showPassword = ref(false);
 
 const addMode = computed(() => ui.modals.editAccount === true);
 
@@ -68,7 +69,12 @@ function add() {
         </div>
         <div class="mt-3 field-row-stacked">
           <label for="password">Password</label>
-          <input placeholder="Leave blank if no password is needed" v-model="password" id="password" type="password" spellcheck="false" autocomplete="off" autocapitalize="none" />
+          <input placeholder="Leave blank if no password is needed" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
+        </div>
+        <div class="mt-1 field-row-stacked">
+          <!-- show password checkbox -->
+          <input v-model="showPassword" type="checkbox" id="show-password">
+          <label for="show-password">Show Password</label>
         </div>
 
         <div style="display: flex; justify-content: center; gap: 1em; margin-top: 1em">

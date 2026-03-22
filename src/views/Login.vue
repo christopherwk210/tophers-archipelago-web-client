@@ -13,6 +13,7 @@ const route = useRoute();
 const url = ref(AppStorage.get('url') || '');
 const slot = ref(AppStorage.get('slot') || '');
 const password = ref(AppStorage.get('password') || '');
+const showPassword = ref(false);
 
 // Controls the "retry" button appearing during a connection
 const connectRetryButtonVisible = ref(false);
@@ -138,7 +139,12 @@ async function cancel() {
           </div>
           <div class="mt-3 field-row-stacked">
             <label for="password">Password</label>
-            <input placeholder="Leave blank if no password is needed" v-model="password" id="password" type="password" spellcheck="false" autocomplete="off" autocapitalize="none" />
+            <input placeholder="Leave blank if no password is needed" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
+          </div>
+          <div class="mt-1 field-row-stacked">
+            <!-- show password checkbox -->
+            <input v-model="showPassword" type="checkbox" id="show-password">
+            <label for="show-password">Show Password</label>
           </div>
   
           <div class="btn-row">
