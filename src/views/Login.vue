@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { login } from '@/lib/archipelago';
+import { computed, onMounted, ref, watch } from 'vue';
+import { client, login } from '@/lib/archipelago';
 import { useRoute, useRouter } from 'vue-router';
 import { AppStorage } from '@/lib/storage';
 import { AppTab, appTabManager } from '@/state/tabs';
 import { self } from '@/state/self';
+import { localAccounts } from '@/lib/accounts';
 
 const router = useRouter();
 const route = useRoute();
@@ -99,6 +100,34 @@ async function cancel() {
   await router.push(`/`);
   window.location.reload();
 }
+
+const hasMultipleAccounts = computed(() => localAccounts.value.length > 1);
+const switchAccountList = computed(() => {
+  const currentSlot = self.slot;
+  const currentURL = AppStorage.get('url');
+
+  // Filter out any accounts that have both the same slot & URL
+  // It's okay if JUST the url is the same or JUST the slot is the same, but if BOTH are the same, we want to filter it out
+  return localAccounts.value.filter(account => !(account.slot === currentSlot && account.url === currentURL));
+});
+
+const accountSwitcher = ref(-1);
+watch(accountSwitcher, () => {
+  const selectedAccount = switchAccountList.value[accountSwitcher.value];
+  if (selectedAccount) {
+    url.value = selectedAccount.url;
+    slot.value = selectedAccount.slot;
+    password.value = selectedAccount.password || '';
+  }
+});
+
+function resetAccountSwitcher() {
+  accountSwitcher.value = -1;
+}
+
+onMounted(() => {
+  client.socket.disconnect();
+})
 </script>
 
 <template>
@@ -126,20 +155,28 @@ async function cancel() {
     <template v-else>
       <div class="window">
         <div class="title-bar">
-          <div class="title-bar-text">Login</div>
+          <div class="title-bar-text">
+            Login
+          </div>
+          <div class="title-bar-controls">
+            <select v-model="accountSwitcher" v-if="hasMultipleAccounts" style="width: 160px">
+              <option disabled :value="-1">Saved accounts...</option>
+              <option v-for="(account, accountIndex) of switchAccountList" :value="accountIndex">{{ account.slot }}</option>
+            </select>
+          </div>
         </div>
         <div class="window-body">
           <div class="field-row-stacked">
             <label for="url">URL</label>
-            <input v-model="url" id="url" type="text" placeholder="archipelago.gg:12345" spellcheck="false" autocomplete="off" autocapitalize="none" />
+            <input @input="resetAccountSwitcher" v-model="url" id="url" type="text" placeholder="archipelago.gg:12345" spellcheck="false" autocomplete="off" autocapitalize="none" />
           </div>
           <div class="mt-3 field-row-stacked">
             <label for="name">Name/Slot</label>
-            <input v-model="slot" id="name" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
+            <input @input="resetAccountSwitcher" v-model="slot" id="name" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
           </div>
           <div class="mt-3 field-row-stacked">
             <label for="password">Password</label>
-            <input placeholder="Leave blank if no password is needed" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
+            <input @input="resetAccountSwitcher" placeholder="Leave blank if no password is needed" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
           </div>
           <div class="mt-1 field-row-stacked">
             <!-- show password checkbox -->
