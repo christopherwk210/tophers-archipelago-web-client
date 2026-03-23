@@ -20,9 +20,14 @@ const messagesElement = useTemplateRef('messagesElement');
 
 const lastScrollPosition = ref(0);
 
-onActivated(() => {
+onActivated(async () => {
   if (messagesElement.value) {
-    messagesElement.value.scrollTop = lastScrollPosition.value;
+    if (lastScrollPosition.value === 0) {
+      await nextTick();
+      messagesElement.value.scrollTop = messagesElement.value.scrollHeight;
+    } else {
+      messagesElement.value.scrollTop = lastScrollPosition.value;
+    }
   }
 
   if (sayInput.value) sayInput.value.focus();

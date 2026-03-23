@@ -14,10 +14,6 @@ const props = defineProps<{
 }>();
 
 function createTippy() {
-  if (props.iclass.length > 1) {
-    console.log('Multiple item classes:', props.iclass, props.name);
-  }
-
   if (tippyInstance.value) tippyInstance.value.destroy();
   tippyInstance.value = undefined;
 
