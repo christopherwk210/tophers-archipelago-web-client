@@ -19,7 +19,8 @@ export const settings = ref({
   // General settings
   generalAutoReconnect: true,
   generalShowPlayerTooltips: true,
-  generalShowItemTooltips: true
+  generalShowItemTooltips: true,
+  lazyLoadTables: false
 } satisfies Record<string, any>);
 
 // Automatically store settings when they change

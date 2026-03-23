@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { settings } from '@/state/settings';
+import { useVirtualList } from '@vueuse/core';
 import { computed, ref } from 'vue';
 
 export interface Column {
@@ -46,6 +48,11 @@ function rowClicked(index: number, item: any) {
   selectedRow.value = index;
   emit('rowSelected', item);
 }
+
+const { list, containerProps, wrapperProps } = useVirtualList(sortedData, {
+  itemHeight: 52,
+  overscan: 10
+});
 </script>
 
 <template>
@@ -57,7 +64,16 @@ function rowClicked(index: number, item: any) {
         </template>
       </tr>
     </thead>
-    <tbody>
+    
+    <tbody v-if="settings.lazyLoadTables" v-bind="containerProps">
+      <tr v-for="(item, index) of list" @click="rowClicked(index, item)" :class="{ highlighted: selectedRow === index }">
+        <slot :name="column.key" :item="item.data" v-for="column of columns">
+          <td>{{ item.data[column.key] }}</td>
+        </slot>
+      </tr>
+    </tbody>
+
+    <tbody v-else>
       <tr v-for="(item, index) of sortedData" @click="rowClicked(index, item)" :class="{ highlighted: selectedRow === index }">
         <slot :name="column.key" :item="item" v-for="column of columns">
           <td>{{ item[column.key] }}</td>

@@ -43,6 +43,8 @@ async function importThemeClicked() {
 const themeFontSize = ref(parseFloat(themeCSSfontSize.value!));
 const updateFontSize = useDebounceFn(() => themeCSSfontSize.value = `${themeFontSize.value}px`, 100);
 watch(themeFontSize, () => updateFontSize());
+
+const importFromClipboardTooltip = 'Click this button after you have copied an exported theme to your clipboard.'
 </script>
 
 <template>

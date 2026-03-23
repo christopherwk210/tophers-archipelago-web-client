@@ -3,9 +3,9 @@ import { playSound } from '@/lib/audio';
 import { resetCache } from '@/lib/cache';
 import { settings } from '@/state/settings';
 import { useCssVar, useDebounceFn } from '@vueuse/core';
-import { ref, watch } from 'vue';
-import ThemeSettings from '../ThemeSettings.vue';
-import { AppStorage } from '@/lib/storage';
+import { onActivated, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import ThemeSettings from './ThemeSettings.vue';
+import tippy, { type Instance } from 'tippy.js';
 
 function clearCache() {
   const confirmation = confirm('Are you sure you want to clear the cache? This will re-download all data packages from the server and reload the page.');
@@ -36,8 +36,27 @@ const updateFontSize = useDebounceFn(() => {
 
 watch(themeFontSize, () => updateFontSize());
 
-const url = ref(AppStorage.get('url') || '');
-const slot = ref(AppStorage.get('slot') || '');
+const tippyInstance = ref<Instance[]>();
+
+function createTippy() {
+  if (tippyInstance.value) tippyInstance.value.forEach(instance => instance.destroy());
+
+  tippyInstance.value = tippy('[data-tippy-content]', {
+    theme: 'light',
+    arrow: true,
+    duration: 100,
+    placement: 'right'
+  });
+}
+
+onActivated(() => createTippy());
+onMounted(() => createTippy());
+
+onBeforeUnmount(() => {
+  if (tippyInstance.value) tippyInstance.value.forEach(instance => instance.destroy());
+});
+
+const lazyLoadTooltip = 'This will cause tables to load their content incrementally, which can speed up load times for slots with a large amount of checks';
 </script>
 
 <template>
@@ -58,6 +77,11 @@ const slot = ref(AppStorage.get('slot') || '');
       <div style="margin-top: 1em" class="check-row">
         <input v-model="settings.generalShowItemTooltips" type="checkbox" id="enableItemTooltips">
         <label for="enableItemTooltips">Enable item tooltips</label>
+      </div>
+
+      <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.lazyLoadTables" type="checkbox" id="lazyLoadTables">
+        <label :data-tippy-content="lazyLoadTooltip" for="lazyLoadTables">Lazy load tables</label>
       </div>
     </fieldset>
 
