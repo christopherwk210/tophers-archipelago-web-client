@@ -1,6 +1,8 @@
 import { AppStorage } from '@/lib/storage';
 import { useCssVar } from '@vueuse/core';
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
+
+import themeDark from '@/assets/styles/themes/dark.css?raw';
 
 export const themeCSSlocation = useCssVar('--theme-location');
 export const themeCSSitemNormal = useCssVar('--theme-item-normal');
@@ -13,6 +15,15 @@ export const themeCSStextHelp = useCssVar('--theme-text-help');
 export const themeCSStextJoin = useCssVar('--theme-text-join');
 export const themeCSSfontSize = useCssVar('--theme-font-size');
 
+export const themes = [
+  'Default',
+  'Dark'
+] as const;
+
+export type Theme = typeof themes[number];
+
+export const selectedTheme = ref<Theme>(themes[0]);
+
 watch([
   themeCSSlocation,
   themeCSSitemNormal,
@@ -23,7 +34,8 @@ watch([
   themeCSSplayerOther,
   themeCSStextHelp,
   themeCSStextJoin,
-  themeCSSfontSize
+  themeCSSfontSize,
+  selectedTheme
 ], () => {
   AppStorage.setJSON('theme', {
     location: themeCSSlocation.value,
@@ -35,9 +47,22 @@ watch([
     playerOther: themeCSSplayerOther.value,
     textHelp: themeCSStextHelp.value,
     textJoin: themeCSStextJoin.value,
-    fontSize: themeCSSfontSize.value
+    fontSize: themeCSSfontSize.value,
+    theme: selectedTheme.value
   });
 });
+
+const themeCSSlocationDefault = '#8b008b';
+const themeCSSitemNormalDefault = '#5d920c';
+const themeCSSitemUsefulDefault = '#0000ff';
+const themeCSSitemProgressionDefault = '#ef23ef';
+const themeCSSitemTrapDefault = '#ff0000';
+const themeCSSplayerYouDefault = '#000000';
+const themeCSSplayerOtherDefault = '#000000';
+const themeCSStextHelpDefault = '#008080';
+const themeCSStextJoinDefault = '#006400';
+const themeCSSfontSizeDefault = '16px';
+const selectedThemeDefault: Theme = 'Default';
 
 export function loadTheme() {
   const savedTheme = AppStorage.getJSON<any>('theme') || {};
@@ -51,18 +76,10 @@ export function loadTheme() {
   themeCSStextHelp.value = savedTheme.textHelp || themeCSStextHelpDefault;
   themeCSStextJoin.value = savedTheme.textJoin || themeCSStextJoinDefault;
   themeCSSfontSize.value = savedTheme.fontSize || themeCSSfontSizeDefault;
-}
+  selectedTheme.value = savedTheme.theme || selectedThemeDefault;
 
-const themeCSSlocationDefault = '#8b008b';
-const themeCSSitemNormalDefault = '#5d920c';
-const themeCSSitemUsefulDefault = '#0000ff';
-const themeCSSitemProgressionDefault = '#ef23ef';
-const themeCSSitemTrapDefault = '#ff0000';
-const themeCSSplayerYouDefault = '#000000';
-const themeCSSplayerOtherDefault = '#000000';
-const themeCSStextHelpDefault = '#008080';
-const themeCSStextJoinDefault = '#006400';
-const themeCSSfontSizeDefault = '16px';
+  applyTheme();
+}
 
 export function resetThemeToDefault() {
   themeCSSlocation.value = themeCSSlocationDefault;
@@ -89,7 +106,8 @@ export function exportTheme() {
     playerOther: themeCSSplayerOther.value,
     textHelp: themeCSStextHelp.value,
     textJoin: themeCSStextJoin.value,
-    fontSize: themeCSSfontSize.value
+    fontSize: themeCSSfontSize.value,
+    theme: selectedTheme.value
   };
 
   const json = JSON.stringify(theme);
@@ -98,7 +116,15 @@ export function exportTheme() {
 }
 
 export function importTheme(theme: string) {
-  const json = atob(theme);
+  let json = '';
+
+  try {
+    json = atob(theme);
+  } catch (e) {
+    console.error('Failed to decode theme:', e);
+    return false;
+  }
+  
   let parsed: any = {};
 
   try {
@@ -118,6 +144,31 @@ export function importTheme(theme: string) {
   themeCSStextHelp.value = parsed.textHelp || themeCSStextHelpDefault;
   themeCSStextJoin.value = parsed.textJoin || themeCSStextJoinDefault;
   themeCSSfontSize.value = parsed.fontSize || themeCSSfontSizeDefault;
+  selectedTheme.value = parsed.theme || selectedThemeDefault;
 
   return true;
 }
+
+function applyTheme() {
+  const styleElementId = 'tawc-theme';
+
+  let styleElement = document.getElementById(styleElementId);
+  if (!styleElement) {
+    styleElement = document.createElement('style');
+    styleElement.id = styleElementId;
+    document.head.appendChild(styleElement);
+  }
+
+  switch (selectedTheme.value) {
+    case 'Default':
+      styleElement.innerHTML = '';
+      break;
+    case 'Dark':
+      styleElement.innerHTML = themeDark;
+      break;
+  }
+}
+
+watch(selectedTheme, () => {
+  applyTheme();
+});

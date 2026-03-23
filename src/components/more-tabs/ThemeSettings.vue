@@ -12,7 +12,9 @@ import {
   themeCSSfontSize,
   resetThemeToDefault,
   exportTheme,
-  importTheme
+  importTheme,
+  selectedTheme,
+  themes
 } from '@/state/theme';
 import { ui } from '@/state/ui';
 
@@ -43,14 +45,20 @@ async function importThemeClicked() {
 const themeFontSize = ref(parseFloat(themeCSSfontSize.value!));
 const updateFontSize = useDebounceFn(() => themeCSSfontSize.value = `${themeFontSize.value}px`, 100);
 watch(themeFontSize, () => updateFontSize());
-
-const importFromClipboardTooltip = 'Click this button after you have copied an exported theme to your clipboard.'
 </script>
 
 <template>
   <fieldset class="mt-3">
     <legend><strong>Theme</strong></legend>
-    <label style="margin-bottom: 0.5em" for="fontSize">Font size ({{ themeCSSfontSize }}):</label>
+
+    <div style="margin-bottom: 1em">
+      <!-- <label style="margin-bottom: 0.5em" for="theme">Base theme:</label> -->
+      <select style="display: block; width: 100%; max-width: 300px;" v-model="selectedTheme">
+        <option v-for="theme of themes" :value="theme">{{ theme }}</option>
+      </select>
+    </div>
+
+    <label style="margin-bottom: 0.5em" for="fontSize">Font size (<strong>{{ themeCSSfontSize }}</strong>):</label>
     <div class="field-row" style="max-width: 300px; margin-bottom: 1em;">
       <label for="fontSize">Small</label>
       <input v-model.number.lazy="themeFontSize" id="fontSize" type="range" min="14" max="20" value="16" step="1" />

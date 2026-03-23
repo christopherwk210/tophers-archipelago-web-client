@@ -40,5 +40,5 @@ watch(() => props.iclass, () => {
 </script>
 
 <template>
-  <em ref="element" :style="getItemStyles(props.iclass)">{{ props.name }}</em>
+  <em class="item-name" ref="element" :style="getItemStyles(props.iclass)">{{ props.name }}</em>
 </template>

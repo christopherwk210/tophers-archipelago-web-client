@@ -40,5 +40,5 @@ watch(() => props.game, () => {
 </script>
 
 <template>
-  <strong ref="element" :style="getPlayerStyles(props.slot)">{{ props.alias }}</strong>
+  <strong class="player-name" ref="element" :style="getPlayerStyles(props.slot)">{{ props.alias }}</strong>
 </template>

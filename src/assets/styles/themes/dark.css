@@ -1,0 +1,104 @@
+:root {
+  --tawc-dark-box-shadow-1: #4f4f4f;
+  --tawc-dark-box-shadow-2: #676767;
+  --tawc-dark-box-shadow-3: #797979;
+  --tawc-dark-text-color: #dcdfde;
+}
+
+body {
+  color: var(--tawc-dark-text-color);
+}
+
+.title-bar {
+  background: linear-gradient(to right, black, #2b2b2b);
+}
+
+.window {
+  background: #2c2c2c;
+  box-shadow: inset -1px -1px #0a0a0a,
+    inset 1px 1px var(--tawc-dark-box-shadow-1),
+    inset -2px -2px var(--tawc-dark-box-shadow-2),
+    inset 2px 2px var(--tawc-dark-box-shadow-3);
+}
+
+menu[role=tablist]>li[aria-selected=true] {
+  background-color: #2c2c2c;
+}
+
+menu[role=tablist]>li {
+  box-shadow: inset -1px 0 #0a0a0a,
+  inset 1px 1px var(--tawc-dark-box-shadow-1),
+  inset -2px 0 var(--tawc-dark-box-shadow-2),
+  inset 2px 2px var(--tawc-dark-box-shadow-3);
+}
+
+menu[role=tablist]>li>a {
+  color: var(--tawc-dark-text-color);
+}
+
+input[type=email], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=url], select {
+  background-color: black;
+
+  box-shadow: inset -1px -1px var(--tawc-dark-box-shadow-3),
+    inset 1px 1px var(--tawc-dark-box-shadow-2),
+    inset -2px -2px var(--tawc-dark-box-shadow-1),
+    inset 2px 2px #0a0a0a;
+
+  color: var(--tawc-dark-text-color);
+}
+
+button, input[type=reset], input[type=submit] {
+  box-shadow: inset -1px -1px #0a0a0a,
+    inset 1px 1px var(--tawc-dark-box-shadow-1),
+    inset -2px -2px var(--tawc-dark-box-shadow-2),
+    inset 2px 2px var(--tawc-dark-box-shadow-3);
+
+  background: #2c2c2c;
+  text-shadow: 0 0 var(--tawc-dark-text-color) !important;
+}
+
+table>thead>tr>* {
+  box-shadow: inset -1px -1px #0a0a0a,
+    inset 1px 1px var(--tawc-dark-box-shadow-1),
+    inset -2px -2px var(--tawc-dark-box-shadow-2),
+    inset 2px 2px var(--tawc-dark-box-shadow-3);
+  
+  background: #2c2c2c;
+}
+
+.sunken-panel, table {
+  background: #2c2c2c;
+}
+
+table>tbody>tr.highlighted {
+  background-color: #4d4d4d !important;
+}
+
+legend {
+  background: transparent;
+}
+
+a {
+  color: white !important;
+}
+
+.app-table th:hover {
+  background: #4b4b4b;
+}
+
+.player-name {
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+input[type=checkbox]:checked+label:after {
+  filter: invert(1);
+}
+
+input[type=checkbox]+label:before {
+  background: black;
+
+  box-shadow: inset -1px -1px var(--tawc-dark-box-shadow-3),
+    inset 1px 1px var(--tawc-dark-box-shadow-2),
+    inset -2px -2px var(--tawc-dark-box-shadow-1),
+    inset 2px 2px #0a0a0a;
+}
