@@ -127,6 +127,9 @@ const selectedThemeDefault: Theme = 'Default';
 export function loadTheme() {
   const savedTheme = AppStorage.getJSON<any>('theme') || {};
   selectedTheme.value = savedTheme.theme || selectedThemeDefault;
+  if (!Object.keys(themes).includes(selectedTheme.value)) {
+    selectedTheme.value = selectedThemeDefault;
+  }
   const themeDefaults = themes[selectedTheme.value].defaults;
 
   themeCSSlocation.value = savedTheme.location || themeDefaults.themeCSSlocation;
