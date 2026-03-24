@@ -102,14 +102,7 @@ async function cancel() {
 }
 
 const hasMultipleAccounts = computed(() => localAccounts.value.length > 1);
-const switchAccountList = computed(() => {
-  const currentSlot = self.slot;
-  const currentURL = AppStorage.get('url');
-
-  // Filter out any accounts that have both the same slot & URL
-  // It's okay if JUST the url is the same or JUST the slot is the same, but if BOTH are the same, we want to filter it out
-  return localAccounts.value.filter(account => !(account.slot === currentSlot && account.url === currentURL));
-});
+const switchAccountList = computed(() => localAccounts.value);
 
 const accountSwitcher = ref(-1);
 watch(accountSwitcher, () => {
