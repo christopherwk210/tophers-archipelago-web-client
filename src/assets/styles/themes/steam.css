@@ -1,0 +1,105 @@
+:root {
+  --tawc-steam-text-color: white;
+  --tawc-steam-box-shadow-out: inset -1px -1px #2e322a,
+    inset 1px 1px #919d8c,
+    inset -2px -2px #424b3d,
+    inset 2px 2px #525d4b;
+  --tawc-steam-box-shadow-in: inset -1px -1px #919d8c,
+    inset 1px 1px #1d201a,
+    inset -2px -2px #525d4b,
+    inset 2px 2px #424b3d;
+}
+
+body {
+  color: var(--tawc-steam-text-color);
+}
+
+.title-bar {
+  background: #4c5844;
+  border-bottom: 1px solid white;
+}
+
+.window {
+  background: #4c5844;
+}
+
+.window[role=tabpanel] {
+  box-shadow: var(--tawc-steam-box-shadow-out);
+}
+
+menu[role=tablist]>li[aria-selected=true], menu[role=tablist]>li:active {
+  background: #3e4637;
+  box-shadow: var(--tawc-steam-box-shadow-in);
+}
+
+menu[role=tablist]>li {
+  border-radius: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: var(--tawc-steam-box-shadow-out);
+}
+
+menu[role=tablist] {
+  margin-bottom: 6px;
+  gap: 6px;
+  padding-top: 0;
+}
+
+menu[role=tablist]>li>a {
+  color: white;
+}
+
+button, input[type=reset], input[type=submit] {
+  background: #4c5844;
+  box-shadow: var(--tawc-steam-box-shadow-out);
+  text-shadow: 0 0 var(--tawc-steam-text-color) !important;
+}
+
+legend {
+  background: transparent;
+}
+
+input[type=checkbox]+label:before {
+  box-shadow: var(--tawc-steam-box-shadow-in);
+}
+
+select {
+  background-color: #3e4637;
+  color: var(--tawc-steam-text-color);
+  box-shadow: var(--tawc-steam-box-shadow-in);
+}
+
+input[type=email], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=url] {
+  box-shadow: var(--tawc-steam-box-shadow-in);
+  background: #3e4637;
+  color: var(--tawc-steam-text-color);
+}
+
+a {
+  color: var(--tawc-steam-text-color) !important;
+}
+
+.sunken-panel, table {
+  background-color: #3e4637;
+}
+
+table>tbody>tr.highlighted {
+  background-color: #6b7966 !important;
+}
+
+table>thead>tr>* {
+  background: #4c5844;
+  box-shadow: var(--tawc-steam-box-shadow-out);
+}
+
+.app-table th:hover {
+  background: #6e7e64;
+}
+
+.Completed {
+  color: #7c7cff !important;
+}
+
+#app > .connected, #app > .login {
+  background: #3e4637;
+}

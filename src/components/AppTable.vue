@@ -66,7 +66,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(sortedData, {
     </thead>
     
     <tbody v-if="settings.lazyLoadTables" v-bind="containerProps">
-      <tr v-for="(item, index) of list" @click="rowClicked(index, item)" :class="{ highlighted: selectedRow === index }">
+      <tr v-for="(item, index) of list" @click="rowClicked(index, item.data)" :class="{ highlighted: selectedRow === index }">
         <slot :name="column.key" :item="item.data" v-for="column of columns">
           <td>{{ item.data[column.key] }}</td>
         </slot>

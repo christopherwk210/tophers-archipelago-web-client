@@ -102,3 +102,11 @@ input[type=checkbox]+label:before {
     inset -2px -2px var(--tawc-dark-box-shadow-1),
     inset 2px 2px #0a0a0a;
 }
+
+.field-border-disabled {
+  background: #2c2c2c;
+}
+
+#app > .connected, #app > .login {
+  background: #232323;
+}

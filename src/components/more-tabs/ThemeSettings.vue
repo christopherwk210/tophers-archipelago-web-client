@@ -25,7 +25,7 @@ function resetToDefault() {
   const proceed = confirm('This will reset all theme settings to default. Do you want to continue?');
   if (!proceed) return;
 
-  resetThemeToDefault();
+  resetThemeToDefault(selectedTheme.value);
 }
 
 function exportThemeClicked() {
@@ -41,6 +41,10 @@ async function importThemeClicked() {
   }
 }
 
+watch(selectedTheme, () => {
+  resetThemeToDefault(selectedTheme.value);
+});
+
 // Font size handling
 const themeFontSize = ref(parseFloat(themeCSSfontSize.value!));
 const updateFontSize = useDebounceFn(() => themeCSSfontSize.value = `${themeFontSize.value}px`, 100);
@@ -52,9 +56,8 @@ watch(themeFontSize, () => updateFontSize());
     <legend><strong>Theme</strong></legend>
 
     <div style="margin-bottom: 1em">
-      <!-- <label style="margin-bottom: 0.5em" for="theme">Base theme:</label> -->
       <select style="display: block; width: 100%; max-width: 300px;" v-model="selectedTheme">
-        <option v-for="theme of themes" :value="theme">{{ theme }}</option>
+        <option v-for="theme of Object.keys(themes)" :value="theme">{{ theme }}</option>
       </select>
     </div>
 
