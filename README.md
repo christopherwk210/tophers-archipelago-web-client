@@ -11,19 +11,15 @@ My goal with this project is to provide a nice way to chat with other players in
 
 Features:
 
-- Mobile browser support
-- Messages are parsed & color coded nicely
-- Saves previously entered information for future visits
-- Can automatically resume connections after refreshing
-- Supports basic markdown bolding and italics for user chat messages
-- Automatically converts URLs in user chat messages to clickable links
-- Well formatted & sortable hints table
-- Sortable users table that shows current player status (connected, completed, etc.)
-- Message recall by pressing the up arrow
-- Integrated sortable tracking table for collected items and location checks
-- Automated item & location hint buying through UI
-- Permanent data package caching for speedy load times and reduced traffic to the server
-- Custom colors and theme options
+- Mobile support
+- Basic markdown support for bolding and italics for user chat messages
+- Multi-account switching and management
+- UI for buying hints with item drop downs
+- Themes & custom colors
+- Audio notifications
+- Sortable & searchable tables
+- No download required
+- TONS more
 
 Libraries:
 
