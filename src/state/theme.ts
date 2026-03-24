@@ -32,20 +32,20 @@ export const themes = {
       themeCSStextJoin: '#006400'
     }
   },
-  'Archipelago': {
-    css: themeArchipelago,
-    defaults: {
-      themeCSSlocation: '#ff6eff',
-      themeCSSitemNormal: '#c2ff66',
-      themeCSSitemUseful: '#8989ff',
-      themeCSSitemProgression: '#ff5dff',
-      themeCSSitemTrap: '#ff5a5a',
-      themeCSSplayerYou: '#ffffff',
-      themeCSSplayerOther: '#ffffff',
-      themeCSStextHelp: '#55e2e2',
-      themeCSStextJoin: '#28d328'
-    }
-  },
+  // 'Archipelago': {
+  //   css: themeArchipelago,
+  //   defaults: {
+  //     themeCSSlocation: '#ff6eff',
+  //     themeCSSitemNormal: '#c2ff66',
+  //     themeCSSitemUseful: '#8989ff',
+  //     themeCSSitemProgression: '#ff5dff',
+  //     themeCSSitemTrap: '#ff5a5a',
+  //     themeCSSplayerYou: '#ffffff',
+  //     themeCSSplayerOther: '#ffffff',
+  //     themeCSStextHelp: '#55e2e2',
+  //     themeCSStextJoin: '#28d328'
+  //   }
+  // },
   'Dark': {
     css: themeDark,
     defaults: {
