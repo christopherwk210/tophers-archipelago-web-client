@@ -110,3 +110,12 @@ input[type=checkbox]+label:before {
 #app > .connected, #app > .login {
   background: #232323;
 }
+
+pre {
+  background: #000000 !important;
+
+  box-shadow: inset -1px -1px var(--tawc-dark-box-shadow-3),
+    inset 1px 1px var(--tawc-dark-box-shadow-2),
+    inset -2px -2px var(--tawc-dark-box-shadow-1),
+    inset 2px 2px #0a0a0a;
+}

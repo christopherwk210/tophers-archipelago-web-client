@@ -103,3 +103,12 @@ table>thead>tr>* {
 #app > .connected, #app > .login {
   background: #3e4637;
 }
+
+pre {
+  background: #404637 !important;
+  box-shadow: var(--tawc-steam-box-shadow-in);
+}
+
+.field-border-disabled {
+  background: #404637 !important;
+}
