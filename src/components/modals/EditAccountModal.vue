@@ -50,7 +50,7 @@ function add() {
 </script>
 
 <template>
-  <div class="edit-account-modal" v-if="ui.modals.editAccount">
+  <div class="modal edit-account-modal" v-if="ui.modals.editAccount">
     <div class="window">
       <div class="title-bar">
         <div class="title-bar-text">{{ addMode ? 'Add Account' : 'Edit Account' }}</div>

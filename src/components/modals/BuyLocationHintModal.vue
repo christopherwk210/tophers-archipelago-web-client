@@ -14,7 +14,7 @@ function purchase() {
 </script>
 
 <template>
-  <div class="buy-item-hint" v-if="ui.modals.buyLocationHint">
+  <div class="modal buy-item-hint" v-if="ui.modals.buyLocationHint">
     <div class="window">
       <div class="title-bar">
         <div class="title-bar-text">Buy location hint</div>

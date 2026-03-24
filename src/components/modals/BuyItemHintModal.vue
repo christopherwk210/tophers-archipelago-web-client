@@ -32,7 +32,7 @@ function purchase() {
 </script>
 
 <template>
-  <div class="buy-item-hint" v-if="ui.modals.buyItemHint">
+  <div class="modal buy-item-hint" v-if="ui.modals.buyItemHint">
     <div class="window">
       <div class="title-bar">
         <div class="title-bar-text">Buy item hint</div>

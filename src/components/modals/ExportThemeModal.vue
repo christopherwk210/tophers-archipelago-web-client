@@ -8,7 +8,7 @@ function copyThemeToClipboard() {
 </script>
 
 <template>
-  <div class="export-theme-modal" v-if="ui.modals.exportTheme !== false">
+  <div class="modal export-theme-modal" v-if="ui.modals.exportTheme !== false">
     <div class="window">
       <div class="title-bar">
         <div class="title-bar-text">Export theme</div>

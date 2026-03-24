@@ -14,3 +14,7 @@
 
   --theme-font-size: 16px;
 }
+
+menu[role=tablist]>li>a {
+  cursor: default;
+}

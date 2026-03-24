@@ -26,8 +26,8 @@ export class TabManager<T extends Tab> {
       return () => {
         return h('div', { 'data-vue-tab': true }, [
           h('menu', { role: 'tablist' }, this.tabs.map((tab, index) => {
-            return h('li', { role: 'tab', 'aria-selected': this.currentTabIndex.value === index }, [
-              h('a', { onClick: () => this.currentTabIndex.value = index }, typeof tab.label === 'string' ? tab.label : tab.label.value)
+            return h('li', { onClick: () => this.currentTabIndex.value = index, role: 'tab', 'aria-selected': this.currentTabIndex.value === index }, [
+              h('a', {  }, typeof tab.label === 'string' ? tab.label : tab.label.value)
             ]);
           })),
           h('div', { class: 'window', role: 'tabpanel' }, [
