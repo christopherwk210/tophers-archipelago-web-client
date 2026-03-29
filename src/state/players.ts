@@ -5,6 +5,7 @@ import { ref } from 'vue';
 export interface LocalPlayer {
   name: string;
   status: string;
+  slot: number;
   game: string;
   team: number;
 }

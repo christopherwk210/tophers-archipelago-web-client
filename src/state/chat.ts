@@ -1,9 +1,10 @@
 import { client, getItemClass, ItemClass } from '@/lib/archipelago';
-import type { Item, MessageNode, Player, SayPacket } from 'archipelago.js';
+import type { BouncedPacket, Item, JSONRecord, MessageNode, Player, SayPacket } from 'archipelago.js';
 import { reactive } from 'vue';
 import { settings } from './settings';
 import { playSound } from '@/lib/audio';
 import { jsConfetti } from '@/lib/confetti';
+import { loadPlayers, players } from './players';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
 export namespace MessageParsing {
@@ -74,9 +75,26 @@ export namespace MessageParsing {
     game: string;
   }
 
+  interface ChatMessageTagChange extends ChatMessageBase {
+    type: 'tag-change';
+    player: string;
+    slot: number;
+    game: string;
+    team: number;
+    tags: string[];
+  }
+
+  interface ChatMessageDeathLink extends ChatMessageBase {
+    type: 'death-link';
+    player?: string;
+    slot?: number;
+    game?: string;
+    cause: string;
+  }
+
   interface ChatMessageUnclassified extends ChatMessageContentBase { type: 'none'; }
   interface ChatMessageUserCommand extends ChatMessageContentBase { type: 'user-command'; }  
-  interface ChatMessageTutorial extends ChatMessageContentBase { type: 'tutorial'; }  
+  interface ChatMessageTutorial extends ChatMessageContentBase { type: 'tutorial'; }
 
   export type ChatMessage =
     ChatMessageUnclassified
@@ -88,6 +106,8 @@ export namespace MessageParsing {
     | ChatMessageGoaled
     | ChatMessageConnected
     | ChatMessageDisconnected
+    | ChatMessageTagChange
+    | ChatMessageDeathLink
     ;
 
   /**
@@ -113,11 +133,56 @@ export namespace MessageParsing {
 
   /** Adds an unclassified message to the chat with no special formatting */
   export function addUnclassifiedMessage(nodes: MessageNode[]) {
-    const joinedMessage = nodesToText(nodes)
+    const joinedMessage = nodesToText(nodes);
     chat.messages.push({
       type: 'none',
       content: joinedMessage
     });
+  }
+
+  export function addTagChangeMessage(player: Player, tags: string[]) {
+    chat.messages.push({
+      type: 'tag-change',
+      player: player.alias,
+      slot: player.slot,
+      game: player.game,
+      team: player.team + 1,
+      tags
+    });
+  }
+
+  export function addBouncedMessage(packet: BouncedPacket, data: JSONRecord) {
+    if (!data) return;
+
+    if (packet.tags && Array.isArray(packet.tags) && packet.tags.includes('DeathLink')) {
+      if (data && data.cause && data.source) {
+        addDeathlinkMessage(data.cause as string, data.source as string);
+      }
+    }
+  }
+
+  export async function addDeathlinkMessage(cause: string, source: string) {
+    // Attempt to find the player object
+    if (players.value.length === 0) await loadPlayers();
+    const playerNameOrSlot = source;
+
+    const foundPlayer = players.value.find(player => player.name === playerNameOrSlot);
+
+    if (foundPlayer) {
+      chat.messages.push({
+        type: 'death-link',
+        player: foundPlayer.name,
+        game: foundPlayer.game,
+        slot: foundPlayer.slot,
+        cause
+      });
+    } else {
+      chat.messages.push({
+        type: 'death-link',
+        player: source,
+        cause
+      });
+    }
   }
 
   /** This is a chat message sent by a player */

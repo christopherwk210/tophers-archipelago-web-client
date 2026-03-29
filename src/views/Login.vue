@@ -80,6 +80,10 @@ async function connect() {
     return;
   }
 
+  if (response.data && (response.data.death_link || response.data.death_link === 1)) {
+    client.deathLink.enableDeathLink();
+  }
+
   // Save form fields for future sessions
   AppStorage.set('url', url.value);
   AppStorage.set('slot', slot.value);

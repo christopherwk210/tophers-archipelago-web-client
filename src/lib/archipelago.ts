@@ -17,11 +17,12 @@ client.messages.on('itemSent', (text, item, nodes) => MessageParsing.addItemSent
 client.messages.on('tutorial', (text, nodes) => MessageParsing.addTutorialMessage(nodes));
 client.messages.on('userCommand', (text, nodes) => MessageParsing.addUserCommandMessage(nodes));
 client.messages.on('chat', (message, player, nodes) => MessageParsing.addPlayerChatMessage(message, player))
+client.messages.on('tagsUpdated', (text, player, tags, nodes) => MessageParsing.addTagChangeMessage(player, tags));
+client.socket.on('bounced', (packet, data) => MessageParsing.addBouncedMessage(packet, data));
 
 // Unclassified messages (these just appear as unformatted text in the chat window)
 client.messages.on('released', (text, player, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
 client.messages.on('serverChat', (message, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
-client.messages.on('tagsUpdated', (text, player, tags, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
 client.messages.on('itemCheated', (text, item, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
 client.messages.on('countdown', (text, value, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
 client.messages.on('adminCommand', (text, nodes) => MessageParsing.addUnclassifiedMessage(nodes));

@@ -24,6 +24,15 @@ function deleteAccount() {
     selectedAccount.value = undefined;
   }
 }
+
+function deleteAll() {
+  const proceed = confirm('Are you sure you want to delete ALL accounts? This cannot be undone.');
+
+  if (proceed) {
+    localAccounts.value = [];
+    selectedAccount.value = undefined;
+  }
+}
 </script>
 
 <template>
@@ -44,6 +53,10 @@ function deleteAccount() {
         </template>
       </AppTable>
     </div>
+    <div style="display: flex; gap: 1em; font-size: 0.875em;">
+      <div style="margin-right: auto"></div>
+      <button :disabled="localAccounts.length === 0" @click="deleteAll">Delete all</button>
+    </div>
   </div>
 </template>
 
@@ -54,6 +67,7 @@ function deleteAccount() {
   flex-direction: column;
   gap: 0.5em;
   flex: 1;
+  padding: 0 !important;
 }
 
 .sunken-panel {

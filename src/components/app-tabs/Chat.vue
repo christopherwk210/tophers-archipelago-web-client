@@ -10,6 +10,7 @@ import info from '@/assets/icons/info.png';
 import user from '@/assets/icons/user.png';
 import check from '@/assets/icons/check.png';
 import warning from '@/assets/icons/warning.png';
+import minus from '@/assets/icons/minus.png';
 import warningFill from '@/assets/icons/warning-fill.png';
 import world from '@/assets/icons/world.png';
 import PlayerName from '../text-elements/PlayerName.vue';
@@ -139,6 +140,21 @@ function onScroll() {
       <div v-else-if="message.type === 'disconnected'" class="message">
         <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> has disconnected.
       </div>
+
+      <!-- Tags changed -->
+      <div v-else-if="message.type === 'tag-change'" class="message">
+        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> (Team {{ message.team }}) has changed their tags:
+        <strong v-for="(tag, tagIndex) in message.tags" :key="tag">{{ tag }}<template v-if="tagIndex < message.tags.length - 1">, </template></strong>
+      </div>
+
+      <!-- Death link -->
+       <div v-else-if="message.type === 'death-link'" class="message">
+        <img class="inline-img" :src="minus">
+        <template v-if="message.player && message.game && message.slot !== undefined">
+          <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />:
+        </template>
+        <span style="color: var(--theme-item-trap);">{{ message.cause }}</span>
+       </div>
     </template>
 
     <!-- Display queued messages -->
