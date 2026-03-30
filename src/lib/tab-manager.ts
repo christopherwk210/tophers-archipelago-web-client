@@ -23,20 +23,30 @@ export class TabManager<T extends Tab> {
    */
   createVueComponent() {
     return defineComponent((_, { slots }) => {
-      return () => {
-        return h('div', { 'data-vue-tab': true }, [
-          h('menu', { role: 'tablist' }, this.tabs.map((tab, index) => {
-            return h('li', { onClick: () => this.currentTabIndex.value = index, role: 'tab', 'aria-selected': this.currentTabIndex.value === index }, [
-              h('a', {  }, typeof tab.label === 'string' ? tab.label : tab.label.value)
-            ]);
-          })),
-          h('div', { class: 'window', role: 'tabpanel' }, [
-            h('div', { class: 'window-body' }, [
-              slots.default ? slots.default({ currentTabIndex: this.currentTabIndex.value, currentTab: this.currentTab.value }) : null
-            ])
+      // <div data-vue-tab>
+      return () => h('div', { 'data-vue-tab': true }, [
+        // <menu role="tablist">
+        h('menu', { role: 'tablist' }, this.tabs.map((tab, index) => {
+          // <li role="tab" aria-selected="true">
+          return h('li', { onClick: () => this.currentTabIndex.value = index, role: 'tab', 'aria-selected': this.currentTabIndex.value === index }, [
+            // <a>{{ tab.label }}</a>
+            h('a', {  }, typeof tab.label === 'string' ? tab.label : tab.label.value)
+          // </li>
+          ]);
+        // </menu>
+        })),
+        // <div class="window" role="tabpanel">
+        h('div', { class: 'window', role: 'tabpanel' }, [
+          // <div class="window-body">
+          h('div', { class: 'window-body' }, [
+            // <slot></slot>
+            slots.default ? slots.default({ currentTabIndex: this.currentTabIndex.value, currentTab: this.currentTab.value }) : null
+          // </div>
           ])
-        ]);
-      };
+        // </div>
+        ])
+      // </div>
+      ]);
     })
   }
 }

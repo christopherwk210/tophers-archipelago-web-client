@@ -2,9 +2,10 @@ import { AppStorage } from '@/lib/storage';
 import { useCssVar } from '@vueuse/core';
 import { ref, watch } from 'vue';
 
-import themeDark from '@/assets/styles/themes/dark.css?raw';
-import themeSteam from '@/assets/styles/themes/steam.css?raw';
-import themeArchipelago from '@/assets/styles/themes/archipelago.css?raw';
+const themeDark = './themes/dark.css';
+const themeSteam = './themes/steam.css';
+const themeXP = './themes/XP.css';
+const themeArchipelago = './themes/archipelago.css';
 
 export const themeCSSlocation = useCssVar('--theme-location');
 export const themeCSSitemNormal = useCssVar('--theme-item-normal');
@@ -17,20 +18,22 @@ export const themeCSStextHelp = useCssVar('--theme-text-help');
 export const themeCSStextJoin = useCssVar('--theme-text-join');
 export const themeCSSfontSize = useCssVar('--theme-font-size');
 
+const defaultThemeColors = {
+  themeCSSlocation: '#8b008b',
+  themeCSSitemNormal: '#5d920c',
+  themeCSSitemUseful: '#0000ff',
+  themeCSSitemProgression: '#ef23ef',
+  themeCSSitemTrap: '#ff0000',
+  themeCSSplayerYou: '#000000',
+  themeCSSplayerOther: '#000000',
+  themeCSStextHelp: '#008080',
+  themeCSStextJoin: '#006400'
+} as const;
+
 export const themes = {
   'Default': {
     css: '',
-    defaults: {
-      themeCSSlocation: '#8b008b',
-      themeCSSitemNormal: '#5d920c',
-      themeCSSitemUseful: '#0000ff',
-      themeCSSitemProgression: '#ef23ef',
-      themeCSSitemTrap: '#ff0000',
-      themeCSSplayerYou: '#000000',
-      themeCSSplayerOther: '#000000',
-      themeCSStextHelp: '#008080',
-      themeCSStextJoin: '#006400'
-    }
+    defaults: defaultThemeColors
   },
   // 'Archipelago': {
   //   css: themeArchipelago,
@@ -49,11 +52,7 @@ export const themes = {
   'Dark': {
     css: themeDark,
     defaults: {
-      themeCSSlocation: '#8b008b',
-      themeCSSitemNormal: '#5d920c',
-      themeCSSitemUseful: '#0000ff',
-      themeCSSitemProgression: '#ef23ef',
-      themeCSSitemTrap: '#ff0000',
+      ...defaultThemeColors,
       themeCSSplayerYou: '#ffffff',
       themeCSSplayerOther: '#ffffff',
       themeCSStextHelp: '#2dc2c2',
@@ -63,17 +62,18 @@ export const themes = {
   'Steam': {
     css: themeSteam,
     defaults: {
+      ...defaultThemeColors,
       themeCSSlocation: '#ffc0ff',
-      themeCSSitemNormal: '#5d920c',
-      themeCSSitemUseful: '#0000ff',
-      themeCSSitemProgression: '#ef23ef',
-      themeCSSitemTrap: '#ff0000',
       themeCSSplayerYou: '#ffffff',
       themeCSSplayerOther: '#ffffff',
       themeCSStextHelp: '#3dc7c7',
       themeCSStextJoin: '#52cb52'
     }
-  }
+  },
+  'XP': {
+    css: themeXP,
+    defaults: defaultThemeColors
+  },
 } as const satisfies Record<string, {
   css: string;
   defaults: {
@@ -221,14 +221,15 @@ export function importTheme(theme: string) {
 function applyTheme() {
   const styleElementId = 'tawc-theme';
 
-  let styleElement = document.getElementById(styleElementId);
+  let styleElement: HTMLLinkElement = document.getElementById(styleElementId) as HTMLLinkElement;
   if (!styleElement) {
-    styleElement = document.createElement('style');
+    styleElement = document.createElement('link');
     styleElement.id = styleElementId;
+    styleElement.rel = 'stylesheet';
     document.head.appendChild(styleElement);
   }
 
-  styleElement.innerHTML = themes[selectedTheme.value].css;
+  styleElement.href = themes[selectedTheme.value].css;
 }
 
 watch(selectedTheme, () => {
