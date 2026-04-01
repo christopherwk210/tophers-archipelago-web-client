@@ -34,14 +34,16 @@ const columnsWithProgress: Column[] = [
   { label: 'Game', key: 'game' }
 ];
 
-const progressTooltip = `Visiting this tab while this box is checked will send the "!status" command in chat in order to get player completion progress.`;
+//const progressTooltip = `Visiting this tab while this box is checked will send the "!status" command in chat in order to get player completion progress.`;
+const progressTooltip = `Requires automatically sending the !status command. It won't show in your chat, but other players may see it.`;
 </script>
 
 <template>
   <div class="players">
     <div class="check-row" style="margin: 0.5em 0;">
       <input @input="onShowPlayerProgress" v-model="settings.showPlayerProgress" type="checkbox" id="showPlayerProgress">
-      <label :data-tippy-content="progressTooltip" data-tippy-placement="right" for="showPlayerProgress">Show player progress</label>
+      <label for="showPlayerProgress">Show player progress</label>
+      <!-- <label :data-tippy-content="progressTooltip" data-tippy-placement="bottom" for="showPlayerProgress">Show player progress</label> -->
     </div>
     <div class="sunken-panel">
       <div v-if="players.length === 0">

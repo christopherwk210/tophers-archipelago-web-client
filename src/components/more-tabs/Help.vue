@@ -76,8 +76,17 @@
     <fieldset class="mt-3">
       <legend><img class="legend-icon" src="@/assets/icons/info.png"> <strong>Players</strong></legend>
       
-      <p class="mt-0 mb-0">
+      <p class="mt-0">
         The Players tab will show a table of all registered players, the game they are playing, and their current status.
+      </p>
+
+      <p class="mb-0">
+        The <strong>Show player progress</strong> toggle will show the progress of each player as a progress bar.
+        <br>
+        <small>
+          <em>Note</em>: This feature requires automatically sending the !status command on your behalf.
+          It will be hidden in your chat, but other players may see it.
+        </small>
       </p>
     </fieldset>
 
