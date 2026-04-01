@@ -1,4 +1,4 @@
-import { Client, Item } from 'archipelago.js';
+import { Client, Item, type ConnectionOptions, type JSONSerializable } from 'archipelago.js';
 import { MessageParsing } from '../state/chat';
 import { safeAsync, type SafePromiseError } from './async-utils';
 import { ref } from 'vue';
@@ -18,7 +18,10 @@ client.messages.on('tutorial', (text, nodes) => MessageParsing.addTutorialMessag
 client.messages.on('userCommand', (text, nodes) => MessageParsing.addUserCommandMessage(nodes));
 client.messages.on('chat', (message, player, nodes) => MessageParsing.addPlayerChatMessage(message, player))
 client.messages.on('tagsUpdated', (text, player, tags, nodes) => MessageParsing.addTagChangeMessage(player, tags));
-client.socket.on('bounced', (packet, data) => MessageParsing.addBouncedMessage(packet, data));
+client.socket.on('bounced', (packet, data) => {
+  console.log(packet, data)
+  MessageParsing.addBouncedMessage(packet, data)
+});
 
 // Unclassified messages (these just appear as unformatted text in the chat window)
 client.messages.on('released', (text, player, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
@@ -30,7 +33,8 @@ client.messages.on('collected', (text, player, nodes) => MessageParsing.addUncla
 
 /** Logs in a user with the server */
 export async function login(url: string, slot: string, password?: string) {
-  const options = password ? { password } : undefined;
+  const options: ConnectionOptions = password ? { password } : {};
+  options.tags = ['TextOnly', 'Tracker']
 
   client.socket.disconnect();
 
@@ -84,6 +88,18 @@ export function itemClassToString(itemClass: ItemClass) {
     default:
       return 'Normal';
   }
+}
+
+const storageKey = (slot: number, key: string) => `-tawc-${slot}-${key}`;
+
+export function storageSetSlot(slot: number, key: string, value: JSONSerializable) {
+  const localKey = storageKey(slot, key);
+  client.storage.prepare(localKey, value).replace(value).commit();
+}
+
+export function storageGetSlot(slot: number, key: string) {
+  const localKey = storageKey(slot, key);
+  return client.storage.fetch(localKey, false);
 }
 
 // Expose client to console during development

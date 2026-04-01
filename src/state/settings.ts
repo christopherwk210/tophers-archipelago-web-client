@@ -3,6 +3,9 @@ import { ref, watch } from 'vue';
 import { Howler } from 'howler';
 
 export const settings = ref({
+  // Player settings
+  showPlayerProgress: true,
+
   // Hint settings
   hintsFilterFound: false,
   locationHintFilterFound: false,
@@ -20,7 +23,8 @@ export const settings = ref({
   generalAutoReconnect: true,
   generalShowPlayerTooltips: true,
   generalShowItemTooltips: true,
-  lazyLoadTables: false
+  lazyLoadTables: false,
+  logTagChanges: false
 } satisfies Record<string, any>);
 
 // Automatically store settings when they change

@@ -8,6 +8,7 @@ export interface LocalPlayer {
   slot: number;
   game: string;
   team: number;
+  progress?: number;
 }
 
 export const players = ref<LocalPlayer[]>([]);
@@ -37,23 +38,23 @@ for (const [key, value] of Object.entries(clientStatuses)) {
 }
 
 export async function loadPlayers() {
-  const localPlayers: LocalPlayer[] = [];
   const allPlayers = client.players.teams.flat();
 
-  const results = await Promise.all(
-    allPlayers.map(async (player) => {
-      const status = await player.fetchStatus().catch(() => null);
+  if (players.value.length === 0) {
+    players.value = allPlayers.map((playerSlot, index) => ({
+      name: playerSlot.name,
+      status: '...',
+      slot: playerSlot.slot,
+      game: playerSlot.game,
+      team: playerSlot.team
+    }));
+  }
 
-      return {
-        name: player.alias,
-        status: status !== null ? clientStatusMap[status] : '',
-        game: player.game,
-        slot: player.slot,
-        team: player.team
-      } as LocalPlayer;
-    })
-  );
+  players.value.forEach(async player => {
+    const me = allPlayers.find(p => p.slot === player.slot);
+    if (!me) return;
 
-  localPlayers.push(...results);
-  players.value = localPlayers;
+    const status = await me.fetchStatus().catch(() => null);
+    player.status = status !== null ? (clientStatusMap[status] || '') : '';
+  });
 }

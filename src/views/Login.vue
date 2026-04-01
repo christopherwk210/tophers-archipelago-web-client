@@ -6,6 +6,8 @@ import { AppStorage } from '@/lib/storage';
 import { AppTab, appTabManager } from '@/state/tabs';
 import { self } from '@/state/self';
 import { localAccounts } from '@/lib/accounts';
+import { players } from '@/state/players';
+import { loadLocations } from '@/state/tracker';
 
 const router = useRouter();
 const route = useRoute();
@@ -69,6 +71,14 @@ async function connect() {
   // Attempt the login
   const response = await login(url.value, slot.value, passwordValue);
 
+  players.value = client.players.teams.flat().map((playerSlot, index) => ({
+    name: playerSlot.name,
+    status: '...',
+    slot: playerSlot.slot,
+    game: playerSlot.game,
+    team: playerSlot.team,
+  }));
+
   // Reset the loading state
   connecting.value = false;
 
@@ -90,6 +100,8 @@ async function connect() {
   AppStorage.set('password', password.value);
 
   self.slot = slot.value;
+
+  loadLocations();
 
   // Go to the main screen
   router.push('/connected');

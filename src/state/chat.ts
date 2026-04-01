@@ -5,6 +5,7 @@ import { settings } from './settings';
 import { playSound } from '@/lib/audio';
 import { jsConfetti } from '@/lib/confetti';
 import { loadPlayers, players } from './players';
+import { AppTab, appTabManager } from './tabs';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
 export namespace MessageParsing {
@@ -141,6 +142,8 @@ export namespace MessageParsing {
   }
 
   export function addTagChangeMessage(player: Player, tags: string[]) {
+    if (!settings.value.logTagChanges) return;
+
     chat.messages.push({
       type: 'tag-change',
       player: player.alias,
@@ -187,6 +190,8 @@ export namespace MessageParsing {
 
   /** This is a chat message sent by a player */
   export function addPlayerChatMessage(message: string, player: Player) {
+    if (message === '!status' && appTabManager.currentTabIndex.value === AppTab.PLAYERS) return;
+
     // Check if the text is a link
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     message = message.replace(urlRegex, (url) => {
@@ -207,7 +212,36 @@ export namespace MessageParsing {
 
   /** The result of a user command */
   export function addUserCommandMessage(nodes: MessageNode[]) {
-    const joinedMessage = nodesToText(nodes)
+    const joinedMessage = nodesToText(nodes);
+
+    let shouldHide = false;
+    if (joinedMessage.toLowerCase().trim().startsWith('player status on team')) {
+      if (appTabManager.currentTabIndex.value === AppTab.PLAYERS) shouldHide = true;
+
+      const lines = joinedMessage.split('\n');
+      lines.shift();
+
+      const allPlayers = client.players.teams.flat();
+      for (const player of allPlayers) {
+        const playerLine = lines.find(line => line.startsWith(player.name) || line.startsWith(player.alias));
+        if (!playerLine) continue;
+
+        const lastOpen = playerLine.lastIndexOf('(');
+        const lastClose = playerLine.lastIndexOf(')');
+
+        if (lastOpen === -1 || lastClose === -1 || lastClose < lastOpen) continue;
+
+        const content = playerLine.slice(lastOpen + 1, lastClose);
+        const [collected, total] = content.split('/').map(Number);
+
+        if (typeof collected !== 'number' || typeof total !== 'number' || total === 0) continue;
+
+        players.value.find(p => p.slot === player.slot)!.progress = Math.round(collected / total * 100);
+      }
+    }
+
+    if (shouldHide) return;
+
     chat.messages.push({
       type: 'user-command',
       content: joinedMessage
@@ -360,7 +394,7 @@ export async function sendMessage(override?: string) {
     const request: SayPacket = { cmd: 'Say', text: saying };
     client.socket.send(request);
   } else {
-    await client.messages.say(saying).catch(() => {})
+    await client.messages.say(saying).catch(() => {});
   }
 
   // Remove this item from the queue

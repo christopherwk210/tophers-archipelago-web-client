@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { isUserAtBottom } from '@/lib/dom-utils';
 import { chat, sendMessage } from '@/state/chat';
-import { nextTick, onActivated, ref, useTemplateRef, watch } from 'vue';
-import { getItemStyles, getPlayerStyles } from '@/lib/theme';
+import { computed, nextTick, onActivated, onDeactivated, ref, useTemplateRef, watch } from 'vue';
 
 // Icons
 import question from '@/assets/icons/question.png';
@@ -15,9 +14,102 @@ import warningFill from '@/assets/icons/warning-fill.png';
 import world from '@/assets/icons/world.png';
 import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
+import { useElementBounding } from '@vueuse/core';
+
+interface CommandHint {
+  cmd: string;
+  args: string[];
+  help: string;
+  isCustom?: boolean;
+}
+
+const commandHints: CommandHint[] = [
+  {
+    cmd: '!help',
+    args: [],
+    help: 'Returns a listing of available commands.'
+  },
+  {
+    cmd: '!license',
+    args: [],
+    help: 'Returns the software licensing information.'
+  },
+  {
+    cmd: '!options',
+    args: [],
+    help: 'Returns the current server options, including password in plaintext.'
+  },
+  {
+    cmd: '!status',
+    args: ['[tag name]'],
+    help: 'Returns information about the connection status and check completion numbers for all players in the current room. Optionally mention a Tag name and get information on who has that Tag. For example: !status DeathLink'
+  },
+  {
+    cmd: '!countdown',
+    args: ['[seconds]'],
+    help: 'Starts a countdown using the given seconds value. Useful for synchronizing starts. Defaults to 10 seconds if no argument is provided.'
+  },
+  {
+    cmd: '!alias',
+    args: ['[alias]'],
+    help: `Sets your alias, which allows you to use commands with the alias rather than your provided name. !alias on its own will reset the alias to the player's original name.`
+  },
+  {
+    cmd: '!admin',
+    args: ['[command]'],
+    help: 'Executes a command as if you typed it into the server console. Remote administration must be enabled.'
+  },
+  {
+    cmd: '!remaining',
+    args: [],
+    help: 'Lists the items remaining in your game, but not where they are or who they go to.'
+  },
+  {
+    cmd: '!missing',
+    args: [],
+    help: `Lists the location checks you are missing from the server's perspective.`
+  },
+  {
+    cmd: '!checked',
+    args: [],
+    help: `Lists all the location checks you've done from the server's perspective.`
+  },
+  {
+    cmd: '!hint',
+    args: ['[item name]'],
+    help: 'Lists all hints relevant to your world, the number of points you have for hints, and how much a hint costs. If an item name is provided, tells you the game world and location your item is in, uses points earned from completing locations.'
+  },
+  {
+    cmd: '!hint_location',
+    args: ['[location]'],
+    help: 'Tells you what item is in a specific location, uses points earned from completing locations.'
+  },
+  {
+    cmd: '!collect',
+    args: [],
+    help: 'Grants you all the remaining items for your world by collecting them from all games. Typically used after goal completion.'
+  },
+  {
+    cmd: '!release',
+    args: [],
+    help: 'Releases all items contained in your world to other worlds. Typically, done automatically by the server, but can be configured to allow/require manual usage of this command.'
+  },
+
+  {
+    cmd: '/clear',
+    args: [],
+    help: 'Clears the local chat history.',
+    isCustom: true
+  }
+];
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
+
+const inputBoundingBox = useElementBounding(sayInput, {
+  windowResize: true,
+  immediate: true
+});
 
 const lastScrollPosition = ref(0);
 
@@ -32,6 +124,11 @@ onActivated(async () => {
   }
 
   if (sayInput.value) sayInput.value.focus();
+});
+
+onDeactivated(() => {
+  hintSelected.value = 0;
+  currentHintMatches.value = [];
 });
 
 // Triggered by keyboard enter in the input box
@@ -77,6 +174,85 @@ function onScroll() {
   if (!el) return;
 
   lastScrollPosition.value = el.scrollTop;
+}
+
+function keyDown(e: KeyboardEvent) {
+  switch (e.key) {
+    case 'Enter':
+      if (currentHintMatches.value.length > 0 && !chat.say.startsWith(currentHintMatches.value[hintSelected.value]!.cmd)) {
+        e.preventDefault();
+        chat.say = currentHintMatches.value[hintSelected.value]!.cmd;
+        hintSelected.value = 0;
+      } else {
+        send();
+      }
+      break;
+    case 'ArrowUp':
+      if (chat.say.trim().length === 0 && chat.lastSay.trim().length > 0) {
+        e.preventDefault();
+        recall();
+      } else if (currentHintMatches.value.length > 0) {
+        e.preventDefault();
+        if (hintSelected.value > 0) {
+          hintSelected.value--;
+        } else {
+          hintSelected.value = currentHintMatches.value.length - 1;
+        }
+      }
+      break;
+    case 'ArrowDown':
+      if (currentHintMatches.value.length > 0) {
+        e.preventDefault();
+        if (hintSelected.value < currentHintMatches.value.length - 1) {
+          hintSelected.value++;
+        } else {
+          hintSelected.value = 0;
+        }
+      }
+      break;
+    case 'Tab':
+      if (currentHintMatches.value.length > 0) {
+        e.preventDefault();
+        chat.say = currentHintMatches.value[hintSelected.value]!.cmd;
+        hintSelected.value = 0;
+      }
+      break;
+  }
+}
+
+const currentHintMatches = ref<CommandHint[]>([]);
+const hintSelected = ref(0);
+
+watch(() => chat.say, () => {
+  if (chat.say.trim().length === 0) {
+    currentHintMatches.value = [];
+    hintSelected.value = 0;
+  } else {
+    currentHintMatches.value = commandHints.filter(hint => {
+      return hint.cmd.indexOf(chat.say.split(' ')[0]!) === 0
+    });
+  }
+});
+
+watch(() => hintSelected.value, () => {
+  const element = document.querySelector(`.command-hint[data-hint-index="${hintSelected.value}"]`);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+});
+
+const commandHintStyles = computed(() => {
+  return {
+    left: inputBoundingBox.left.value + 'px',
+    bottom: (window.innerHeight - inputBoundingBox.top.value) + 8 + 'px',
+    width: inputBoundingBox.width.value + 'px',
+  }
+});
+
+async function acceptHint(index: number) {
+  chat.say = currentHintMatches.value[index]!.cmd;
+  await nextTick();
+  if (sayInput.value) sayInput.value.focus();
 }
 </script>
 
@@ -166,8 +342,7 @@ function onScroll() {
   <div class="input">
     <input
       ref="sayInput"
-      @keydown.enter="send"
-      @keydown.arrow-up.prevent="recall"
+      @keydown="keyDown"
       placeholder="Type here..."
       v-model="chat.say"
       id="say"
@@ -176,6 +351,18 @@ function onScroll() {
       autocomplete="off"
       autocapitalize="none"
     />
+  </div>
+
+  <div v-if="currentHintMatches.length > 0" :style="commandHintStyles" class="command-hints">
+    <div @click="acceptHint(hintIndex)" :data-hint-index="hintIndex" :class="{ selected: hintSelected === hintIndex }" class="command-hint" v-for="(hint, hintIndex) in currentHintMatches">
+      <img v-if="hint.isCustom" src="@/assets/icons/world.png">
+      <img v-else src="@/assets/images/archipelago-icon.png">
+      <div>
+        <strong>{{ hint.cmd }}</strong> {{ hint.args.join(' ') }}
+        <br>
+        <small style="opacity: 0.8">{{ hint.help }}</small>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -205,5 +392,40 @@ input {
 .item-for-me {
   background: wheat;
   padding: 0.5em 0;
+}
+
+.command-hints {
+  position: fixed;
+  background: #192327;
+  color: white;
+  border-radius: 4px;
+  line-height: 1.25;
+  max-height: 300px;
+  overflow: auto;
+  padding: 0.2em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.command-hint {
+  padding: 0.3em;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  margin-bottom: 0.3em;
+  display: flex;
+  gap: 0.5em;
+}
+
+.command-hint > img {
+  height: 2em;
+  width: 2em;
+}
+
+.command-hint:last-child {
+  margin-bottom: 0;
+}
+
+.command-hint:hover, .command-hint.selected {
+  background: rgba(255, 255, 255, 0.1);
 }
 </style>

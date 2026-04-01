@@ -36,26 +36,6 @@ const updateFontSize = useDebounceFn(() => {
 
 watch(themeFontSize, () => updateFontSize());
 
-const tippyInstance = ref<Instance[]>();
-
-function createTippy() {
-  if (tippyInstance.value) tippyInstance.value.forEach(instance => instance.destroy());
-
-  tippyInstance.value = tippy('[data-tippy-content]', {
-    theme: 'light',
-    arrow: true,
-    duration: 100,
-    placement: 'right'
-  });
-}
-
-onActivated(() => createTippy());
-onMounted(() => createTippy());
-
-onBeforeUnmount(() => {
-  if (tippyInstance.value) tippyInstance.value.forEach(instance => instance.destroy());
-});
-
 const lazyLoadTooltip = 'This will cause tables to load their content incrementally, which can speed up load times for slots with a large amount of checks';
 </script>
 
@@ -81,7 +61,12 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
 
       <div style="margin-top: 1em" class="check-row">
         <input v-model="settings.lazyLoadTables" type="checkbox" id="lazyLoadTables">
-        <label :data-tippy-content="lazyLoadTooltip" for="lazyLoadTables">Lazy load tables</label>
+        <label :data-tippy-content="lazyLoadTooltip" data-tippy-placement="right" for="lazyLoadTables">Lazy load tables</label>
+      </div>
+
+      <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.logTagChanges" type="checkbox" id="logTagChanges">
+        <label for="logTagChanges">Show tag change messages</label>
       </div>
     </fieldset>
 
@@ -149,11 +134,17 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
       <legend><strong>Misc</strong></legend>
 
       <button @click="clearCache()">Clear cache</button>
+      <a target="_blank" href="https://github.com/christopherwk210/tophers-archipelago-web-client" style="margin-left: 1em;"><button>View source code</button></a>
     </fieldset>
   </div>
 </template>
 
 <style scoped>
+button, :deep(button) {
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+}
+
 .audio-play-btn {
   width: 2em;
   height: 2em;
