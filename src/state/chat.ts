@@ -1,11 +1,12 @@
 import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import type { BouncedPacket, Item, JSONRecord, MessageNode, Player, SayPacket } from 'archipelago.js';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { settings } from './settings';
 import { playSound } from '@/lib/audio';
 import { jsConfetti } from '@/lib/confetti';
 import { loadPlayers, players } from './players';
 import { AppTab, appTabManager } from './tabs';
+import { tawcBounce } from '@/lib/bounces';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
 export namespace MessageParsing {
@@ -93,6 +94,13 @@ export namespace MessageParsing {
     cause: string;
   }
 
+  interface ChatMessageConfetti extends ChatMessageBase {
+    type: 'confetti';
+    player: string;
+    slot: number;
+    game: string;
+  }
+
   interface ChatMessageUnclassified extends ChatMessageContentBase { type: 'none'; }
   interface ChatMessageUserCommand extends ChatMessageContentBase { type: 'user-command'; }  
   interface ChatMessageTutorial extends ChatMessageContentBase { type: 'tutorial'; }
@@ -109,6 +117,7 @@ export namespace MessageParsing {
     | ChatMessageDisconnected
     | ChatMessageTagChange
     | ChatMessageDeathLink
+    | ChatMessageConfetti
     ;
 
   /**
@@ -343,6 +352,99 @@ export namespace MessageParsing {
   }
 }
 
+export interface CommandHint {
+  cmd: string;
+  args: string[];
+  help: string;
+  isCustom?: boolean;
+}
+
+export const commandHints = ref<CommandHint[]>([
+  {
+    cmd: '!help',
+    args: [],
+    help: 'Returns a listing of available commands.'
+  },
+  {
+    cmd: '!license',
+    args: [],
+    help: 'Returns the software licensing information.'
+  },
+  {
+    cmd: '!options',
+    args: [],
+    help: 'Returns the current server options, including password in plaintext.'
+  },
+  {
+    cmd: '!status',
+    args: ['[tag name]'],
+    help: 'Returns information about the connection status and check completion numbers for all players in the current room. Optionally mention a Tag name and get information on who has that Tag. For example: !status DeathLink'
+  },
+  {
+    cmd: '!countdown',
+    args: ['[seconds]'],
+    help: 'Starts a countdown using the given seconds value. Useful for synchronizing starts. Defaults to 10 seconds if no argument is provided.'
+  },
+  {
+    cmd: '!alias',
+    args: ['[alias]'],
+    help: `Sets your alias, which allows you to use commands with the alias rather than your provided name. !alias on its own will reset the alias to the player's original name.`
+  },
+  {
+    cmd: '!admin',
+    args: ['[command]'],
+    help: 'Executes a command as if you typed it into the server console. Remote administration must be enabled.'
+  },
+  {
+    cmd: '!remaining',
+    args: [],
+    help: 'Lists the items remaining in your game, but not where they are or who they go to.'
+  },
+  {
+    cmd: '!missing',
+    args: [],
+    help: `Lists the location checks you are missing from the server's perspective.`
+  },
+  {
+    cmd: '!checked',
+    args: [],
+    help: `Lists all the location checks you've done from the server's perspective.`
+  },
+  {
+    cmd: '!hint',
+    args: ['[item name]'],
+    help: 'Lists all hints relevant to your world, the number of points you have for hints, and how much a hint costs. If an item name is provided, tells you the game world and location your item is in, uses points earned from completing locations.'
+  },
+  {
+    cmd: '!hint_location',
+    args: ['[location]'],
+    help: 'Tells you what item is in a specific location, uses points earned from completing locations.'
+  },
+  {
+    cmd: '!collect',
+    args: [],
+    help: 'Grants you all the remaining items for your world by collecting them from all games. Typically used after goal completion.'
+  },
+  {
+    cmd: '!release',
+    args: [],
+    help: 'Releases all items contained in your world to other worlds. Typically, done automatically by the server, but can be configured to allow/require manual usage of this command.'
+  },
+
+  // {
+  //   cmd: '/clear',
+  //   args: [],
+  //   help: 'Clears the local chat history.',
+  //   isCustom: true
+  // },
+  // {
+  //   cmd: '/confetti',
+  //   args: [],
+  //   help: 'Triggers a confetti celebration for everyone using Topher\'s Archipelago Web Client, including you!',
+  //   isCustom: true
+  // }
+]);
+
 export const chat = reactive({
   /** What is currently being typed in the box */
   say: '',
@@ -360,12 +462,7 @@ export const chat = reactive({
   messages: [] as MessageParsing.ChatMessage[],
 
   /** Custom chat commands */
-  customCommands: {
-    '/clear': () => {
-      chat.say = '';
-      chat.messages = [];
-    }
-  } as Record<string, () => void>,
+  customCommands: {} as Record<string, () => void>,
 });
 
 /** Send a message to the server */

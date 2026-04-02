@@ -1,7 +1,8 @@
-import { Client, Item, type ConnectionOptions, type JSONSerializable } from 'archipelago.js';
+import { Client, Item, type ConnectionOptions, type JSONRecord, type JSONSerializable } from 'archipelago.js';
 import { MessageParsing } from '../state/chat';
 import { safeAsync, type SafePromiseError } from './async-utils';
 import { ref } from 'vue';
+import { tawcBounces } from './bounces';
 
 export const client = new Client();
 
@@ -19,7 +20,19 @@ client.messages.on('userCommand', (text, nodes) => MessageParsing.addUserCommand
 client.messages.on('chat', (message, player, nodes) => MessageParsing.addPlayerChatMessage(message, player))
 client.messages.on('tagsUpdated', (text, player, tags, nodes) => MessageParsing.addTagChangeMessage(player, tags));
 client.socket.on('bounced', (packet, data) => {
-  console.log(packet, data)
+  let handled = false;
+  if (data.__twac && typeof data.__signal === 'string') {
+    for (const tawcBounce of tawcBounces) {
+      if (tawcBounce.signal === data.__signal) {
+        tawcBounce.handler(data.data as any);
+        handled = true;
+        break;
+      }
+    }
+  }
+
+  if (handled) return;
+
   MessageParsing.addBouncedMessage(packet, data)
 });
 

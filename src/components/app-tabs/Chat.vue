@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isUserAtBottom } from '@/lib/dom-utils';
-import { chat, sendMessage } from '@/state/chat';
+import { chat, commandHints, sendMessage, type CommandHint } from '@/state/chat';
 import { computed, nextTick, onActivated, onDeactivated, ref, useTemplateRef, watch } from 'vue';
 
 // Icons
@@ -15,93 +15,6 @@ import world from '@/assets/icons/world.png';
 import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
 import { useElementBounding } from '@vueuse/core';
-
-interface CommandHint {
-  cmd: string;
-  args: string[];
-  help: string;
-  isCustom?: boolean;
-}
-
-const commandHints: CommandHint[] = [
-  {
-    cmd: '!help',
-    args: [],
-    help: 'Returns a listing of available commands.'
-  },
-  {
-    cmd: '!license',
-    args: [],
-    help: 'Returns the software licensing information.'
-  },
-  {
-    cmd: '!options',
-    args: [],
-    help: 'Returns the current server options, including password in plaintext.'
-  },
-  {
-    cmd: '!status',
-    args: ['[tag name]'],
-    help: 'Returns information about the connection status and check completion numbers for all players in the current room. Optionally mention a Tag name and get information on who has that Tag. For example: !status DeathLink'
-  },
-  {
-    cmd: '!countdown',
-    args: ['[seconds]'],
-    help: 'Starts a countdown using the given seconds value. Useful for synchronizing starts. Defaults to 10 seconds if no argument is provided.'
-  },
-  {
-    cmd: '!alias',
-    args: ['[alias]'],
-    help: `Sets your alias, which allows you to use commands with the alias rather than your provided name. !alias on its own will reset the alias to the player's original name.`
-  },
-  {
-    cmd: '!admin',
-    args: ['[command]'],
-    help: 'Executes a command as if you typed it into the server console. Remote administration must be enabled.'
-  },
-  {
-    cmd: '!remaining',
-    args: [],
-    help: 'Lists the items remaining in your game, but not where they are or who they go to.'
-  },
-  {
-    cmd: '!missing',
-    args: [],
-    help: `Lists the location checks you are missing from the server's perspective.`
-  },
-  {
-    cmd: '!checked',
-    args: [],
-    help: `Lists all the location checks you've done from the server's perspective.`
-  },
-  {
-    cmd: '!hint',
-    args: ['[item name]'],
-    help: 'Lists all hints relevant to your world, the number of points you have for hints, and how much a hint costs. If an item name is provided, tells you the game world and location your item is in, uses points earned from completing locations.'
-  },
-  {
-    cmd: '!hint_location',
-    args: ['[location]'],
-    help: 'Tells you what item is in a specific location, uses points earned from completing locations.'
-  },
-  {
-    cmd: '!collect',
-    args: [],
-    help: 'Grants you all the remaining items for your world by collecting them from all games. Typically used after goal completion.'
-  },
-  {
-    cmd: '!release',
-    args: [],
-    help: 'Releases all items contained in your world to other worlds. Typically, done automatically by the server, but can be configured to allow/require manual usage of this command.'
-  },
-
-  {
-    cmd: '/clear',
-    args: [],
-    help: 'Clears the local chat history.',
-    isCustom: true
-  }
-];
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -228,7 +141,7 @@ watch(() => chat.say, () => {
     currentHintMatches.value = [];
     hintSelected.value = 0;
   } else {
-    currentHintMatches.value = commandHints.filter(hint => {
+    currentHintMatches.value = commandHints.value.filter(hint => {
       return hint.cmd.indexOf(chat.say.split(' ')[0]!) === 0
     });
   }
@@ -324,13 +237,19 @@ async function acceptHint(index: number) {
       </div>
 
       <!-- Death link -->
-       <div v-else-if="message.type === 'death-link'" class="message">
+      <div v-else-if="message.type === 'death-link'" class="message">
         <img class="inline-img" :src="minus">
         <template v-if="message.player && message.game && message.slot !== undefined">
           <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />:
         </template>
         <span style="color: var(--theme-item-trap);">{{ message.cause }}</span>
-       </div>
+      </div>
+
+      <!-- Confetti -->
+      <div v-else-if="message.type === 'confetti'" class="message">
+        <img class="inline-img" style="opacity: 0; pointer-events: none;" :src="info">
+        <span style="color: var(--theme-text-join);"><PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> <strong>sends confetti</strong></span> 🎉
+      </div>
     </template>
 
     <!-- Display queued messages -->
