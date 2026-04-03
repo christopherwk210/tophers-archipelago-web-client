@@ -9,6 +9,8 @@ export const settings = ref({
   // Hint settings
   hintsFilterFound: false,
   locationHintFilterFound: false,
+  hintCopyButtonEnabled: true,
+  hintCopyType: 'markdown' as 'markdown' | 'plain' | 'ascii' | 'item-name',
 
   // Notification settings
   notificationsItemSent: true,

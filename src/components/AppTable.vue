@@ -12,6 +12,7 @@ export interface Column {
 
 const emit = defineEmits<{
   (e: 'rowSelected', row: any): void;
+  (e: 'rowDoubleClicked', row: any): void;
 }>();
 
 const props = withDefaults(defineProps<{
@@ -66,7 +67,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(sortedData, {
     </thead>
     
     <tbody v-if="settings.lazyLoadTables" v-bind="containerProps">
-      <tr v-for="(item, index) of list" @click="rowClicked(index, item.data)" :class="{ highlighted: selectedRow === index }">
+      <tr v-for="(item, index) of list" @dblclick.stop.prevent.capture="emit('rowDoubleClicked', item.data)" @click="rowClicked(index, item.data)" :class="{ highlighted: selectedRow === index }">
         <slot :name="column.key" :item="item.data" v-for="column of columns">
           <td>{{ item.data[column.key] }}</td>
         </slot>
@@ -74,7 +75,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(sortedData, {
     </tbody>
 
     <tbody v-else>
-      <tr v-for="(item, index) of sortedData" @click="rowClicked(index, item)" :class="{ highlighted: selectedRow === index }">
+      <tr v-for="(item, index) of sortedData" @dblclick.stop.prevent.capture="emit('rowDoubleClicked', item)" @click="rowClicked(index, item)" :class="{ highlighted: selectedRow === index }">
         <slot :name="column.key" :item="item" v-for="column of columns">
           <td>{{ item[column.key] }}</td>
         </slot>

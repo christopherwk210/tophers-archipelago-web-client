@@ -119,3 +119,7 @@ pre {
     inset -2px -2px var(--tawc-dark-box-shadow-1),
     inset 2px 2px #0a0a0a;
 }
+
+.copy-btn svg {
+  filter: invert(1);
+}

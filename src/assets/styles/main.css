@@ -87,6 +87,7 @@ menu a {
 /* Tables */
 .app-table {
   width: 100%;
+  user-select: none;
 }
 
 .app-table thead {
@@ -108,4 +109,15 @@ select {
 table>tbody>tr.highlighted {
   background-color: #d9d9d9 !important;
   color: initial !important;
+}
+
+code {
+  font-family: monospace !important;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+u {
+  text-decoration: underline !important;
 }

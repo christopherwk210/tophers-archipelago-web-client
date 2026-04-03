@@ -5,6 +5,8 @@ import { ref, watch } from 'vue';
 const themeDark = './themes/dark.css';
 const themeSteam = './themes/steam.css';
 const themeXP = './themes/XP.css';
+const themeXPSilver = './themes/XP-silver.css';
+const themeVisualStudio = './themes/visual-studio.css';
 const themeArchipelago = './themes/archipelago.css';
 
 export const themeCSSlocation = useCssVar('--theme-location');
@@ -74,6 +76,21 @@ export const themes = {
     css: themeXP,
     defaults: defaultThemeColors
   },
+  'Visual Studio': {
+    css: themeVisualStudio,
+    defaults: {
+      ...defaultThemeColors,
+      themeCSSplayerYou: '#ffffff',
+      themeCSSplayerOther: '#ffffff',
+      themeCSStextHelp: '#2dc2c2',
+      themeCSStextJoin: '#2f9a2f',
+      themeCSSlocation: '#1da75b'
+    }
+  },
+  // 'XP Silver': {
+  //   css: themeXPSilver,
+  //   defaults: defaultThemeColors
+  // },
 } as const satisfies Record<string, {
   css: string;
   defaults: {

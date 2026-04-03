@@ -46,7 +46,7 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
 
       <div style="margin-top: 0.5em" class="check-row">
         <input v-model="settings.generalAutoReconnect" type="checkbox" id="attemptReconnect">
-        <label for="attemptReconnect">Attempt to reconnect automatically on page refresh</label>
+        <label for="attemptReconnect">Reconnect automatically on refresh</label>
       </div>
 
       <div style="margin-top: 1em" class="check-row">
@@ -61,12 +61,51 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
 
       <div style="margin-top: 1em" class="check-row">
         <input v-model="settings.lazyLoadTables" type="checkbox" id="lazyLoadTables">
-        <label :data-tippy-content="lazyLoadTooltip" data-tippy-placement="right" for="lazyLoadTables">Lazy load tables</label>
+        <label :data-tippy-content="lazyLoadTooltip" for="lazyLoadTables">Lazy load tables</label>
       </div>
 
       <div style="margin-top: 1em" class="check-row">
         <input v-model="settings.logTagChanges" type="checkbox" id="logTagChanges">
         <label for="logTagChanges">Show tag change messages</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="mt-3">
+      <legend><strong>Hints</strong></legend>
+
+      <div style="margin-top: 0.5em" class="check-row">
+        <input v-model="settings.hintsFilterFound" type="checkbox" id="hintsFilterFound">
+        <label for="hintsFilterFound">Hide found hint in the hints tab</label>
+      </div>
+
+      <!-- <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.locationHintFilterFound" type="checkbox" id="locationHintFilterFound">
+        <label for="locationHintFilterFound">Hide checked location in the locations tab</label>
+      </div> -->
+
+      <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.hintCopyButtonEnabled" type="checkbox" id="hintCopyButtonEnabled">
+        <label data-tippy-content="You can always copy hints by double clicking them in the table" for="hintCopyButtonEnabled">Enable copy button in the hints tab</label>
+      </div>
+
+      <div style="margin-top: 1em" class="check-row">
+        <label>Copy hints as:</label>
+      </div>
+      <div class="field-row radio-row">
+        <input v-model="settings.hintCopyType" value="markdown" id="markdown" type="radio" name="markdown">
+        <label data-tippy-maxWidth="none" data-tippy-content="<code>Player</code>'s <u>Item</u> is in <code>Other Player</code>'s world at <strong>Location</strong>" for="markdown">Markdown/Discord</label>
+      </div>
+      <div class="field-row radio-row">
+        <input v-model="settings.hintCopyType" value="plain" id="plain" type="radio" name="plain">
+        <label data-tippy-maxWidth="none" data-tippy-content="Player's Item is in Other Player's world at Location" for="plain">Plain text</label>
+      </div>
+      <div class="field-row radio-row">
+        <input v-model="settings.hintCopyType" value="item-name" id="item-name" type="radio" name="item-name">
+        <label data-tippy-content="Item Name" for="item-name">Item name only</label>
+      </div>
+      <div class="field-row radio-row">
+        <input v-model="settings.hintCopyType" value="ascii" id="ascii" type="radio" name="ascii">
+        <label data-tippy-maxWidth="none" data-tippy-content="<code>(╯°□°)╯ <( PLAYER YOU HAVE MY ITEM AND I NEED IT )</code>" for="ascii">Screaming</label>
       </div>
     </fieldset>
 
@@ -163,5 +202,10 @@ button, :deep(button) {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.radio-row {
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
 }
 </style>
