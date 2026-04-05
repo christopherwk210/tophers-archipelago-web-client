@@ -116,3 +116,7 @@ pre {
 .copy-btn svg {
   filter: invert(1);
 }
+
+.theme-selector-item:hover {
+  background: #404637 !important;
+}

@@ -26,7 +26,8 @@ export const settings = ref({
   generalShowPlayerTooltips: true,
   generalShowItemTooltips: true,
   lazyLoadTables: false,
-  logTagChanges: false
+  logTagChanges: false,
+  showLoginThemeButton: true
 } satisfies Record<string, any>);
 
 // Automatically store settings when they change

@@ -8,6 +8,8 @@ import { self } from '@/state/self';
 import { localAccounts } from '@/lib/accounts';
 import { players } from '@/state/players';
 import { loadLocations } from '@/state/tracker';
+import LoginThemeSelector from '@/components/LoginThemeSelector.vue';
+import { settings } from '@/state/settings';
 
 const router = useRouter();
 const route = useRoute();
@@ -136,7 +138,7 @@ function resetAccountSwitcher() {
 
 onMounted(() => {
   client.socket.disconnect();
-})
+});
 </script>
 
 <template>
@@ -213,6 +215,7 @@ onMounted(() => {
       </div>
     </template>
 
+    <LoginThemeSelector v-if="settings.showLoginThemeButton && !connecting" />
   </div>
 </template>
 
@@ -238,6 +241,9 @@ h1 {
   font-family: serif !important;
   text-shadow: 4px 4px 0 black;
   user-select: none;
+
+  max-width: 550px;
+  margin-right: 100px;
 }
 
 .window {

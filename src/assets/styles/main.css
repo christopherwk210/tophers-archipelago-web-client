@@ -121,3 +121,13 @@ code {
 u {
   text-decoration: underline !important;
 }
+
+menu[role=tablist] {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* hide horizontal scrollbar on tablist */
+menu[role=tablist]::-webkit-scrollbar {
+  display: none !important;
+}

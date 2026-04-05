@@ -4,11 +4,13 @@ import Help from '@/components/more-tabs/Help.vue';
 import { TabManager } from '@/lib/tab-manager';
 import type { ComponentTab } from '@/state/tabs';
 import Accounts from '../more-tabs/Accounts.vue';
+import Changes from '../more-tabs/Changes.vue';
 
 const tabManager = new TabManager([
   { label: 'Settings', component: Settings },
   { label: 'Accounts', component: Accounts },
-  { label: 'Help', component: Help }
+  { label: 'Help', component: Help },
+  { label: 'Changelog', component: Changes }
 ] as const satisfies ComponentTab[]);
 
 const Tabs = tabManager.createVueComponent();
