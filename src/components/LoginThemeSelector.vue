@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { selectedTheme, themes } from '@/state/theme';
+import { resetThemeToDefault, selectedTheme, themes } from '@/state/theme';
 import { useElementBounding, useEventListener } from '@vueuse/core';
 import { computed, ref, useTemplateRef } from 'vue';
 
@@ -21,6 +21,7 @@ useEventListener('click', () => {
 
 function selectTheme(theme: any) {
   selectedTheme.value = theme;
+  resetThemeToDefault(selectedTheme.value);
 }
 </script>
 
