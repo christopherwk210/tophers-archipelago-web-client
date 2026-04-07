@@ -1,5 +1,7 @@
 import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import { reactive, ref } from 'vue';
+import { showMouseToast } from './ui';
+import { settings } from './settings';
 
 export enum HintStatus {
   UNSPECIFIED = 0,
@@ -88,4 +90,30 @@ export async function loadHints() {
   });
 
   hintsLastUpdated.value = Date.now();
+}
+
+export async function copyHint(item: LocalHint) {
+  showMouseToast('Hint copied to clipboard');
+
+  let result: boolean | void;
+  switch (settings.value.hintCopyType) {
+    case 'markdown':
+      result = await navigator.clipboard.writeText(`\`${item.player}\`'s __${item.item}__ is in \`${item.owner}\`'s world at **${item.location}**`).catch(() => false);
+      break;
+    case 'plain':
+      result = await navigator.clipboard.writeText(`${item.player}'s ${item.item} is in ${item.owner}'s world at ${item.location}`).catch(() => false);
+      break;
+    case 'item-name':
+      result = await navigator.clipboard.writeText(item.item).catch(() => false);
+      break;
+    case 'ascii':
+      result = await navigator.clipboard.writeText(`(╯°□°)╯ <( ${item.owner.toUpperCase()} YOU HAVE MY ${item.item.toUpperCase()} AND I NEED IT )`).catch(() => false);
+      break;
+  }
+
+  if (result === false) {
+    showMouseToast('Failed to copy hint');
+  } else {
+    showMouseToast('Hint copied to clipboard');
+  }
 }

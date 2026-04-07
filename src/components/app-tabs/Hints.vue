@@ -3,7 +3,7 @@ import { computed, onActivated, ref, useTemplateRef, watchEffect } from 'vue';
 import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 import { showMouseToast, ui } from '@/state/ui';
-import { getCssVarFromStatus, getHintStatusName, hints, hintsLastUpdated, HintStatus, loadHints, type LocalHint } from '@/state/hints';
+import { getCssVarFromStatus, getHintStatusName, hints, hintsLastUpdated, HintStatus, loadHints, type LocalHint, copyHint } from '@/state/hints';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { settings } from '@/state/settings';
 import PlayerName from '../text-elements/PlayerName.vue';
@@ -41,32 +41,6 @@ const filteredHints = computed(() => {
     return !isFound;
   });
 });
-
-async function copyHint(item: LocalHint) {
-  showMouseToast('Hint copied to clipboard');
-
-  let result: boolean | void;
-  switch (settings.value.hintCopyType) {
-    case 'markdown':
-      result = await navigator.clipboard.writeText(`\`${item.player}\`'s __${item.item}__ is in \`${item.owner}\`'s world at **${item.location}**`).catch(() => false);
-      break;
-    case 'plain':
-      result = await navigator.clipboard.writeText(`${item.player}'s ${item.item} is in ${item.owner}'s world at ${item.location}`).catch(() => false);
-      break;
-    case 'item-name':
-      result = await navigator.clipboard.writeText(item.item).catch(() => false);
-      break;
-    case 'ascii':
-      result = await navigator.clipboard.writeText(`(╯°□°)╯ <( ${item.owner.toUpperCase()} YOU HAVE MY ${item.item.toUpperCase()} AND I NEED IT )`).catch(() => false);
-      break;
-  }
-
-  if (result === false) {
-    showMouseToast('Failed to copy hint');
-  } else {
-    showMouseToast('Hint copied to clipboard');
-  }
-}
 
 const priorityDropDown = useTemplateRef('priority-drop-down');
 const priorityDropDownBounding = useElementBounding(priorityDropDown);

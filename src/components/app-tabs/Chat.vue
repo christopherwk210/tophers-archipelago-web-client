@@ -15,7 +15,7 @@ import world from '@/assets/icons/world.png';
 import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
 import { useElementBounding } from '@vueuse/core';
-import { getCssVarFromStatus, getHintStatusName, HintStatus } from '@/state/hints';
+import { copyHint, getCssVarFromStatus, getHintStatusName, HintStatus } from '@/state/hints';
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -209,6 +209,14 @@ async function acceptHint(index: number) {
 
       <!-- Item hinted -->
       <div v-else-if="message.type === 'item-hinted'" class="message">
+        <button @click="e => copyHint({
+          player: message.receiver,
+          item: message.itemName,
+          owner: message.sender,
+          location: message.itemLocation
+        } as any)" class="copy-btn">
+          <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6 18h-3c-.48 0-1-.379-1-1v-14c0-.481.38-1 1-1h14c.621 0 1 .522 1 1v3h3c.621 0 1 .522 1 1v14c0 .621-.522 1-1 1h-14c-.48 0-1-.379-1-1zm1.5-10.5v13h13v-13zm9-1.5v-2.5h-13v13h2.5v-9.5c0-.481.38-1 1-1z" fill-rule="nonzero"/></svg>
+        </button>
         <img class="inline-img" :src="message.found ? check : question">
         <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />'s <ItemName :iclass="message.itemClass" :name="message.itemName" /> is at <em style="color: var(--theme-location);">{{ message.itemLocation }}</em> in <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />'s world.
         <span v-if="message.status" :style="{ color: getCssVarFromStatus(message.status) }">({{ getHintStatusName(message.status) }})</span>
@@ -347,5 +355,19 @@ input {
 
 .command-hint:hover, .command-hint.selected {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.copy-btn {
+  margin-right: 0.5em;
+  padding: 8px;
+  min-width: 0;
+  min-height: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.copy-btn svg {
+  width: 1.2em;
+  height: 1.2em;
 }
 </style>
