@@ -10,6 +10,11 @@ import {
   themeCSStextHelp,
   themeCSStextJoin,
   themeCSSfontSize,
+  themeCSSstatusAvoid,
+  themeCSSstatusNoPriority,
+  themeCSSstatusFound,
+  themeCSSstatusNone,
+  themeCSSstatusPriority,
   resetThemeToDefault,
   exportTheme,
   importTheme,
@@ -120,6 +125,34 @@ watch(themeFontSize, () => updateFontSize());
         <div class="field-row">
           <input type="color" v-model="themeCSStextJoin" />
           <label>Player joined</label>
+        </div>
+      </div>
+
+      <div>
+        <div style="margin-bottom: 0.5em;"><strong>Status colors</strong></div>
+        <div class="field-row">
+          <input type="color" v-model="themeCSSstatusFound" />
+          <label>Found</label>
+        </div>
+    
+        <div class="field-row">
+          <input type="color" v-model="themeCSSstatusPriority" />
+          <label>Priority</label>
+        </div>
+
+        <div class="field-row">
+          <input type="color" v-model="themeCSSstatusNoPriority" />
+          <label>No Priority</label>
+        </div>
+
+        <div class="field-row">
+          <input type="color" v-model="themeCSSstatusAvoid" />
+          <label>Avoid</label>
+        </div>
+
+        <div class="field-row">
+          <input type="color" v-model="themeCSSstatusNone" />
+          <label>None</label>
         </div>
       </div>
     </div>

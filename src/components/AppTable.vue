@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { settings } from '@/state/settings';
 import { useVirtualList } from '@vueuse/core';
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 
 export interface Column {
   label: string;
@@ -28,7 +28,9 @@ const selectedRow = ref(-1);
 const sortBy = ref<string>(props.defaultSortBy || props.columns[0]?.key || '');
 const sortOrder = ref<'asc' | 'desc'>(props.defaultSortOrder || 'asc');
 const sortedData = computed(() => {
-  return [...props.data].sort((a, b) => {
+  const data = props.data;
+
+  return data.slice().sort((a, b) => {
     const modifier = sortOrder.value === 'asc' ? 1 : -1;
     if (a[sortBy.value] < b[sortBy.value]) return -1 * modifier;
     if (a[sortBy.value] > b[sortBy.value]) return 1 * modifier;
@@ -50,7 +52,7 @@ function rowClicked(index: number, item: any) {
   emit('rowSelected', item);
 }
 
-const { list, containerProps, wrapperProps } = useVirtualList(sortedData, {
+const { list, containerProps } = useVirtualList(sortedData, {
   itemHeight: 52,
   overscan: 10
 });

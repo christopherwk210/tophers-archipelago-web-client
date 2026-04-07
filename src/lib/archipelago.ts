@@ -3,6 +3,7 @@ import { MessageParsing } from '../state/chat';
 import { safeAsync, type SafePromiseError } from './async-utils';
 import { ref } from 'vue';
 import { tawcBounces } from './bounces';
+import { loadHints } from '@/state/hints';
 
 export const client = new Client();
 
@@ -13,7 +14,7 @@ client.options.autoFetchDataPackage = false;
 client.messages.on('connected', (text, player, tags, nodes) => MessageParsing.addConnectedMessage(player));
 client.messages.on('disconnected', (text, player, nodes) => MessageParsing.addDisconnectedMessage(player));
 client.messages.on('goaled', (text, player, nodes) => MessageParsing.addGoaledMessage(player));
-client.messages.on('itemHinted', (text, item, found, nodes) => MessageParsing.addItemHintedMessage(item, found));
+client.messages.on('itemHinted', (text, item, found, nodes) => MessageParsing.addItemHintedMessage(item, found, nodes));
 client.messages.on('itemSent', (text, item, nodes) => MessageParsing.addItemSentMessage(item));
 client.messages.on('tutorial', (text, nodes) => MessageParsing.addTutorialMessage(nodes));
 client.messages.on('userCommand', (text, nodes) => MessageParsing.addUserCommandMessage(nodes));
@@ -21,7 +22,7 @@ client.messages.on('chat', (message, player, nodes) => MessageParsing.addPlayerC
 client.messages.on('tagsUpdated', (text, player, tags, nodes) => MessageParsing.addTagChangeMessage(player, tags));
 client.socket.on('bounced', (packet, data) => {
   let handled = false;
-  if (data.__twac && typeof data.__signal === 'string') {
+  if (data && data.__twac && typeof data.__signal === 'string') {
     for (const tawcBounce of tawcBounces) {
       if (tawcBounce.signal === data.__signal) {
         tawcBounce.handler(data.data as any);
@@ -43,6 +44,11 @@ client.messages.on('itemCheated', (text, item, nodes) => MessageParsing.addUncla
 client.messages.on('countdown', (text, value, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
 client.messages.on('adminCommand', (text, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
 client.messages.on('collected', (text, player, nodes) => MessageParsing.addUnclassifiedMessage(nodes));
+
+// React to new hints
+client.items.on('hintReceived', () => loadHints());
+client.items.on('hintFound', () => loadHints());
+client.items.on('hintStatusChanged' as any, () => loadHints());
 
 /** Logs in a user with the server */
 export async function login(url: string, slot: string, password?: string) {

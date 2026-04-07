@@ -1,3 +1,9 @@
+# April 7, 2026
+- 🎨 added sakura theme
+- ⚙️ added support for item status/priorities (thank you for your help @emilyv!)
+- 🪛 added new theme colors for item priorities
+- ✨ added a new help section about account management
+
 # April 4, 2026
 - ⚙️ added theme picker button on the login screen (with ability to hide it in the settings)
 - ⚙️ added in-app changelog

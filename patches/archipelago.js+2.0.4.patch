@@ -1,0 +1,27 @@
+diff --git a/node_modules/archipelago.js/dist/index.js b/node_modules/archipelago.js/dist/index.js
+index 205536c..038b2e9 100644
+--- a/node_modules/archipelago.js/dist/index.js
++++ b/node_modules/archipelago.js/dist/index.js
+@@ -584,6 +584,9 @@ class Hint {
+   get entrance() {
+     return this.#hint.entrance || "Vanilla";
+   }
++  get status() {
++    return this.#hint.status;
++  }
+ }
+ 
+ // src/classes/managers/ItemsManager.ts
+@@ -629,9 +632,10 @@ class ItemsManager extends EventBasedManager {
+       if (this.#hints[i] === undefined) {
+         this.#hints[i] = new Hint(this.#client, hints[i]);
+         this.emit("hintReceived", [this.#hints[i]]);
+-      } else if (this.#hints[i].found !== hints[i].found) {
++      } else if (this.#hints[i].status !== hints[i].status) {
+         this.#hints[i] = new Hint(this.#client, hints[i]);
+-        this.emit("hintFound", [this.#hints[i]]);
++        if (hints[i].found) this.emit("hintFound", [this.#hints[i]]);
++        this.emit('hintStatusChanged', [this.#hints[i]]);
+       }
+     }
+   }

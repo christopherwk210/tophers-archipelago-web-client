@@ -9,8 +9,8 @@ import Changes from '../more-tabs/Changes.vue';
 const tabManager = new TabManager([
   { label: 'Settings', component: Settings },
   { label: 'Accounts', component: Accounts },
-  { label: 'Help', component: Help },
-  { label: 'Changelog', component: Changes }
+  { label: 'Changelog', component: Changes },
+  { label: 'Help', component: Help }
 ] as const satisfies ComponentTab[]);
 
 const Tabs = tabManager.createVueComponent();

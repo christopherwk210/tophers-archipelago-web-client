@@ -8,6 +8,7 @@ const themeXP = './themes/XP.css';
 const themeXPSilver = './themes/XP-silver.css';
 const themeVisualStudio = './themes/visual-studio.css';
 const themeArchipelago = './themes/archipelago.css';
+const themeSakura = './themes/sakura.css';
 
 export const themeCSSlocation = useCssVar('--theme-location');
 export const themeCSSitemNormal = useCssVar('--theme-item-normal');
@@ -19,6 +20,11 @@ export const themeCSSplayerOther = useCssVar('--theme-player-other');
 export const themeCSStextHelp = useCssVar('--theme-text-help');
 export const themeCSStextJoin = useCssVar('--theme-text-join');
 export const themeCSSfontSize = useCssVar('--theme-font-size');
+export const themeCSSstatusPriority = useCssVar('--theme-status-priority');
+export const themeCSSstatusNone = useCssVar('--theme-status-none');
+export const themeCSSstatusFound = useCssVar('--theme-status-found');
+export const themeCSSstatusAvoid = useCssVar('--theme-status-avoid');
+export const themeCSSstatusNoPriority = useCssVar('--theme-status-no-priority');
 
 const defaultThemeColors = {
   themeCSSlocation: '#8b008b',
@@ -29,7 +35,12 @@ const defaultThemeColors = {
   themeCSSplayerYou: '#000000',
   themeCSSplayerOther: '#000000',
   themeCSStextHelp: '#008080',
-  themeCSStextJoin: '#006400'
+  themeCSStextJoin: '#006400',
+  themeCSSstatusPriority: '#7f65cb',
+  themeCSSstatusNone: '#000000',
+  themeCSSstatusFound: '#008543',
+  themeCSSstatusAvoid: '#e5786c',
+  themeCSSstatusNoPriority: '#00adad'
 } as const;
 
 export const themes = {
@@ -69,7 +80,12 @@ export const themes = {
       themeCSSplayerYou: '#ffffff',
       themeCSSplayerOther: '#ffffff',
       themeCSStextHelp: '#3dc7c7',
-      themeCSStextJoin: '#52cb52'
+      themeCSStextJoin: '#52cb52',
+      themeCSSstatusPriority: '#9b82e6',
+      themeCSSstatusFound: '#29b56f',
+      themeCSSitemUseful: '#7e7eff',
+      themeCSSitemProgression: '#ff85ff',
+      themeCSSitemTrap: '#ff4545'
     }
   },
   'XP': {
@@ -87,6 +103,10 @@ export const themes = {
       themeCSSlocation: '#1da75b'
     }
   },
+  'Sakura': {
+    css: themeSakura,
+    defaults: defaultThemeColors
+  },
   // 'XP Silver': {
   //   css: themeXPSilver,
   //   defaults: defaultThemeColors
@@ -103,6 +123,11 @@ export const themes = {
     themeCSSplayerOther: string;
     themeCSStextHelp: string;
     themeCSStextJoin: string;
+    themeCSSstatusPriority: string;
+    themeCSSstatusNone: string;
+    themeCSSstatusFound: string;
+    themeCSSstatusAvoid: string;
+    themeCSSstatusNoPriority: string;
   };
 }>;
 
@@ -121,7 +146,12 @@ watch([
   themeCSStextHelp,
   themeCSStextJoin,
   themeCSSfontSize,
-  selectedTheme
+  selectedTheme,
+  themeCSSstatusPriority,
+  themeCSSstatusNone,
+  themeCSSstatusFound,
+  themeCSSstatusAvoid,
+  themeCSSstatusNoPriority
 ], () => {
   AppStorage.setJSON('theme', {
     location: themeCSSlocation.value,
@@ -134,6 +164,11 @@ watch([
     textHelp: themeCSStextHelp.value,
     textJoin: themeCSStextJoin.value,
     fontSize: themeCSSfontSize.value,
+    statusPriority: themeCSSstatusPriority.value,
+    statusNone: themeCSSstatusNone.value,
+    statusFound: themeCSSstatusFound.value,
+    statusAvoid: themeCSSstatusAvoid.value,
+    statusNoPriority: themeCSSstatusNoPriority.value,
     theme: selectedTheme.value
   });
 });
@@ -159,6 +194,11 @@ export function loadTheme() {
   themeCSStextHelp.value = savedTheme.textHelp || themeDefaults.themeCSStextHelp;
   themeCSStextJoin.value = savedTheme.textJoin || themeDefaults.themeCSStextJoin;
   themeCSSfontSize.value = savedTheme.fontSize || themeCSSfontSizeDefault;
+  themeCSSstatusPriority.value = savedTheme.statusPriority || themeDefaults.themeCSSstatusPriority;
+  themeCSSstatusNone.value = savedTheme.statusNone || themeDefaults.themeCSSstatusNone;
+  themeCSSstatusFound.value = savedTheme.statusFound || themeDefaults.themeCSSstatusFound;
+  themeCSSstatusAvoid.value = savedTheme.statusAvoid || themeDefaults.themeCSSstatusAvoid;
+  themeCSSstatusNoPriority.value = savedTheme.statusNoPriority || themeDefaults.themeCSSstatusNoPriority;
 
   applyTheme();
 }
@@ -176,6 +216,11 @@ export function resetThemeToDefault(theme: Theme) {
   themeCSStextHelp.value = themeDefaults.themeCSStextHelp;
   themeCSStextJoin.value = themeDefaults.themeCSStextJoin;
   themeCSSfontSize.value = themeCSSfontSizeDefault;
+  themeCSSstatusPriority.value = themeDefaults.themeCSSstatusPriority;
+  themeCSSstatusNone.value = themeDefaults.themeCSSstatusNone;
+  themeCSSstatusFound.value = themeDefaults.themeCSSstatusFound;
+  themeCSSstatusAvoid.value = themeDefaults.themeCSSstatusAvoid;
+  themeCSSstatusNoPriority.value = themeDefaults.themeCSSstatusNoPriority;
 }
 
 /** Converts the theme to a compressed string */
@@ -191,7 +236,12 @@ export function exportTheme() {
     textHelp: themeCSStextHelp.value,
     textJoin: themeCSStextJoin.value,
     fontSize: themeCSSfontSize.value,
-    theme: selectedTheme.value
+    theme: selectedTheme.value,
+    statusPriority: themeCSSstatusPriority.value,
+    statusNone: themeCSSstatusNone.value,
+    statusFound: themeCSSstatusFound.value,
+    statusAvoid: themeCSSstatusAvoid.value,
+    statusNoPriority: themeCSSstatusNoPriority.value
   };
 
   const json = JSON.stringify(theme);
@@ -231,6 +281,11 @@ export function importTheme(theme: string) {
   themeCSStextHelp.value = parsed.textHelp || themeDefaults.themeCSStextHelp;
   themeCSStextJoin.value = parsed.textJoin || themeDefaults.themeCSStextJoin;
   themeCSSfontSize.value = parsed.fontSize || themeCSSfontSizeDefault;
+  themeCSSstatusPriority.value = parsed.statusPriority || themeDefaults.themeCSSstatusPriority;
+  themeCSSstatusNone.value = parsed.statusNone || themeDefaults.themeCSSstatusNone;
+  themeCSSstatusFound.value = parsed.statusFound || themeDefaults.themeCSSstatusFound;
+  themeCSSstatusAvoid.value = parsed.statusAvoid || themeDefaults.themeCSSstatusAvoid;
+  themeCSSstatusNoPriority.value = parsed.statusNoPriority || themeDefaults.themeCSSstatusNoPriority;
 
   return true;
 }

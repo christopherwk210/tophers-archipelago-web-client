@@ -12,6 +12,12 @@
   --theme-text-help: #008080;
   --theme-text-join: #006400;
 
+  --theme-status-priority: #7f65cb;
+  --theme-status-none: #000000;
+  --theme-status-found: #008543;
+  --theme-status-avoid: #e5786c;
+  --theme-status-no-priority: #00adad;
+
   --theme-font-size: 16px;
 }
 

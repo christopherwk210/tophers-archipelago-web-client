@@ -4,12 +4,11 @@
       <legend><img class="legend-icon" src="@/assets/icons/warning-fill.png"> <strong>Troubleshooting</strong></legend>
       
       <p class="mt-0">
-        If you're seeing things that don't seem right, like missing or extra hints, you can try the following steps:
+        If something doesn't seem right, like missing or extra hints, you can try the following steps:
       </p>
 
-      <ol class="mb-0">
-        <li>Click on the <strong>More</strong> tab</li>
-        <li>Click on the <strong>Settings</strong> tab</li>
+      <ol style="line-height: 1.5" class="mb-0">
+        <li>Navigate to <strong>More</strong> &gt; <strong>Settings</strong></li>
         <li>Scroll to the bottom and click on the <strong>Clear Cache</strong> button</li>
         <li>Refresh the page</li>
       </ol>
@@ -68,6 +67,10 @@
         To buy hints, you can use the <strong>Buy item hint</strong> button or use the <strong>!hint</strong> command.
       </p>
 
+      <p>
+        You can double click a row to copy the hint text to your clipboard.
+      </p>
+
       <p class="mb-0">
         The <strong>Hide found hints</strong> toggle will hide any hints that have already been found.
       </p>
@@ -99,6 +102,18 @@
 
       <p class="mb-0">
         You can buy location hints using the <strong>Buy location hint</strong> button, and already checked locations can be hidden using the <strong>Hide checked locations</strong> toggle.
+      </p>
+    </fieldset>
+
+    <fieldset class="mt-3">
+      <legend><img class="legend-icon" src="@/assets/icons/info.png"> <strong>Accounts</strong></legend>
+      
+      <p class="mt-0">
+        When visiting the login page, all of the text boxes will be pre-filled with your last successful connection. If you are playing multiple games and would like to quickly switch between these slots/accounts, you can use the <strong>More</strong> &gt; <strong>Accounts</strong> tab.
+      </p>
+
+      <p class="mb-0">
+        After adding more than one account, the "Logout" button on the top right of your screen will change to a dropdown, allowing you to quickly switch between accounts without having to re-enter your credentials. A new drop-down will also be added to the login page, allowing you to select your account before logging in.
       </p>
     </fieldset>
   </div>

@@ -15,6 +15,7 @@ import world from '@/assets/icons/world.png';
 import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
 import { useElementBounding } from '@vueuse/core';
+import { getCssVarFromStatus, getHintStatusName, HintStatus } from '@/state/hints';
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -210,7 +211,7 @@ async function acceptHint(index: number) {
       <div v-else-if="message.type === 'item-hinted'" class="message">
         <img class="inline-img" :src="message.found ? check : question">
         <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />'s <ItemName :iclass="message.itemClass" :name="message.itemName" /> is at <em style="color: var(--theme-location);">{{ message.itemLocation }}</em> in <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />'s world.
-        <span v-if="message.found" style="color: green;">(found)</span>
+        <span v-if="message.status" :style="{ color: getCssVarFromStatus(message.status) }">({{ getHintStatusName(message.status) }})</span>
       </div>
 
       <!-- Goaled -->

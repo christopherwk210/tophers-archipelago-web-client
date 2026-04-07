@@ -7,6 +7,7 @@ import { jsConfetti } from '@/lib/confetti';
 import { loadPlayers, players } from './players';
 import { AppTab, appTabManager } from './tabs';
 import { tawcBounce } from '@/lib/bounces';
+import { HintStatus } from './hints';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
 export namespace MessageParsing {
@@ -52,6 +53,7 @@ export namespace MessageParsing {
     itemLocation: string;
     itemClass: ItemClass[];
     found: boolean;
+    status: HintStatus;
   }
 
   interface ChatMessageGoaled extends ChatMessageBase {
@@ -301,7 +303,17 @@ export namespace MessageParsing {
   }
 
   /** The system response for asking for a hint for an item */
-  export function addItemHintedMessage(item: Item, found: boolean) {
+  export function addItemHintedMessage(item: Item, found: boolean, nodes: MessageNode[]) {
+    const hintStatusNode: any = nodes.find((node: any) => node.type === 'text' && node.part && node.part.type === 'hint_status');
+    let status: HintStatus = HintStatus.UNSPECIFIED;
+    if (hintStatusNode && hintStatusNode.part) {
+      const statusCode = hintStatusNode.part.hint_status;
+      const validHint = !!HintStatus[statusCode];
+      if (validHint) {
+        status = statusCode;
+      }
+    }
+
     chat.messages.push({
       type: 'item-hinted',
       sender: item.sender.alias,
@@ -314,6 +326,7 @@ export namespace MessageParsing {
       receiverSlot: item.receiver.slot,
       senderGame: item.sender.game,
       senderSlot: item.sender.slot,
+      status
     });
   }
 
