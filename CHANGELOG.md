@@ -3,6 +3,7 @@
 - ⚙️ added support for item status/priorities (thank you for your help @emilyv!)
 - 🪛 added new theme colors for item priorities
 - ✨ added a new help section about account management
+- ✨ added hint copy button to chat
 
 # April 4, 2026
 - ⚙️ added theme picker button on the login screen (with ability to hide it in the settings)
