@@ -21,7 +21,7 @@ const columns: Column[] = [
   { label: 'Item', key: 'item' },
   { label: 'Owner', key: 'owner' },
   { label: 'Location', key: 'location' },
-  { label: 'Status', key: 'status' }
+  { label: 'Status', key: 'status', style: 'padding-right: 1em' }
 ];
 
 const computedColumns = computed(() => {

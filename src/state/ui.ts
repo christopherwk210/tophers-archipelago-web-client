@@ -3,6 +3,9 @@ import type { TrackerLocation } from './tracker';
 import type { Account } from '@/lib/accounts';
 
 export const ui = reactive({
+  design: {
+    windowOpen: false
+  },
   modals: {
     buyItemHint: false,
     editAccount: undefined as Account | undefined | true,

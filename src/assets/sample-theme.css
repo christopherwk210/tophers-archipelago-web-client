@@ -1,0 +1,280 @@
+/*
+
+TAWC Sample Theme
+-----------------
+
+You may use this theme as an example to follow or
+as a base for making your own theme. Have fun!
+
+*/
+
+/* Setup CSS variables to re-use throughout the theme */
+:root {
+  /* It is recommended that you prefix your variables */
+  /* i.e. --prefix-variable-name */
+
+  --sample-background-color: #0f90a1;
+  --sample-window-background-color: #ffeedf;
+
+  --sample-window-title-left-color: #05555f;
+  --sample-window-title-right-color: #458088;
+
+  --sample-btn-color: #05555f;
+  --sample-btn-active-color: #043a41;
+  --sample-border-color: #4c6199;
+}
+
+
+/* #region Login screen */
+  .login, .connected {
+    background: var(--sample-background-color) !important;
+  }
+
+  /* This is the "Topher's Archipelago Web Client" text on the top left */
+  .login h1 {
+    font-style: normal;
+    text-shadow: none;
+    font-size: 2rem;
+  }
+
+  .status-bar-field {
+    box-shadow: none;
+    border: 1px solid var(--sample-border-color);
+  }
+
+  /* Login loading bar */
+  .progress-indicator {
+    box-shadow: none;
+  }
+
+  .progress-indicator.segmented>.progress-indicator-bar {
+    background-image: linear-gradient(90deg, var(--sample-btn-color) 16px, transparent 0 2px);
+  }
+
+  /* This is the error box that appears for a failed login attempt */
+  .field-border-disabled {
+    box-shadow: none;
+  }
+/* #endregion */
+
+
+/* #region Window customization */
+  .window {
+    box-shadow: none;
+    background: var(--sample-window-background-color);
+  }
+
+  .connected > .window {
+    background: var(--sample-window-background-color);
+  }
+
+  .title-bar {
+    background: linear-gradient(90deg, var(--sample-window-title-left-color), var(--sample-window-title-right-color));
+    margin-top: -3px;
+    margin-left: -3px;
+    margin-right: -3px;
+    padding: 6px;
+  }
+
+  .window[role=tabpanel] {
+    box-shadow: none;
+    border: 1px solid var(--sample-border-color);
+  }
+/* #endregion */
+
+
+/* #region Form controls */
+  input[type=email], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=url], select {
+    box-shadow: none;
+    border: 1px solid var(--sample-border-color);
+  }
+
+  input[type=checkbox]+label:before {
+    box-shadow: none;
+    border: 1px solid var(--sample-border-color);
+  }
+
+  select:focus {
+    background-color: var(--sample-background-color);
+  }
+
+  select {
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    background-image: none;
+    height: auto;
+    padding-right: 0;
+  }
+
+  select:active {
+    background-image: none;
+  }
+
+  input[type=radio]+label:before {
+    background: var(--sample-background-color);
+    border-radius: 50%;
+  }
+
+  input[type=radio]:checked+label:after {
+    height: 6px;
+    width: 6px;
+    left: -15px;
+    top: 3px;
+    background-size: cover;
+  }
+
+  input[type=radio]+label:active:before {
+    background: var(--sample-btn-color) !important;
+  }
+/* #endregion */
+
+
+/* #region Buttons */
+  button, input[type=reset], input[type=submit] {
+    box-shadow: none;
+    background-color: var(--sample-btn-color);
+    color: white;
+    outline: none;
+  }
+
+  button:focus, input[type=reset]:focus, input[type=submit]:focus {
+    outline: none;
+  }
+
+  button:not(:disabled):active, input[type=reset]:not(:disabled):active, input[type=submit]:not(:disabled):active {
+    background-color: var(--sample-btn-active-color);
+    box-shadow: none;
+  }
+
+  button:disabled, input[type=reset]:disabled, input[type=submit]:disabled {
+    text-shadow: none;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--sample-btn-active-color);
+  }
+/* #endregion */
+
+
+/* #region Tabs */
+  menu[role=tablist]>li {
+    box-shadow: none;
+    background: var(--sample-btn-color);
+  }
+
+  menu[role=tablist]>li, menu[role=tablist]>li * {
+    color: white !important;
+  }
+
+  menu[role=tablist] {
+    gap: 2px;
+  }
+
+  menu[role=tablist]>li[aria-selected=true] {
+    margin-left: 0 !important;
+    background-color: var(--sample-btn-active-color);
+    z-index: 1;
+  }
+
+  menu[role=tablist]>li[aria-selected=true] * {
+    color: white !important;
+  }
+/* #endregion */
+
+
+/* #region Tables */
+  .sunken-panel {
+    border-image: none;
+    border: 1px solid var(--sample-border-color);
+  }
+
+  table>thead>tr>* {
+    box-shadow: none;
+    background: var(--sample-btn-color);
+    color: white;
+    padding: 4px 6px;
+  }
+
+  .app-table th:hover {
+    background: var(--sample-btn-active-color);
+  }
+/* #endregion */
+
+
+/* #region Hints */
+  .copy-btn > svg {
+    filter: invert(1);
+  }
+/* #endregion */
+
+
+/* #region Chat */
+  /* Server/help messages go in pre's */
+  pre {
+    box-shadow: none;
+  }
+/* #endregion */
+
+
+/* #region Settings */
+  legend {
+    background: transparent;
+  }
+/* #endregion */
+
+
+/* #region Setting sliders */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 21px;
+    width: 21px;
+    background: none;
+    box-shadow: none;
+    border: none;
+    background: var(--sample-btn-color);
+    border-radius: 50%;
+  }
+
+  input[type="range"].has-box-indicator::-webkit-slider-thumb {
+    background: none;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    height: 21px;
+    width: 21px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  input[type="range"].has-box-indicator::-moz-range-thumb {
+    background: none;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    box-sizing: border-box;
+    background: var(--sample-btn-color);
+    border-right: none;
+    border-bottom: none;
+    box-shadow: none;
+  }
+
+  input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 2px;
+    box-sizing: border-box;
+    background: var(--sample-btn-color);
+    border-right: none;
+    border-bottom: none;
+    box-shadow: none;
+  }
+/* #endregion */
+
+
+/* #region Scrollbars */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: var(--sample-btn-color) var(--sample-background-color);
+  }
+/* #endregion */

@@ -1,4 +1,5 @@
 import { AppStorage } from '@/lib/storage';
+import { customCSS, getCustomCSS } from '@/lib/theme';
 import { useCssVar } from '@vueuse/core';
 import { ref, watch } from 'vue';
 
@@ -9,6 +10,7 @@ const themeXPSilver = './themes/XP-silver.css';
 const themeVisualStudio = './themes/visual-studio.css';
 const themeArchipelago = './themes/archipelago.css';
 const themeSakura = './themes/sakura.css';
+const themeSpring = './themes/spring.css';
 
 export const themeCSSlocation = useCssVar('--theme-location');
 export const themeCSSitemNormal = useCssVar('--theme-item-normal');
@@ -105,6 +107,14 @@ export const themes = {
   },
   'Sakura': {
     css: themeSakura,
+    defaults: defaultThemeColors
+  },
+  'Spring': {
+    css: themeSpring,
+    defaults: defaultThemeColors
+  },
+  'Custom...': {
+    css: '',
     defaults: defaultThemeColors
   },
   // 'XP Silver': {
@@ -290,7 +300,7 @@ export function importTheme(theme: string) {
   return true;
 }
 
-function applyTheme() {
+async function applyTheme() {
   const styleElementId = 'tawc-theme';
 
   let styleElement: HTMLLinkElement = document.getElementById(styleElementId) as HTMLLinkElement;
@@ -302,6 +312,25 @@ function applyTheme() {
   }
 
   styleElement.href = themes[selectedTheme.value].css;
+
+  
+  if (selectedTheme.value === 'Custom...') {
+    customCSS.value = await getCustomCSS();
+
+    let customStyleTag = document.querySelector('style[data-tawc-custom-theme]');
+    if (!customStyleTag) {
+      customStyleTag = document.createElement('style');
+      customStyleTag.setAttribute('data-tawc-custom-theme', 'true');
+      document.head.appendChild(customStyleTag);
+    }
+
+    customStyleTag.innerHTML = customCSS.value;
+  } else {
+    const customStyleTag = document.querySelector('style[data-tawc-custom-theme]');
+    if (customStyleTag) {
+      document.head.removeChild(customStyleTag);
+    }
+  }
 }
 
 watch(selectedTheme, () => {

@@ -20,6 +20,7 @@ export const settings = ref({
   notificationsItemSentTrap: true,
   notificationsPlayerConnected: true,
   notificationsVolume: 0.5,
+  notificationsUseDesktop: false,
 
   // General settings
   generalAutoReconnect: true,

@@ -95,19 +95,22 @@ export async function loadHints() {
 export async function copyHint(item: LocalHint) {
   showMouseToast('Hint copied to clipboard');
 
+  const trueItemPlayer = item.player.replace('&lt;', '<').replace('&gt;', '>');
+  const trueItemOwner = item.owner.replace('&lt;', '<').replace('&gt;', '>');
+
   let result: boolean | void;
   switch (settings.value.hintCopyType) {
     case 'markdown':
-      result = await navigator.clipboard.writeText(`\`${item.player}\`'s __${item.item}__ is in \`${item.owner}\`'s world at **${item.location}**`).catch(() => false);
+      result = await navigator.clipboard.writeText(`\`${trueItemPlayer}\`'s __${item.item}__ is in \`${trueItemOwner}\`'s world at **${item.location}**`).catch(() => false);
       break;
     case 'plain':
-      result = await navigator.clipboard.writeText(`${item.player}'s ${item.item} is in ${item.owner}'s world at ${item.location}`).catch(() => false);
+      result = await navigator.clipboard.writeText(`${trueItemPlayer}'s ${item.item} is in ${trueItemOwner}'s world at ${item.location}`).catch(() => false);
       break;
     case 'item-name':
       result = await navigator.clipboard.writeText(item.item).catch(() => false);
       break;
     case 'ascii':
-      result = await navigator.clipboard.writeText(`(╯°□°)╯ <( ${item.owner.toUpperCase()} YOU HAVE MY ${item.item.toUpperCase()} AND I NEED IT )`).catch(() => false);
+      result = await navigator.clipboard.writeText(`(╯°□°)╯ <( ${trueItemOwner.toUpperCase()} YOU HAVE MY ${item.item.toUpperCase()} AND I NEED IT )`).catch(() => false);
       break;
   }
 

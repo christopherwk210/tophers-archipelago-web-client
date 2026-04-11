@@ -15,6 +15,7 @@ async function parseChangelog() {
     .replace(/🎨/g, '<span data-tippy-content="New theme" class="changelog-emoji">🎨</span>')
     .replace(/✨/g, '<span data-tippy-content="Quality of life" class="changelog-emoji">✨</span>')
     .replace(/🪛/g, '<span data-tippy-content="New setting(s)" class="changelog-emoji">🪛</span>')
+    .replace(/🐛/g, '<span data-tippy-content="Bug fix" class="changelog-emoji">🐛</span>')
 }
 
 parseChangelog();

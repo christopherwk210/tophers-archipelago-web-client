@@ -21,6 +21,6 @@
   --theme-font-size: 16px;
 }
 
-menu[role=tablist]>li>a {
+#app menu[role=tablist]>li>a {
   cursor: default;
 }

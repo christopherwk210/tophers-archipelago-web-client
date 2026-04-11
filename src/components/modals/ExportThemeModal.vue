@@ -18,6 +18,7 @@ function copyThemeToClipboard() {
       </div>
       <div class="window-body">
         <p>Copy the text below to export your theme:</p>
+        <p><small>Note: This does not include custom CSS designs</small></p>
         <textarea readonly>{{ ui.modals.exportTheme }}</textarea>
         <div style="display: flex; justify-content: center; gap: 1em">
           <button @click="copyThemeToClipboard">Copy</button>

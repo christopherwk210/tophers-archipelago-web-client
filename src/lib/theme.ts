@@ -1,4 +1,6 @@
+import Dexie, { type EntityTable } from 'dexie';
 import { client, ItemClass, sortItemClasses } from './archipelago';
+import { ref } from 'vue';
 
 export function getPlayerStyles(slot: number) {
   const isMe = slot === client.players.self.slot;
@@ -34,3 +36,35 @@ export function getItemStyles(itemClass: ItemClass[]) {
     '-webkit-text-fill-color': 'transparent'
   };
 }
+
+const databaseName = 'tophers-archipelago-web-client-css';
+
+// The structure of the "package" table entity
+interface CSSPackage {
+  css: string;
+}
+
+export const db = new Dexie(databaseName) as Dexie & {
+  packages: EntityTable<CSSPackage>
+};
+
+// Database configuration
+db.version(1).stores({
+  packages: 'css'
+});
+
+export async function getCustomCSS() {
+  const packages = await db.packages.toArray();
+  if (packages && packages.length > 0 && packages[0]) {
+    return packages[0].css || '';
+  } else {
+    return '';
+  }
+}
+
+export async function setCustomCSS(css: string) {
+  db.packages.clear();
+  await db.packages.put({ css });
+}
+
+export const customCSS = ref('');

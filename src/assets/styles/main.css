@@ -1,4 +1,4 @@
-* {
+#app * {
   box-sizing: border-box;
   font-family: Arial !important;
   -webkit-font-smoothing: initial;
@@ -17,7 +17,18 @@ html, body {
   flex-direction: column;
 }
 
-.title-bar, .window, button, input, label, legend, li[role=tab], option, select, table, textarea, ul.tree-view {
+#app .title-bar,
+#app .window,
+#app button,
+#app input,
+#app label,
+#app legend,
+#app li[role=tab],
+#app option,
+#app select,
+#app table,
+#app textarea,
+#app ul.tree-view {
   font-size: 1rem;
 }
 
@@ -38,26 +49,26 @@ input {
   margin-bottom: 0;
 }
 
-button {
+#app button {
   user-select: none;
 }
 
-.title-bar {
+#app .title-bar {
   user-select: none;
 }
 
-.check-row {
+#app .check-row {
   margin-bottom: 0.5em;
   display: flex;
   align-items: center;
 }
 
 /* Tabs */
-menu {
+#app menu {
   padding-top: 0.25em;
 }
 
-menu a {
+#app menu a {
   user-select: none;
   cursor: pointer;
   padding: 0 0.5em;
@@ -102,32 +113,32 @@ menu a {
   background: #dfdfdf;
 }
 
-select {
+#app select {
   font-size: 16px;
 }
 
-table>tbody>tr.highlighted {
+#app table>tbody>tr.highlighted {
   background-color: #d9d9d9 !important;
   color: initial !important;
 }
 
-code {
+#app code {
   font-family: monospace !important;
   border: 1px solid rgba(255, 255, 255, 0.5);
   padding: 0 2px;
   border-radius: 3px;
 }
 
-u {
+#app u {
   text-decoration: underline !important;
 }
 
-menu[role=tablist] {
+#app menu[role=tablist] {
   overflow-x: auto;
   scrollbar-width: none;
 }
 
 /* hide horizontal scrollbar on tablist */
-menu[role=tablist]::-webkit-scrollbar {
+#app menu[role=tablist]::-webkit-scrollbar {
   display: none !important;
 }

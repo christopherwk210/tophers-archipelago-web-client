@@ -3,9 +3,8 @@ import { playSound } from '@/lib/audio';
 import { resetCache } from '@/lib/cache';
 import { settings } from '@/state/settings';
 import { useCssVar, useDebounceFn } from '@vueuse/core';
-import { onActivated, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import ThemeSettings from './ThemeSettings.vue';
-import tippy, { type Instance } from 'tippy.js';
 
 function clearCache() {
   const confirmation = confirm('Are you sure you want to clear the cache? This will re-download all data packages from the server and reload the page.');
@@ -116,7 +115,12 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
 
     <fieldset class="mt-3">
       <legend><strong>Notifications</strong></legend>
-      <label style="margin-bottom: 0.5em" for="volume">Volume:</label>
+      <div style="margin-top: 0.5em; margin-bottom: 1em" class="check-row">
+        <input v-model="settings.notificationsUseDesktop" type="checkbox" id="notificationUseDesktop">
+        <label for="notificationUseDesktop" data-tippy-content="You must accept browser permissions to allow notifications for this site to enable this feature">Use desktop notifications</label>
+      </div>
+
+      <label style="margin-bottom: 0.5em; font-size: 0.95em" for="volume">Volume:</label>
       <div class="field-row" style="max-width: 300px; margin-bottom: 1em;">
         <label for="volume">Low</label>
         <input v-model.number="settings.notificationsVolume" id="volume" type="range" min="0" max="1" value="0.5" step="0.1" />
@@ -127,7 +131,7 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
         <button @click="() => playSound('chimes')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
         <div>
           <input v-model="settings.notificationsPlayerConnected" type="checkbox" id="connectNotification">
-          <label for="connectNotification">Play a sound when someone connects</label>
+          <label for="connectNotification">Notify me when someone connects</label>
         </div>
       </div>
 
@@ -135,7 +139,7 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
         <button @click="() => playSound('notify')" class="audio-play-btn"><img src="@/assets/icons/speaker.png"></button>
         <div>
           <input v-model="settings.notificationsItemSent" type="checkbox" id="itemSentNotification">
-          <label for="itemSentNotification">Play a sound when someone has sent you an item</label>
+          <label for="itemSentNotification">Notify me when someone has sent you an item</label>
         </div>
       </div>
 
@@ -171,8 +175,6 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
         </div>
       </div>
     </fieldset>
-
-    <ThemeSettings />
 
     <fieldset class="mt-3">
       <legend><strong>Misc</strong></legend>
@@ -212,5 +214,12 @@ button, :deep(button) {
 .radio-row {
   margin-bottom: 0.5em;
   padding-left: 0.5em;
+}
+
+.warning {
+  background: rgba(0, 0, 0, 0.075);
+  padding: 0.5em;
+  margin-bottom: 1em;
+  display: flex;
 }
 </style>

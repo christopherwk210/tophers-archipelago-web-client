@@ -1,3 +1,13 @@
+# April 11, 2026
+- 🎨 added spring theme
+- ⚙️ added support for desktop/browser notifications
+- ⚙️ added custom theme support with a built-in VS code CSS editor and sample base theme
+- 🪛 added setting to toggle desktop notifications
+- ✨ the saved accounts drop down now appears on the login screen even if you only have one account added
+- ✨ added "View on GitHub" link above changelog
+- ✨ moved theme settings to its own tab
+- 🐛 fixed issue where `<` and `>` symbols would sometimes not get copied directly from player's names
+
 # April 7, 2026
 - 🎨 added sakura theme
 - ⚙️ added support for item status/priorities (thank you for your help @emilyv!)

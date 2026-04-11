@@ -8,6 +8,7 @@ import { loadPlayers, players } from './players';
 import { AppTab, appTabManager } from './tabs';
 import { tawcBounce } from '@/lib/bounces';
 import { HintStatus } from './hints';
+import { desktopNotify } from '@/lib/desktop-notifications';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
 export namespace MessageParsing {
@@ -276,13 +277,33 @@ export namespace MessageParsing {
 
     if (isForMe && settings.value.notificationsItemSent) {
       if (itemClass.includes(ItemClass.PROGRESSION)) {
-        if (settings.value.notificationsItemSentProgression) playSound('notify');
+        if (settings.value.notificationsItemSentProgression) {
+          desktopNotify(`Progression Item Received`, {
+            body: `${item.sender.alias} sent you ${item.name}`
+          });
+          playSound('notify');
+        }
       } else if (itemClass.includes(ItemClass.USEFUL)) {
-        if (settings.value.notificationsItemSentUseful) playSound('notify');
+        if (settings.value.notificationsItemSentUseful) {
+          desktopNotify(`Useful Item Received`, {
+            body: `${item.sender.alias} sent you ${item.name}`
+          });
+          playSound('notify');
+        }
       } else if (itemClass.includes(ItemClass.TRAP)) {
-        if (settings.value.notificationsItemSentTrap) playSound('notify');
+        if (settings.value.notificationsItemSentTrap) {
+          desktopNotify(`Trap Item Received`, {
+            body: `${item.sender.alias} sent you ${item.name}`
+          });
+          playSound('notify');
+        }
       } else {
-        if (settings.value.notificationsItemSentNormal) playSound('notify');
+        if (settings.value.notificationsItemSentNormal) {
+          desktopNotify(`Item Received`, {
+            body: `${item.sender.alias} sent you ${item.name}`
+          });
+          playSound('notify');
+        }
       }
     }
 
@@ -344,7 +365,15 @@ export namespace MessageParsing {
   }
 
   export function addConnectedMessage(player: Player) {
-    if (settings.value.notificationsPlayerConnected) playSound('chimes');
+    if (settings.value.notificationsPlayerConnected) {
+      if (settings.value.notificationsUseDesktop) {
+        desktopNotify('Player Connected', {
+          body: `${player.alias} has joined!`
+        });
+      }
+
+      playSound('chimes');
+    }
 
     chat.messages.push({
       type: 'connected',

@@ -61,9 +61,17 @@ watch(themeFontSize, () => updateFontSize());
     <legend><strong>Theme</strong></legend>
 
     <div style="margin-bottom: 1em">
-      <select style="display: block; width: 100%; max-width: 300px;" v-model="selectedTheme">
+      <select v-if="!ui.design.windowOpen" style="display: block; width: 100%; max-width: 300px;" v-model="selectedTheme">
         <option v-for="theme of Object.keys(themes)" :value="theme">{{ theme }}</option>
       </select>
+      <div style="display: inline-block; width: 100%; max-width: 300px;" v-else data-tippy-content="You can't change themes while the design window is open">
+        <select disabled style="display: block; width: 100%; max-width: 300px; pointer-events: none;" v-model="selectedTheme">
+          <option v-for="theme of Object.keys(themes)" :value="theme">{{ theme }}</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-bottom: 1em" v-if="selectedTheme === 'Custom...'">
+      <button data-tippy-content="<strong>Warning</strong>: This feature is for advanced users only. CSS knowledge is required.<br><br>Changes are saved when you close the design window." @click.prevent="ui.design.windowOpen = true">Open design window</button>
     </div>
 
     <label style="margin-bottom: 0.5em" for="fontSize">Font size (<strong>{{ themeCSSfontSize }}</strong>):</label>

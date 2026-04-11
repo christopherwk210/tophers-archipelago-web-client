@@ -5,9 +5,11 @@ import { TabManager } from '@/lib/tab-manager';
 import type { ComponentTab } from '@/state/tabs';
 import Accounts from '../more-tabs/Accounts.vue';
 import Changes from '../more-tabs/Changes.vue';
+import Theme from '../more-tabs/Theme.vue';
 
 const tabManager = new TabManager([
   { label: 'Settings', component: Settings },
+  { label: 'Theme', component: Theme },
   { label: 'Accounts', component: Accounts },
   { label: 'Changelog', component: Changes },
   { label: 'Help', component: Help }
