@@ -205,6 +205,10 @@ onMounted(() => {
             <div class="field-border-disabled" style="padding: 8px">
               {{ error }}
             </div>
+            <div class="tip">
+              Tip: If you're trying to connect to a self-hosted archipelago server, you may need to access this client from an insecure http connection.
+              <a href="http://insecure.topheranselmo.com/archipelago">Click here</a> to access the insecure version.
+            </div>
           </template>
         </div>
   
@@ -287,5 +291,11 @@ img {
   100% {
     width: 100%;
   }
+}
+
+.tip {
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 0.5rem;
 }
 </style>

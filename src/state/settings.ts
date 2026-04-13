@@ -22,6 +22,9 @@ export const settings = ref({
   notificationsVolume: 0.5,
   notificationsUseDesktop: false,
 
+  // Tracker settings
+  trackerCollectedSimplified: false,
+
   // General settings
   generalAutoReconnect: true,
   generalShowPlayerTooltips: true,

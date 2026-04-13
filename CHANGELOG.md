@@ -1,3 +1,7 @@
+# April 12, 2026
+- 🪛 added simplified view to the collected tab
+- ✨ added a tip to the login screen on a failed connection that directs users towards the non-https version for self hosting
+
 # April 11, 2026
 - 🎨 added spring theme
 - ⚙️ added support for desktop/browser notifications
