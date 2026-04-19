@@ -83,4 +83,28 @@ export function initializeCustomCommands() {
       tawcBounce('confetti', { slot: client.players.self.slot });
     })
     .build();
+  
+  CustomCommand
+    .create('/shrug')
+    .setHelp('Expands to ¯\\_(ツ)_/¯')
+    .setCallback(() => {
+      chat.say = `¯\\_(ツ)_/¯`;
+    })
+    .build();
+  
+  CustomCommand
+    .create('/tableflip')
+    .setHelp('Expands to (╯°□°)╯︵ ┻━┻')
+    .setCallback(() => {
+      chat.say = `(╯°□°)╯︵ ┻━┻`;
+    })
+    .build();
+
+  CustomCommand
+    .create('/unflip')
+    .setHelp('Expands to ┬─┬ノ( º _ ºノ)')
+    .setCallback(() => {
+      chat.say = `┬─┬ノ( º _ ºノ)`;
+    })
+    .build();
 }

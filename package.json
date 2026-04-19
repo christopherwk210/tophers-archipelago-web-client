@@ -20,6 +20,7 @@
     "file-saver": "^2.0.5",
     "howler": "^2.2.4",
     "js-confetti": "^0.13.1",
+    "konami": "^1.7.0",
     "marked": "^17.0.5",
     "monaco-editor": "0.55.1",
     "patch-package": "^8.0.1",

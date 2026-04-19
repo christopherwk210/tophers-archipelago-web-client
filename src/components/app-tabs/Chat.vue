@@ -16,6 +16,7 @@ import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
 import { useElementBounding } from '@vueuse/core';
 import { copyHint, getCssVarFromStatus, getHintStatusName, HintStatus } from '@/state/hints';
+import { appTabManager } from '@/state/tabs';
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -168,6 +169,23 @@ async function acceptHint(index: number) {
   await nextTick();
   if (sayInput.value) sayInput.value.focus();
 }
+
+function messageIsMediaLink(message: string) {
+  if (!message.startsWith('https://') && !message.startsWith('http://')) return false;
+
+  const linkRegEx = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/g;
+  if (!linkRegEx.test(message)) return false;
+
+  const lower = message.toLowerCase();
+  return getLinkMediaType(lower) !== null;
+}
+
+function getLinkMediaType(link: string): 'video' | 'image' | null {
+  const lower = link.toLowerCase();
+  if (lower.endsWith('.mp4') || lower.endsWith('.webm')) return 'video';
+  if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.gif') || lower.endsWith('.webp')) return 'image';
+  return null;
+}
 </script>
 
 <template>
@@ -180,7 +198,15 @@ async function acceptHint(index: number) {
       <div v-else-if="message.type === 'player-chat'" class="message">
         <!-- This icon is invisible just to keep the message aligned with other messages that do have icons -->
         <img class="inline-img" style="opacity: 0; pointer-events: none;" :src="info">
-        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />: <span v-html="message.content"></span>
+        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />:
+        <template v-if="messageIsMediaLink(message.rawContent)">
+          <br>
+          <img :key="appTabManager.currentTabIndex.value" v-if="getLinkMediaType(message.rawContent) === 'image'" :src="message.rawContent" style="width: 300px; max-width: 100%; border-radius: 4px; margin-top: 0.5em;">
+          <video :key="appTabManager.currentTabIndex.value" v-if="getLinkMediaType(message.rawContent) === 'video'" autoplay muted loop style="width: 300px; max-width: 100%; border-radius: 4px; margin-top: 0.5em;">
+            <source :src="message.rawContent" type="video/mp4">
+          </video>
+        </template>
+        <span v-else v-html="message.content"></span>
       </div>
 
       <!-- User command message -->

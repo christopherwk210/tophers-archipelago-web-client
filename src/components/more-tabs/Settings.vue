@@ -79,7 +79,7 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
 
       <div style="margin-top: 0.5em" class="check-row">
         <input v-model="settings.hintsFilterFound" type="checkbox" id="hintsFilterFound">
-        <label for="hintsFilterFound">Hide found hint in the hints tab</label>
+        <label for="hintsFilterFound">Hide found hints in the hints tab</label>
       </div>
 
       <!-- <div style="margin-top: 1em" class="check-row">

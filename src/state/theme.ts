@@ -11,6 +11,7 @@ const themeVisualStudio = './themes/visual-studio.css';
 const themeArchipelago = './themes/archipelago.css';
 const themeSakura = './themes/sakura.css';
 const themeSpring = './themes/spring.css';
+const themeSimpleTeal = './themes/simple-teal.css';
 
 export const themeCSSlocation = useCssVar('--theme-location');
 export const themeCSSitemNormal = useCssVar('--theme-item-normal');
@@ -113,14 +114,18 @@ export const themes = {
     css: themeSpring,
     defaults: defaultThemeColors
   },
-  'Custom...': {
-    css: '',
+  'Simple Teal': {
+    css: themeSimpleTeal,
     defaults: defaultThemeColors
   },
   // 'XP Silver': {
   //   css: themeXPSilver,
   //   defaults: defaultThemeColors
   // },
+  'Custom...': {
+    css: '',
+    defaults: defaultThemeColors
+  }
 } as const satisfies Record<string, {
   css: string;
   defaults: {

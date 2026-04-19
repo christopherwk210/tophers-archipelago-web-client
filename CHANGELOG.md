@@ -1,3 +1,13 @@
+# April 19, 2026
+- 🎨 added simple teal theme (the base custom theme, now available as a preset)
+- ⚙️ links to images in chat will now render the linked image, so sharing gifs in chat is now possible if you have a gif url
+- ⚙️ added support for markdown inline code snippets (using backticks)
+- ⚙️ added new chat command: `/shrug`
+- ⚙️ added new chat command: `/tableflip`
+- ⚙️ added new chat command: `/unflip`
+- ✨ added some secret easter eggs
+- 🐛 fixed an issue where links would sometimes not render properly in user chat messages
+
 # April 12, 2026
 - 🪛 added simplified view to the collected tab
 - ✨ added a tip to the login screen on a failed connection that directs users towards the non-https version for self hosting

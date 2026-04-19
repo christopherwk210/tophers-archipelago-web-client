@@ -9,9 +9,10 @@ import { useIntervalFn } from '@vueuse/core';
 import { client } from '@/lib/archipelago';
 import { AppStorage } from '@/lib/storage';
 import { settings } from '@/state/settings';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { localAccounts } from '@/lib/accounts';
 import MouseToast from '@/components/MouseToast.vue';
+import { initKonami, uninitKonami } from '@/lib/easter-egg';
 
 const router = useRouter();
 
@@ -66,6 +67,9 @@ watch(accountSwitcher, () => {
 });
 
 init();
+
+initKonami();
+onBeforeUnmount(() => uninitKonami());
 </script>
 
 <template>

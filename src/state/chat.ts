@@ -22,6 +22,7 @@ export namespace MessageParsing {
 
   interface ChatMessagePlayerChat extends ChatMessageContentBase {
     type: 'player-chat';
+    rawContent: string;
     player: string;
     slot: number;
     game: string;
@@ -129,6 +130,19 @@ export namespace MessageParsing {
   function basicMarkdownToHtml(input: string) {
     let html = input;
 
+    // Protect emoticons
+    const emoticons = [
+      '¯\\_(ツ)_/¯',
+      `(╯°□°)╯︵ ┻━┻`,
+      `┬─┬ノ( º _ ºノ)`
+    ];
+
+    const placeholders = emoticons.map(() => `$$PLACEHOLDER$${Math.random().toString(36)}$$`);
+
+    placeholders.forEach((placeholder, index) => {
+      html = html.split(emoticons[index]!).join(placeholder);
+    });
+
     // Bold (**text** or __text__)
     html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
@@ -136,6 +150,15 @@ export namespace MessageParsing {
     // Italic (*text* or _text_)
     html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
     html = html.replace(/_(.+?)_/g, '<em>$1</em>');
+
+    // Code (`text`)
+    html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+
+    placeholders.forEach((placeholder, index) => {
+      html = html.split(placeholder).join(emoticons[index]!);
+    });
+
+    html = html.replace(/(burger king)/gi, '<strong data-tippy-content="Burger King" style="font-size: 1.1em; cursor: cell;">Burger King</strong>');
 
     return html;
   }
@@ -204,21 +227,28 @@ export namespace MessageParsing {
   export function addPlayerChatMessage(message: string, player: Player) {
     if (message === '!status' && appTabManager.currentTabIndex.value === AppTab.PLAYERS) return;
 
+    const rawContent = message;
+
     // Check if the text is a link
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    message = message.replace(urlRegex, (url) => {
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-    });
+    const messageIsLink = urlRegex.test(message);
 
-    // Apply basic markdown
-    message = basicMarkdownToHtml(message.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+    if (messageIsLink) {
+      message = message.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+      });
+    } else {
+      // Apply basic markdown
+      message = basicMarkdownToHtml(message.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+    }
 
     chat.messages.push({
       type: 'player-chat',
       player: player.alias,
       content: message,
       slot: player.slot,
-      game: player.game
+      game: player.game,
+      rawContent
     });
   }
 
