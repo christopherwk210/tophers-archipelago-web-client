@@ -14,22 +14,27 @@ export interface ComponentTab extends Tab {
 export const appTabManager = new TabManager([
   {
     label: 'Chat',
+    keypath: 'MainView.mainTabChat',
     component: Chat
   },
   {
     label: 'Hints',
+    keypath: 'MainView.mainTabHints',
     component: Hints
   },
   {
     label: 'Players',
+    keypath: 'MainView.mainTabPlayers',
     component: Players
   },
   {
     label: 'Tracker',
+    keypath: 'MainView.mainTabTracker',
     component: Tracker
   },
   {
     label: 'More',
+    keypath: 'MainView.mainTabMore',
     component: More
   }
 ] as const satisfies ComponentTab[]);

@@ -1,8 +1,11 @@
-import { computed, defineComponent, h, ref, shallowReactive, type Ref, type ShallowReactive } from 'vue';
+import type { LocaleKey } from '@/localization';
+import { computed, defineComponent, h, ref, shallowReactive, isRef, type Ref, type ShallowReactive } from 'vue';
+import { I18nT } from 'vue-i18n';
 
 // Tabs as an object for future extensibility
 export interface Tab {
   label: string | Ref<string>;
+  keypath?: LocaleKey;
 }
 
 export class TabManager<T extends Tab> {
@@ -30,7 +33,7 @@ export class TabManager<T extends Tab> {
           // <li role="tab" aria-selected="true">
           return h('li', { onClick: () => this.currentTabIndex.value = index, role: 'tab', 'aria-selected': this.currentTabIndex.value === index }, [
             // <a>{{ tab.label }}</a>
-            h('a', {  }, typeof tab.label === 'string' ? tab.label : tab.label.value)
+            typeof tab.keypath !== 'string' ? h('a', {  }, typeof tab.label === 'string' ? tab.label : tab.label.value) : h(I18nT, { keypath: tab.keypath, tag: 'a', scope: 'global' })
           // </li>
           ]);
         // </menu>

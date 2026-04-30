@@ -247,7 +247,7 @@ h1 {
   text-shadow: 4px 4px 0 black;
   user-select: none;
 
-  max-width: 550px;
+  max-width: 670px;
   margin-right: 100px;
 }
 

@@ -257,7 +257,14 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       <!-- Connected -->
       <div v-else-if="message.type === 'connected'" class="message">
         <img class="inline-img" :src="user">
-        <span style="color: var(--theme-text-join)"><PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> has joined! (Team {{ message.team }})</span>
+
+        <i18n-t keypath="Chat.chatComponentJoined" tag="span" style="color: var(--theme-text-join)" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />
+          </template>
+
+          <template v-slot:team>{{ message.team }}</template>
+        </i18n-t>
       </div>
 
       <!-- Disconnected -->
