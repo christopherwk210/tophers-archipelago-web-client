@@ -61,8 +61,6 @@ export async function updatePackageCache() {
       }
     }
   }
-
-  console.log(dataPackage);
   
   // Import into the client
   client.package.importPackage(dataPackage);

@@ -5,6 +5,8 @@ import { Howler } from 'howler';
 export const settings = ref({
   // Player settings
   showPlayerProgress: true,
+  showPlayerCheckCount: false,
+  showPlayerDecimal: false,
 
   // Hint settings
   hintsFilterFound: false,

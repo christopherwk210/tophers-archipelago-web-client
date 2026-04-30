@@ -278,7 +278,11 @@ export namespace MessageParsing {
 
         if (typeof collected !== 'number' || typeof total !== 'number' || total === 0) continue;
 
-        players.value.find(p => p.slot === player.slot)!.progress = Math.round(collected / total * 100);
+        const localPlayer = players.value.find(p => p.slot === player.slot)!;
+        localPlayer.progress = Math.round(collected / total * 100);
+        localPlayer.progressTwoDecimal = ((collected / total * 100).toFixed(2));
+        localPlayer.progressCollected = collected;
+        localPlayer.progressTotal = total;
       }
     }
 

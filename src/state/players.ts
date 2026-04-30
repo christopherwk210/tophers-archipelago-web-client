@@ -9,6 +9,9 @@ export interface LocalPlayer {
   game: string;
   team: number;
   progress?: number;
+  progressTwoDecimal?: string;
+  progressCollected?: number;
+  progressTotal?: number;
 }
 
 export const players = ref<LocalPlayer[]>([]);
