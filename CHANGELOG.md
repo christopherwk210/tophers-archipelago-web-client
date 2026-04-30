@@ -1,7 +1,7 @@
-# April XXXXX, 2026
+# April 30, 2026
 - 🪛 added new setting to use precise player progress in the players tab (up to 2 decimal places)
 - 🪛 added new setting to show completed & total checks in the players tab
-- ✨ begun adding localization support (ping me on discord if you're interested in helping with translations!)
+- ✨ started adding localization support (ping me on discord if you're interested in helping with translations!)
 - ✨ removed the internal "archipelago" player from the players tab
 - 🐛 fixed an issue where the cache would not update when a datapackage changed checksums
 
