@@ -1,3 +1,7 @@
+# April XXXXX, 2026
+- ✨ begun adding localization support (ping me on discord if you're interested in helping to translate!)
+- 🐛 fixed an issue where the cache would not update when a datapackage changed checksums
+
 # April 19, 2026
 - 🎨 added simple teal theme (the base custom theme, now available as a preset)
 - ⚙️ links to images in chat will now render the linked image, so sharing gifs in chat is now possible if you have a gif url

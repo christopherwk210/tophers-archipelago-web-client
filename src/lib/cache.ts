@@ -51,8 +51,18 @@ export async function updatePackageCache() {
   // Convert to a proper data package
   const dataPackage: DataPackage = { games: {} };
   for (const data of cachedPackages) {
-    dataPackage.games[data.game] = data.package;
+    if (!dataPackage.games[data.game]) {
+      dataPackage.games[data.game] = data.package;
+    } else {
+      // There are two instances of this game in the cache, so we need to use the
+      // one that has a checksum in the remote checksum list we just got
+      if (datapackageChecksums.value[data.game] === data.checksum) {
+        dataPackage.games[data.game] = data.package;
+      }
+    }
   }
+
+  console.log(dataPackage);
   
   // Import into the client
   client.package.importPackage(dataPackage);
