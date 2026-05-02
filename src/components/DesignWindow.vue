@@ -2,18 +2,85 @@
 import { ui } from '@/state/ui';
 import { useDraggable, useEventListener } from '@vueuse/core';
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
-import * as monaco from 'monaco-editor';
 import { customCSS, setCustomCSS } from '@/lib/theme';
 import { saveAs } from 'file-saver';
+
+let monaco: typeof import('monaco-editor/esm/vs/editor/editor.api') | null = null;
+let editor: import('monaco-editor').editor.IStandaloneCodeEditor | null = null;
+let model: import('monaco-editor').editor.ITextModel | null = null;
+
+let monacoLoading: Promise<void> | null = null;
+
+const loadingEditor = ref(false);
+
+async function loadMonaco() {
+  if (monaco) return;
+
+  if (!monacoLoading) {
+    monacoLoading = (async () => {
+      monaco = await import('monaco-editor/esm/vs/editor/editor.api');
+
+      // language (both required)
+      await import('monaco-editor/esm/vs/basic-languages/css/css.contribution');
+      await import('monaco-editor/esm/vs/language/css/monaco.contribution');
+
+      // core services
+      await import('monaco-editor/esm/vs/editor/standalone/browser/standaloneServices');
+
+      // features
+      await import('monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestController');
+      await import('monaco-editor/esm/vs/editor/contrib/contextmenu/browser/contextmenu');
+      await import('monaco-editor/esm/vs/editor/contrib/hover/browser/contentHoverController');
+      await import('monaco-editor/esm/vs/editor/contrib/bracketMatching/browser/bracketMatching');
+
+      // theme (define AFTER monaco is loaded)
+      monaco.editor.defineTheme('custom-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+          { token: 'tag', foreground: 'd7ba7d' },
+          { token: 'type', foreground: 'd7ba7d' },
+          { token: 'entity.name.tag', foreground: 'd7ba7d' },
+        ],
+        colors: {}
+      });
+    })();
+  }
+
+  await monacoLoading;
+}
+
+function createEditor() {
+  if (!monaco || !editorOutlet.value) return;
+
+  // 🔥 create model ONCE
+  if (!model) {
+    model = monaco.editor.createModel(customCSS.value || '', 'css');
+  }
+
+  editor = monaco.editor.create(editorOutlet.value, {
+    model, // 👈 use model instead of value
+    automaticLayout: true,
+    theme: 'custom-dark',
+    tabSize: 2,
+    contextmenu: true,
+    fontLigatures: false
+  });
+
+  editor.onDidChangeModelContent(() => {
+    const editorContents = model!.getValue();
+    const customStyleTag = document.querySelector('style[data-tawc-custom-theme]');
+    if (customStyleTag) {
+      customStyleTag.textContent = editorContents;
+    }
+  });
+}
 
 import sampleTheme from '@/assets/sample-theme.css?raw';
 
 const title = useTemplateRef('title');
 const bottomRightDrag = useTemplateRef('bottom-right-drag');
 const editorOutlet = useTemplateRef('editor-outlet');
-
-let editor: monaco.editor.IStandaloneCodeEditor;
-const temporaryEditorContents = ref('');
 
 const { x, y } = useDraggable(title, {
   initialValue: { x: 40, y: 40 },
@@ -37,13 +104,28 @@ const windowStyle = computed(() => {
   };
 });
 
-watch(() => ui.design.windowOpen, () => {
+watch(() => ui.design.windowOpen, async () => {
   if (ui.design.windowOpen) {
-    temporaryEditorContents.value = customCSS.value;
-    editor.focus();
-    editor.setValue(temporaryEditorContents.value);
+    loadingEditor.value = true;
+
+    await loadMonaco();
+    if (!editor) {
+      createEditor();
+      requestAnimationFrame(() => {
+        editor!.layout();
+      });
+    }
+
+    // only sync external → model IF needed
+    if (model && model.getValue() !== customCSS.value) {
+      model.setValue(customCSS.value);
+    }
+
+    editor!.focus();
+
+    loadingEditor.value = false;
   }
-})
+});
 
 const resizingWindow = ref(false);
 
@@ -71,71 +153,30 @@ useEventListener(window, 'pointerup', event => {
   passive: true
 });
 
-onMounted(() => {
-  if (!editorOutlet.value) return;
-
-  editor = monaco.editor.create(editorOutlet.value, {
-    value: '',
-    language: 'css',
-    automaticLayout: true,
-    theme: 'vs-dark',
-    tabSize: 2,
-    contextmenu: true
-  });
-
-  editor.onDidChangeModelContent((e) => {
-    const editorContents = editor.getValue();
-    const customStyleTag = document.querySelector('style[data-tawc-custom-theme]');
-    if (customStyleTag) {
-      temporaryEditorContents.value = editorContents;
-      customStyleTag.textContent = editorContents;
-    }
-  });
-
-  const removableIds = [
-    'editor.action.peekDefinition',
-    'editor.action.referenceSearch.trigger',
-    'editor.action.revealDefinition',
-    'editor.action.goToReferences',
-    'editor.action.quickOutline',
-    'submenuitem.EditorContextPeek'
-  ];
-  const contextmenu: any = editor.getContribution('editor.contrib.contextmenu');
-  const realMethod = contextmenu._getMenuActions;
-  contextmenu._getMenuActions = function() {
-    const items = realMethod.apply(contextmenu, arguments);
-    return items.filter((item: any) => {
-      return !removableIds.includes(item.id);
-    });
-  };
-});
-
 function close() {
   ui.design.windowOpen = false;
-  customCSS.value = temporaryEditorContents.value;
+  customCSS.value = model!.getValue();
   setCustomCSS(customCSS.value);
 }
 
 function reset() {
   const areYouSure = confirm('Are you sure you want to reset your custom theme? This action cannot be undone.');
   if (areYouSure) {
-    temporaryEditorContents.value = '';
-    editor.focus();
-    editor.setValue(temporaryEditorContents.value);
+    model!.setValue('');
+    editor!.focus();
   }
 }
 
 function download() {
-  saveAs(new Blob([temporaryEditorContents.value], { type: 'text/css' }), 'tawc-custom-theme.css');
+  saveAs(new Blob([model!.getValue()], { type: 'text/css' }), 'tawc-custom-theme.css');
 }
 
 function loadSample() {
   const areYouSure = confirm('This will overwrite your current CSS with the sample theme. Continue?');
   if (!areYouSure) return;
 
-  temporaryEditorContents.value = sampleTheme;
-  editor.focus();
-  editor.setValue(temporaryEditorContents.value);
+  model!.setValue(sampleTheme);
+  editor!.focus();
 }
 </script>
 
@@ -152,7 +193,13 @@ function loadSample() {
           <div @click="loadSample" data-design-window-toolbar-btn>Load sample</div>
           <div @click="reset" data-design-window-toolbar-btn>Reset</div>
         </div>
-        <div ref="editor-outlet" data-design-window-editor-outlet></div>
+        <div data-design-window-editor-outlet>
+          <div v-if="loadingEditor" data-editor-loading>
+            <div class="spinner"></div>
+          </div>
+
+          <div v-show="!loadingEditor" ref="editor-outlet" style="width: 100%; height: 100%;"></div>
+        </div>
         <div ref="bottom-right-drag" data-design-window-bottom-right-drag></div>
       </div>
     </div>
@@ -221,7 +268,7 @@ function loadSample() {
   width: 12px;
   height: 12px;
   cursor: nwse-resize;
-  z-index: 100000;
+  z-index: 2200;
   background: linear-gradient(135deg,
     transparent 0%,
 
@@ -241,6 +288,7 @@ function loadSample() {
 
 [data-design-window-editor-outlet] {
   flex: 1;
+  overflow: hidden;
 }
 
 [data-design-window-toolbar] {
@@ -260,4 +308,45 @@ function loadSample() {
 [data-design-window-toolbar-btn]:active {
   background: #1e1e1e;
 }
+
+[data-editor-loading] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+<style>
+/* Reset textarea styles */
+[data-design-window] textarea {
+  all: unset;
+}
+
+/* Temporarily remove monaco find widget tooltips */
+/* https://github.com/microsoft/monaco-editor/issues/5137 */
+/* https://github.com/microsoft/monaco-editor/issues/5177 */
+/* .monaco-editor .monaco-hover {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+.monaco-component {
+  visibility: hidden !important;
+} */
 </style>

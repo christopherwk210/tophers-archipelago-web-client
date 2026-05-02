@@ -10,7 +10,9 @@ export default defineConfig({
   base: './',
   plugins: [
     vue(),
-    _monacoEditorPlugin.default({})
+    _monacoEditorPlugin.default({
+      languages: ['css']
+    })
   ],
   resolve: {
     alias: {

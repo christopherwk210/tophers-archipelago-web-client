@@ -2,6 +2,7 @@
 - ⚙️ added chat message filtering by message type
 - ✨ added dotted underlines to indicate anything that has a tooltip
 - ✨ moved "show theme button on login screen" to the theme tab
+- ✨ massive internal re-work of the theme designer resulting in better syntax highlighting, responsiveness, load times, and more
 - 🐛 fixed name mismatch on the custom theme sample
 
 # April 30, 2026

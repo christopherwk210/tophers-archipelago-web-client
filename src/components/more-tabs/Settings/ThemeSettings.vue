@@ -24,6 +24,8 @@ import {
 } from '@/state/theme';
 import { ui } from '@/state/ui';
 
+import themeGalleryImageDefault from '@/../media/theme-default.png';
+
 import { useDebounceFn } from '@vueuse/core';
 import { ref, watch } from 'vue';
 
