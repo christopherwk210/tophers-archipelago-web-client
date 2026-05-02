@@ -145,5 +145,5 @@ input {
 
 label[data-tippy-content], button[data-tippy-content] {
   text-decoration: underline dotted;
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: 1px;
 }

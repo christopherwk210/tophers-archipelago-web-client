@@ -16,6 +16,8 @@ import { initKonami, uninitKonami } from '@/lib/easter-egg';
 
 const router = useRouter();
 
+const url = ref(AppStorage.get('url') || '');
+
 function logout() {
   router.push('/');
 }
@@ -78,7 +80,11 @@ onBeforeUnmount(() => uninitKonami());
       <div class="title-bar">
         <div class="title-bar-text">
           Topher's Archipelago Web Client
-          <span style="margin: 0 1em">|</span> <em style="font-weight: 400;">{{ self.slot }}</em>
+          <span style="margin: 0 1em">|</span>
+          <em style="font-weight: 400;">
+            {{ self.slot }}
+            <span v-if="settings.uiShowUrlTitle" class="title-bar-url">{{ url }}</span>
+          </em>
         </div>
         <div class="title-bar-controls">
           <select v-model="accountSwitcher" v-if="hasMultipleAccounts" style="width: 160px">
@@ -145,6 +151,10 @@ input {
 .message {
   margin-bottom: 0.5em;
   white-space: pre-wrap;
+}
+
+.title-bar-url {
+  margin-left: 1em;
 }
 
 @media (max-width: 500px) {

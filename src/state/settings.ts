@@ -47,12 +47,15 @@ export const settings = ref({
 
   // General settings
   generalAutoReconnect: true,
+  lazyLoadTables: false,
+  logTagChanges: false, // @deprecated
+  showLoginThemeButton: true,
+  
+  // UI settings
   generalShowPlayerTooltips: true,
   generalShowItemTooltips: true,
-  lazyLoadTables: false,
-  logTagChanges: false,
-  showLoginThemeButton: true,
-
+  uiShowUrlTitle: true,
+  
   // Chat settings
   chatFilterFlags: filterFlags.value
 } satisfies Record<string, any>);

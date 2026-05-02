@@ -49,6 +49,15 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
       </div>
 
       <div style="margin-top: 1em" class="check-row">
+        <input v-model="settings.lazyLoadTables" type="checkbox" id="lazyLoadTables">
+        <label :data-tippy-content="lazyLoadTooltip" for="lazyLoadTables">Lazy load tables</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="mt-3">
+      <legend><strong>UI</strong></legend>
+
+      <div style="margin-top: 0.5em" class="check-row">
         <input v-model="settings.generalShowPlayerTooltips" type="checkbox" id="enablePlayerTooltips">
         <label for="enablePlayerTooltips">Enable player tooltips</label>
       </div>
@@ -59,8 +68,8 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
       </div>
 
       <div style="margin-top: 1em" class="check-row">
-        <input v-model="settings.lazyLoadTables" type="checkbox" id="lazyLoadTables">
-        <label :data-tippy-content="lazyLoadTooltip" for="lazyLoadTables">Lazy load tables</label>
+        <input v-model="settings.uiShowUrlTitle" type="checkbox" id="showConnectionURL">
+        <label for="showConnectionURL">Show connection URL in title bar</label>
       </div>
     </fieldset>
 
