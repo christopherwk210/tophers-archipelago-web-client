@@ -142,3 +142,8 @@ input {
 #app menu[role=tablist]::-webkit-scrollbar {
   display: none !important;
 }
+
+label[data-tippy-content], button[data-tippy-content] {
+  text-decoration: underline dotted;
+  text-decoration-thickness: 2px;
+}

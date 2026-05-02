@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { settings } from '@/state/settings';
 import {
   themeCSSlocation,
   themeCSSitemNormal,
@@ -72,6 +73,11 @@ watch(themeFontSize, () => updateFontSize());
     </div>
     <div style="margin-bottom: 1em" v-if="selectedTheme === 'Custom...'">
       <button data-tippy-content="<strong>Warning</strong>: This feature is for advanced users only. CSS knowledge is required.<br><br>Changes are saved when you close the design window." @click.prevent="ui.design.windowOpen = true">Open design window</button>
+    </div>
+
+    <div style="margin: 1em 0" class="check-row">
+      <input v-model="settings.showLoginThemeButton" type="checkbox" id="showLoginThemeButton">
+      <label for="showLoginThemeButton">Show theme button on login screen</label>
     </div>
 
     <label style="margin-bottom: 0.5em" for="fontSize">Font size (<strong>{{ themeCSSfontSize }}</strong>):</label>

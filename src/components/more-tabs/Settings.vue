@@ -67,11 +67,6 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
         <input v-model="settings.logTagChanges" type="checkbox" id="logTagChanges">
         <label for="logTagChanges">Show tag change messages</label>
       </div>
-
-      <div style="margin-top: 1em" class="check-row">
-        <input v-model="settings.showLoginThemeButton" type="checkbox" id="showLoginThemeButton">
-        <label for="showLoginThemeButton">Show theme button on login screen</label>
-      </div>
     </fieldset>
 
     <fieldset class="mt-3">

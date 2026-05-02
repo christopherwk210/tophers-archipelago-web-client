@@ -1,3 +1,8 @@
+# May XXX, 2026
+- ✨ added dotted underlines to indicate anything that has a tooltip
+- ✨ moved "show theme button on login screen" to the theme tab
+- 🐛 fixed name mismatch on the custom theme sample
+
 # April 30, 2026
 - 🪛 added new setting to use precise player progress in the players tab (up to 2 decimal places)
 - 🪛 added new setting to show completed & total checks in the players tab
