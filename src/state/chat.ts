@@ -6,7 +6,6 @@ import { playSound } from '@/lib/audio';
 import { jsConfetti } from '@/lib/confetti';
 import { loadPlayers, players } from './players';
 import { AppTab, appTabManager } from './tabs';
-import { tawcBounce } from '@/lib/bounces';
 import { HintStatus } from './hints';
 import { desktopNotify } from '@/lib/desktop-notifications';
 
@@ -123,6 +122,8 @@ export namespace MessageParsing {
     | ChatMessageDeathLink
     | ChatMessageConfetti
     ;
+
+  export type ChatMessageType = ChatMessage['type'];
 
   /**
    * Converts basic Markdown syntax to HTML

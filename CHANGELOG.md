@@ -1,4 +1,5 @@
 # May XXX, 2026
+- ⚙️ added chat message filtering by message type
 - ✨ added dotted underlines to indicate anything that has a tooltip
 - ✨ moved "show theme button on login screen" to the theme tab
 - 🐛 fixed name mismatch on the custom theme sample

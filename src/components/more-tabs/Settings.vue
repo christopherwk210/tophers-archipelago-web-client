@@ -4,7 +4,7 @@ import { resetCache } from '@/lib/cache';
 import { settings } from '@/state/settings';
 import { useCssVar, useDebounceFn } from '@vueuse/core';
 import { ref, watch } from 'vue';
-import ThemeSettings from './ThemeSettings.vue';
+import ChatSettings from './Settings/ChatSettings.vue';
 
 function clearCache() {
   const confirmation = confirm('Are you sure you want to clear the cache? This will re-download all data packages from the server and reload the page.');
@@ -62,12 +62,9 @@ const lazyLoadTooltip = 'This will cause tables to load their content incrementa
         <input v-model="settings.lazyLoadTables" type="checkbox" id="lazyLoadTables">
         <label :data-tippy-content="lazyLoadTooltip" for="lazyLoadTables">Lazy load tables</label>
       </div>
-
-      <div style="margin-top: 1em" class="check-row">
-        <input v-model="settings.logTagChanges" type="checkbox" id="logTagChanges">
-        <label for="logTagChanges">Show tag change messages</label>
-      </div>
     </fieldset>
+
+    <ChatSettings />
 
     <fieldset class="mt-3">
       <legend><strong>Hints</strong></legend>

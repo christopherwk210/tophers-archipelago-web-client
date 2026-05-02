@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { playSound } from '@/lib/audio';
-import { resetCache } from '@/lib/cache';
-import { settings } from '@/state/settings';
 import { useCssVar, useDebounceFn } from '@vueuse/core';
 import { ref, watch } from 'vue';
-import ThemeSettings from './ThemeSettings.vue';
+import ThemeSettings from './Settings/ThemeSettings.vue';
 
 const themeCss = {
   location: useCssVar('--theme-location'),

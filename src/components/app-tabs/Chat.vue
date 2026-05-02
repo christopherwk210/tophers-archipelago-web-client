@@ -17,6 +17,7 @@ import ItemName from '../text-elements/ItemName.vue';
 import { useElementBounding } from '@vueuse/core';
 import { copyHint, getCssVarFromStatus, getHintStatusName, HintStatus } from '@/state/hints';
 import { appTabManager } from '@/state/tabs';
+import { chatFilterHasFlag, ChatFilterFlag } from '@/state/settings';
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -192,10 +193,10 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
   <div ref="messagesElement" class="messages" @scroll="onScroll">
     <template v-for="message of chat.messages">
       <!-- Unclassified messages -->
-      <div v-if="message.type === 'none'" class="message" v-html="message.content"></div>
+      <div v-if="message.type === 'none' && !chatFilterHasFlag(ChatFilterFlag.UNCLASSIFIED)" class="message" v-html="message.content"></div>
 
       <!-- Player chat messages -->
-      <div v-else-if="message.type === 'player-chat'" class="message">
+      <div v-else-if="message.type === 'player-chat' && !chatFilterHasFlag(ChatFilterFlag.PLAYER_CHAT)" class="message">
         <!-- This icon is invisible just to keep the message aligned with other messages that do have icons -->
         <img class="inline-img" style="opacity: 0; pointer-events: none;" :src="info">
         <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />:
@@ -215,12 +216,12 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       </div>
 
       <!-- Tutorial message -->
-      <div v-else-if="message.type === 'tutorial'" class="message">
+      <div v-else-if="message.type === 'tutorial' && !chatFilterHasFlag(ChatFilterFlag.TUTORIAL)" class="message">
         <img class="inline-img" :src="info"><em style="color: var(--theme-text-help);">{{ message.content }}</em>
       </div>
 
       <!-- Item sent -->
-      <div v-else-if="message.type === 'item-sent'" class="message" :class="{ 'item-for-me': message.isForMe }">
+      <div v-else-if="message.type === 'item-sent' && !chatFilterHasFlag(ChatFilterFlag.ITEM_SENT)" class="message" :class="{ 'item-for-me': message.isForMe }">
         <img class="inline-img" :src="message.isForMe ? warningFill : warning">
         <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />
 
@@ -234,7 +235,7 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       </div>
 
       <!-- Item hinted -->
-      <div v-else-if="message.type === 'item-hinted'" class="message">
+      <div v-else-if="message.type === 'item-hinted' && !chatFilterHasFlag(ChatFilterFlag.ITEM_HINTED)" class="message">
         <button @click="e => copyHint({
           player: message.receiver,
           item: message.itemName,
@@ -249,13 +250,13 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       </div>
 
       <!-- Goaled -->
-      <div v-else-if="message.type === 'goaled'" class="message">
+      <div v-else-if="message.type === 'goaled' && !chatFilterHasFlag(ChatFilterFlag.GOALED)" class="message">
         <img class="inline-img" :src="world">
         <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> (Team {{ message.team }}) has completed their goal!
       </div>
 
       <!-- Connected -->
-      <div v-else-if="message.type === 'connected'" class="message">
+      <div v-else-if="message.type === 'connected' && !chatFilterHasFlag(ChatFilterFlag.CONNECTED)" class="message">
         <img class="inline-img" :src="user">
 
         <i18n-t keypath="Chat.chatComponentJoined" tag="span" style="color: var(--theme-text-join)" scope="global">
@@ -268,18 +269,18 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       </div>
 
       <!-- Disconnected -->
-      <div v-else-if="message.type === 'disconnected'" class="message">
+      <div v-else-if="message.type === 'disconnected' && !chatFilterHasFlag(ChatFilterFlag.DISCONNECTED)" class="message">
         <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> has disconnected.
       </div>
 
       <!-- Tags changed -->
-      <div v-else-if="message.type === 'tag-change'" class="message">
+      <div v-else-if="message.type === 'tag-change' && !chatFilterHasFlag(ChatFilterFlag.TAG_CHANGE)" class="message">
         <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> (Team {{ message.team }}) has changed their tags:
         <strong v-for="(tag, tagIndex) in message.tags" :key="tag">{{ tag }}<template v-if="tagIndex < message.tags.length - 1">, </template></strong>
       </div>
 
       <!-- Death link -->
-      <div v-else-if="message.type === 'death-link'" class="message">
+      <div v-else-if="message.type === 'death-link' && !chatFilterHasFlag(ChatFilterFlag.DEATH_LINK)" class="message">
         <img class="inline-img" :src="minus">
         <template v-if="message.player && message.game && message.slot !== undefined">
           <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />:
