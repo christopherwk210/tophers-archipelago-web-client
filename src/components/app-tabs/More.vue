@@ -12,12 +12,36 @@ import Credits from '../more-tabs/Credits.vue';
 const { t } = useLocalization();
 
 const tabManager = new TabManager([
-  { label: t('More.moreTabSettings'), component: Settings },
-  { label: t('More.moreTabTheme'), component: Theme },
-  { label: t('More.moreTabAccounts'), component: Accounts },
-  { label: t('More.moreTabChangelog'), component: Changes },
-  { label: t('More.moreTabHelp'), component: Help },
-  { label: t('More.moreTabCredits'), component: Credits }
+  {
+    label: t('More.moreTabSettings'),
+    keypath: 'More.moreTabSettings',
+    component: Settings
+  },
+  {
+    label: t('More.moreTabTheme'),
+    keypath: 'More.moreTabTheme',
+    component: Theme
+  },
+  {
+    label: t('More.moreTabAccounts'),
+    keypath: 'More.moreTabAccounts',
+    component: Accounts
+  },
+  {
+    label: t('More.moreTabChangelog'),
+    keypath: 'More.moreTabChangelog',
+    component: Changes
+  },
+  {
+    label: t('More.moreTabHelp'),
+    keypath: 'More.moreTabHelp',
+    component: Help
+  },
+  {
+    label: t('More.moreTabCredits'),
+    keypath: 'More.moreTabCredits',
+    component: Credits
+  }
 ] as const satisfies ComponentTab[]);
 
 const Tabs = tabManager.createVueComponent();

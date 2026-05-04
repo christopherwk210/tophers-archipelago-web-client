@@ -2,14 +2,14 @@
 import { BitField } from '@/lib/bit-field';
 import { useLocalization } from '@/lib/localization-util';
 import { chatFilterHasFlag, ChatFilterFlag, settings } from '@/state/settings';
-import { computed, type WritableComputedRef } from 'vue';
+import { computed, type ComputedRef, type WritableComputedRef } from 'vue';
 
 const { t } = useLocalization();
 
 type ChatFilterFlagInfo = {
-  name: string;
+  name: ComputedRef<string>;
   flag: WritableComputedRef<boolean, boolean>;
-  tooltip?: string;
+  tooltip?: ComputedRef<string>;
 }
 
 function createComputedFlag(flag: ChatFilterFlag) {
@@ -31,46 +31,46 @@ function createComputedFlag(flag: ChatFilterFlag) {
 
 const filterFlagMap: ChatFilterFlagInfo[] = [
   {
-    name: t('Settings.settingsChatPlayerMessages')!,
+    name: computed(() => t('Settings.settingsChatPlayerMessages')),
     flag: createComputedFlag(ChatFilterFlag.PLAYER_CHAT),
-    tooltip: t('Settings.settingsChatPlayerMessagesTooltip')!
+    tooltip: computed(() => t('Settings.settingsChatPlayerMessagesTooltip'))
   },
   {
-    name: t('Settings.settingsChatTutorialMessages')!,
+    name: computed(() => t('Settings.settingsChatTutorialMessages')),
     flag: createComputedFlag(ChatFilterFlag.TUTORIAL),
   },
   {
-    name: t('Settings.settingsChatItemSent')!,
+    name: computed(() => t('Settings.settingsChatItemSent')),
     flag: createComputedFlag(ChatFilterFlag.ITEM_SENT),
   },
   {
-    name: t('Settings.settingsChatItemHinted')!,
+    name: computed(() => t('Settings.settingsChatItemHinted')),
     flag: createComputedFlag(ChatFilterFlag.ITEM_HINTED),
   },
   {
-    name: t('Settings.settingsChatPlayerGoaled')!,
+    name: computed(() => t('Settings.settingsChatPlayerGoaled')),
     flag: createComputedFlag(ChatFilterFlag.GOALED),
   },
   {
-    name: t('Settings.settingsChatPlayerConnected')!,
+    name: computed(() => t('Settings.settingsChatPlayerConnected')),
     flag: createComputedFlag(ChatFilterFlag.CONNECTED),
   },
   {
-    name: t('Settings.settingsChatPlayerDisconnected')!,
+    name: computed(() => t('Settings.settingsChatPlayerDisconnected')),
     flag: createComputedFlag(ChatFilterFlag.DISCONNECTED),
   },
   {
-    name: t('Settings.settingsChatPlayerChangedTags')!,
+    name: computed(() => t('Settings.settingsChatPlayerChangedTags')),
     flag: createComputedFlag(ChatFilterFlag.TAG_CHANGE),
   },
   {
-    name: t('Settings.settingsChatDeathLinkMessages')!,
+    name: computed(() => t('Settings.settingsChatDeathLinkMessages')),
     flag: createComputedFlag(ChatFilterFlag.DEATH_LINK),
   },
   {
-    name: t('Settings.settingsChatUnclassified')!,
+    name: computed(() => t('Settings.settingsChatUnclassified')),
     flag: createComputedFlag(ChatFilterFlag.UNCLASSIFIED),
-    tooltip: t('Settings.settingsChatUnclassifiedTooltip')!
+    tooltip: computed(() => t('Settings.settingsChatUnclassifiedTooltip'))
   }
 ];
 
@@ -89,17 +89,17 @@ function selectNone() {
 
 <template>
   <fieldset class="mt-3">
-    <legend><strong>Chat</strong></legend>
-    <label>Only show these kinds messages:</label>
+    <legend><strong>{{ t('Settings.settingsChat') }}</strong></legend>
+    <label>{{ t('Settings.settingsChatOnlyShow') }}</label>
     <div class="chat-filter-grid">
       <div v-for="item of filterFlagMap">
-        <input v-model="item.flag.value" type="checkbox" :id="item.name">
-        <label :data-tippy-content="item.tooltip" :for="item.name">{{ item.name }}</label>
+        <input v-model="item.flag.value" type="checkbox" :id="item.name.value">
+        <label :data-tippy-content="item.tooltip" :for="item.name.value">{{ item.name }}</label>
       </div>
     </div>
     <div class="select-btn-row">
-      <button @click="selectAll()">Select all</button>
-      <button @click="selectNone()">Select none</button>
+      <button @click="selectAll()">{{ t('Settings.settingsChatSelectAll') }}</button>
+      <button @click="selectNone()">{{ t('Settings.settingsChatSelectNone') }}</button>
     </div>
   </fieldset>
 </template>
@@ -114,6 +114,10 @@ function selectNone() {
 
 .chat-filter-grid > * {
   width: 200px;
+}
+
+.chat-filter-grid label {
+  line-height: 1.1;
 }
 
 .select-btn-row {

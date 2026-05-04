@@ -2,6 +2,7 @@ import { AppStorage } from '@/lib/storage';
 import { ref, watch } from 'vue';
 import { Howler } from 'howler';
 import { BitField } from '@/lib/bit-field';
+import { getPreferredLocale } from '@/lib/localization-util';
 
 export enum ChatFilterFlag {
   UNCLASSIFIED = 1,
@@ -50,6 +51,7 @@ export const settings = ref({
   lazyLoadTables: false,
   logTagChanges: false, // @deprecated
   showLoginThemeButton: true,
+  generalSelectedLocale: getPreferredLocale(),
   
   // UI settings
   generalShowPlayerTooltips: true,

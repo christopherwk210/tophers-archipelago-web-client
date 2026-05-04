@@ -5,22 +5,22 @@ import '@/assets/styles/main.css';
 
 import { app } from '@/app';
 import router from './router';
-import { loadSettings } from './state/settings';
+import { loadSettings, settings } from './state/settings';
 import { loadTheme } from './state/theme';
 import { delegate } from 'tippy.js';
 import { createI18n } from 'vue-i18n';
 import { i18n_messages } from './localization';
 
+loadSettings();
+loadTheme();
+
 const i18n = createI18n({
   legacy: false,
-  locale: 'en',
+  locale: settings.value.generalSelectedLocale,
   fallbackLocale: 'en',
   messages: i18n_messages,
   warnHtmlMessage: false
 });
-
-loadSettings();
-loadTheme();
 
 delegate(document.body, {
   target: '[data-tippy-content]',

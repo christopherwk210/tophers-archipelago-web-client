@@ -6,6 +6,8 @@ import { useCssVar, useDebounceFn } from '@vueuse/core';
 import { ref, watch } from 'vue';
 import ChatSettings from './Settings/ChatSettings.vue';
 import { useLocalization } from '@/lib/localization-util';
+import { useI18n } from 'vue-i18n';
+import { i18n_messages } from '@/localization';
 
 const { t } = useLocalization();
 
@@ -44,7 +46,14 @@ watch(themeFontSize, () => updateFontSize());
     <fieldset>
       <legend><strong>{{ t('Settings.settingsGeneral') }}</strong></legend>
 
-      <div style="margin-top: 0.5em" class="check-row">
+      <div style="margin-top: 0.5em">
+        <label for="attemptReconnect">{{ t('Settings.settingsLanguage') }}</label>
+        <select style="display: block; width: 100%; max-width: 300px; margin-top: 0.25em;" v-model="$i18n.locale">
+          <option v-for="locale in $i18n.availableLocales" :value="locale">{{ (i18n_messages as any)[locale]['MiscUI']['languageName'] }}</option>
+        </select>
+      </div>
+
+      <div style="margin-top: 1em" class="check-row">
         <input v-model="settings.generalAutoReconnect" type="checkbox" id="attemptReconnect">
         <label for="attemptReconnect">{{ t('Settings.settingsReconnectOnRefresh') }}</label>
       </div>

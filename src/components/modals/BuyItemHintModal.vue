@@ -44,7 +44,7 @@ function purchase() {
         </div>
       </div>
       <div class="window-body">
-        <div style="margin-bottom: 0.2em">{{ t('Hints.hintItem') }}:</div>
+        <div style="margin-bottom: 0.2em">{{ t('Hints.hintItem') }}</div>
         <select v-model="selectedItem">
           <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
         </select>
