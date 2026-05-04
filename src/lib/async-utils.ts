@@ -1,3 +1,5 @@
+import { useLocalization } from "./localization-util";
+
 export interface SafePromiseSuccess<T> {
   success: true;
   data: T;
@@ -12,6 +14,8 @@ export interface SafePromiseError {
 
 /** Promise wrapper to remove the need for try/catch blocks */
 export async function safeAsync<T>(promise: Promise<T>): Promise<SafePromiseSuccess<T> | SafePromiseError> {
+  const { t } = useLocalization();
+
   try {
     const data = await promise;
 
@@ -21,7 +25,7 @@ export async function safeAsync<T>(promise: Promise<T>): Promise<SafePromiseSucc
     };
   } catch (e: any) {
     let error: Error = e;
-    let message = 'An unknown error occurred';
+    let message = t('MiscUI.errorUnknownFull');
 
     if (e && e instanceof Error) message = e.message;
 

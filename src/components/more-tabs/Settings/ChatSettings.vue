@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { BitField } from '@/lib/bit-field';
+import { useLocalization } from '@/lib/localization-util';
 import { chatFilterHasFlag, ChatFilterFlag, settings } from '@/state/settings';
 import { computed, type WritableComputedRef } from 'vue';
+
+const { t } = useLocalization();
 
 type ChatFilterFlagInfo = {
   name: string;
@@ -28,46 +31,46 @@ function createComputedFlag(flag: ChatFilterFlag) {
 
 const filterFlagMap: ChatFilterFlagInfo[] = [
   {
-    name: 'Player Messages',
+    name: t('Settings.settingsChatPlayerMessages')!,
     flag: createComputedFlag(ChatFilterFlag.PLAYER_CHAT),
-    tooltip: 'All user chat messages, even your own!'
+    tooltip: t('Settings.settingsChatPlayerMessagesTooltip')!
   },
   {
-    name: 'Tutorial Messages',
+    name: t('Settings.settingsChatTutorialMessages')!,
     flag: createComputedFlag(ChatFilterFlag.TUTORIAL),
   },
   {
-    name: 'Item Sent',
+    name: t('Settings.settingsChatItemSent')!,
     flag: createComputedFlag(ChatFilterFlag.ITEM_SENT),
   },
   {
-    name: 'Item Hinted',
+    name: t('Settings.settingsChatItemHinted')!,
     flag: createComputedFlag(ChatFilterFlag.ITEM_HINTED),
   },
   {
-    name: 'Player Goaled',
+    name: t('Settings.settingsChatPlayerGoaled')!,
     flag: createComputedFlag(ChatFilterFlag.GOALED),
   },
   {
-    name: 'Player Connected',
+    name: t('Settings.settingsChatPlayerConnected')!,
     flag: createComputedFlag(ChatFilterFlag.CONNECTED),
   },
   {
-    name: 'Player Disconnected',
+    name: t('Settings.settingsChatPlayerDisconnected')!,
     flag: createComputedFlag(ChatFilterFlag.DISCONNECTED),
   },
   {
-    name: 'Player Changed Tags',
+    name: t('Settings.settingsChatPlayerChangedTags')!,
     flag: createComputedFlag(ChatFilterFlag.TAG_CHANGE),
   },
   {
-    name: 'Death Link Messages',
+    name: t('Settings.settingsChatDeathLinkMessages')!,
     flag: createComputedFlag(ChatFilterFlag.DEATH_LINK),
   },
   {
-    name: 'Unclassified',
+    name: t('Settings.settingsChatUnclassified')!,
     flag: createComputedFlag(ChatFilterFlag.UNCLASSIFIED),
-    tooltip: 'Messages that don\'t fit any other category'
+    tooltip: t('Settings.settingsChatUnclassifiedTooltip')!
   }
 ];
 

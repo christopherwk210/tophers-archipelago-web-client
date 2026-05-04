@@ -3,6 +3,9 @@ import { appTabManager, AppTab } from '@/state/tabs';
 import { ui } from '@/state/ui';
 import { sendMessage } from '@/state/chat';
 import { hints } from '@/state/hints';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 function purchase() {
   if (!ui.modals.buyLocationHint) return;
@@ -17,25 +20,25 @@ function purchase() {
   <div class="modal buy-item-hint" v-if="ui.modals.buyLocationHint">
     <div class="window">
       <div class="title-bar">
-        <div class="title-bar-text">Buy location hint</div>
+        <div class="title-bar-text">{{ t('Locations.locationBuy') }}</div>
         <div class="title-bar-controls">
           <button aria-label="Close" @click="ui.modals.buyLocationHint = undefined"></button>
         </div>
       </div>
       <div class="window-body">
         <div style="margin-bottom: 0.5em;">
-          You are about to purchase a location hint for:
+          {{ t('Locations.locationBuyText') }}
         </div>
 
         <strong>{{ ui.modals.buyLocationHint.name }}</strong>
 
         <div style="margin: 1em 0; font-size: 0.875em">
-          <div>Hint cost: {{ hints.cost }}</div>
-          <div>Available points: {{ hints.points }}</div>
+          <div>{{ t('Hints.hintCost') }} {{ hints.cost }}</div>
+          <div>{{ t('Hints.hintAvailablePoints') }} {{ hints.points }}</div>
         </div>
 
         <div style="display: flex; justify-content: center;">
-          <button :disabled="hints.points < hints.cost" @click="purchase">Purchase</button>
+          <button :disabled="hints.points < hints.cost" @click="purchase">{{ t('MiscUI.purchase') }}</button>
         </div>
       </div>
     </div>

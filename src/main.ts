@@ -3,8 +3,7 @@ import '@/assets/styles/theme.css';
 import 'tippy.js/dist/tippy.css';
 import '@/assets/styles/main.css';
 
-import { createApp } from 'vue';
-import App from './App.vue';
+import { app } from '@/app';
 import router from './router';
 import { loadSettings } from './state/settings';
 import { loadTheme } from './state/theme';
@@ -16,7 +15,8 @@ const i18n = createI18n({
   legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
-  messages: i18n_messages
+  messages: i18n_messages,
+  warnHtmlMessage: false
 });
 
 loadSettings();
@@ -27,7 +27,6 @@ delegate(document.body, {
   allowHTML: true
 });
 
-const app = createApp(App);
 app.use(i18n);
 app.use(router);
 app.mount('#app');

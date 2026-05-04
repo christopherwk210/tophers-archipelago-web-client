@@ -7,6 +7,9 @@ import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
 import { settings } from '@/state/settings';
 import type { ItemClass } from '@/lib/archipelago';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 onActivated(() => {
   loadCollectedItems();
@@ -14,11 +17,11 @@ onActivated(() => {
 
 const columns: Column[] = [
   { label: '', key: '_check_image' },
-  { label: 'Order', key: 'order' },
-  { label: 'Name', key: 'name' },
-  { label: 'Sender', key: 'sender' },
-  { label: 'Source Game', key: 'locationGame' },
-  { label: 'Location', key: 'location' }
+  { label: t('Collected.collectedOrder'), key: 'order' },
+  { label: t('MiscUI.name'), key: 'name' },
+  { label: t('Collected.collectedSender'), key: 'sender' },
+  { label: t('Collected.collectedSourceGame'), key: 'locationGame' },
+  { label: t('Locations.locationSelect'), key: 'location' }
 ];
 
 const search = ref('');
@@ -27,8 +30,8 @@ const filteredCollected = computed(() => {
 });
 
 const simplifiedColumns: Column[] = [
-  { label: 'Quantity', key: 'count', style: 'width: 80px' },
-  { label: 'Name', key: 'name' }
+  { label: t('Collected.collectedQuantity'), key: 'count', style: 'width: 80px' },
+  { label: t('MiscUI.name'), key: 'name' }
 ];
 
 const simplifiedCollected = computed(() => {
@@ -50,10 +53,10 @@ const simplifiedCollected = computed(() => {
 <template>
   <div class="collected">
     <div>
-      <input v-model="search" style="margin-right: auto" placeholder="Search items by name..." type="text">
+      <input v-model="search" style="margin-right: auto" :placeholder="t('Collected.collectedSearch')" type="text">
       <div class="check-row" style="margin: 0.5em 0;">
         <input v-model="settings.trackerCollectedSimplified" type="checkbox" id="simplified">
-        <label for="simplified">Simplified view</label>
+        <label for="simplified">{{ t('Collected.collectedSimplified') }}</label>
       </div>
     </div>
     <div class="sunken-panel">

@@ -4,6 +4,7 @@ import { safeAsync, type SafePromiseError } from './async-utils';
 import { ref } from 'vue';
 import { tawcBounces } from './bounces';
 import { loadHints } from '@/state/hints';
+import { useLocalization } from './localization-util';
 
 export const client = new Client();
 
@@ -52,6 +53,8 @@ client.items.on('hintStatusChanged' as any, () => loadHints());
 
 /** Logs in a user with the server */
 export async function login(url: string, slot: string, password?: string) {
+  const { t } = useLocalization();
+
   const options: ConnectionOptions = password ? { password } : {};
   options.tags = ['TextOnly', 'Tracker']
 
@@ -65,7 +68,7 @@ export async function login(url: string, slot: string, password?: string) {
       success: false,
       data: null,
       error: new Error(),
-      message: 'Failed to connect to server'
+      message: t('MiscUI.failToConnect')
     } as SafePromiseError;
   }
 
@@ -97,15 +100,17 @@ export function sortItemClasses(itemClasses: ItemClass[]) {
 }
 
 export function itemClassToString(itemClass: ItemClass) {
+  const { t } = useLocalization();
+
   switch (itemClass) {
     case ItemClass.PROGRESSION:
-      return 'Progression';
+      return t('Texts.textItemProgression');
     case ItemClass.USEFUL:
-      return 'Useful';
+      return t('Texts.textItemUseful');
     case ItemClass.TRAP:
-      return 'Trap';
+      return t('Texts.textItemTrap');
     default:
-      return 'Normal';
+      return t('Texts.textItemNormal');
   }
 }
 

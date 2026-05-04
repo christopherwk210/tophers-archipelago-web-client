@@ -10,6 +10,9 @@ import { players } from '@/state/players';
 import { loadLocations } from '@/state/tracker';
 import LoginThemeSelector from '@/components/LoginThemeSelector.vue';
 import { settings } from '@/state/settings';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const router = useRouter();
 const route = useRoute();
@@ -149,7 +152,7 @@ onMounted(() => {
     <template v-if="connecting">
       <div class="window">
         <div class="title-bar">
-          <div class="title-bar-text">Connecting, please wait...</div>
+          <div class="title-bar-text">{{ t('Login.loginConnecting') }}</div>
         </div>
         <div class="window-body">
           <img src="@/assets/images/file_copy.gif">
@@ -157,8 +160,8 @@ onMounted(() => {
             <span class="progress-indicator-bar"></span>
           </div>
           <div class="btn-row">
-            <button v-if="connectRetryButtonVisible" @click="cancel">Cancel</button>
-            <button v-if="connectRetryButtonVisible" @click="retry">Retry</button>
+            <button v-if="connectRetryButtonVisible" @click="cancel">{{ t('MiscUI.cancel') }}</button>
+            <button v-if="connectRetryButtonVisible" @click="retry">{{ t('MiscUI.retry') }}</button>
           </div>
         </div>
       </div>
@@ -168,54 +171,54 @@ onMounted(() => {
       <div class="window">
         <div class="title-bar">
           <div class="title-bar-text">
-            Login
+            {{ t('Login.loginWindowTitle') }}
           </div>
           <div class="title-bar-controls">
             <select v-model="accountSwitcher" v-if="hasMultipleAccounts" style="width: 160px">
-              <option disabled :value="-1">Saved accounts...</option>
+              <option disabled :value="-1">{{ t('Accounts.accountsSavedAccounts') }}</option>
               <option v-for="(account, accountIndex) of switchAccountList" :value="accountIndex">{{ account.slot }}</option>
             </select>
           </div>
         </div>
         <div class="window-body">
           <div class="field-row-stacked">
-            <label for="url">URL</label>
+            <label for="url">{{ t('Accounts.accountsUrl') }}</label>
             <input @input="resetAccountSwitcher" v-model="url" id="url" type="text" placeholder="archipelago.gg:12345" spellcheck="false" autocomplete="off" autocapitalize="none" />
           </div>
           <div class="mt-3 field-row-stacked">
-            <label for="name">Name/Slot</label>
+            <label for="name">{{ t('Accounts.accountsNameSlot') }}</label>
             <input @input="resetAccountSwitcher" v-model="slot" id="name" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
           </div>
           <div class="mt-3 field-row-stacked">
-            <label for="password">Password</label>
-            <input @input="resetAccountSwitcher" placeholder="Leave blank if no password is needed" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
+            <label for="password">{{ t('Accounts.accountsPassword') }}</label>
+            <input @input="resetAccountSwitcher" :placeholder="t('Accounts.accountsLeaveBlank')" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
           </div>
           <div class="mt-1 field-row-stacked">
             <!-- show password checkbox -->
             <input v-model="showPassword" type="checkbox" id="show-password">
-            <label for="show-password">Show Password</label>
+            <label for="show-password">{{ t('Accounts.accountsShowPassword') }}</label>
           </div>
   
           <div class="btn-row">
-            <button @click="connect">Connect</button>
+            <button @click="connect">{{ t('Login.loginConnect') }}</button>
           </div>
 
           <template v-if="error">
-            <strong style="color: red">Error:</strong>
+            <strong style="color: red">{{ t('MiscUI.error') }}:</strong>
             <div class="field-border-disabled" style="padding: 8px">
               {{ error }}
             </div>
             <div class="tip">
-              Tip: If you're trying to connect to a self-hosted archipelago server, you may need to access this client from an insecure http connection.
-              <a href="http://insecure.topheranselmo.com/archipelago">Click here</a> to access the insecure version.
+              {{ t('Login.loginInsecureTip0') }}
+              <a href="http://insecure.topheranselmo.com/archipelago">{{ t('Login.loginInsecureTip1') }}</a> {{ t('Login.loginInsecureTip2') }}
             </div>
           </template>
         </div>
   
         <div class="status-bar">
-          <p class="status-bar-field">Powered by <a href="https://archipelago.gg/">Archipelago</a></p>
-          <p class="status-bar-field">Made by <a href="https://topheranselmo.com/">topher</a></p>
-          <p class="status-bar-field"><a href="https://github.com/christopherwk210/tophers-archipelago-web-client">Source code</a></p>
+          <p class="status-bar-field">{{ t('Login.loginPoweredBy') }} <a href="https://archipelago.gg/">Archipelago</a></p>
+          <p class="status-bar-field">{{ t('Login.loginMadeBy') }} <a href="https://topheranselmo.com/">topher</a></p>
+          <p class="status-bar-field"><a href="https://github.com/christopherwk210/tophers-archipelago-web-client">{{ t('Login.loginSourceCode') }}</a></p>
         </div>
       </div>
     </template>

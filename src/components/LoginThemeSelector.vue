@@ -2,6 +2,9 @@
 import { resetThemeToDefault, selectedTheme, themes } from '@/state/theme';
 import { useElementBounding, useEventListener } from '@vueuse/core';
 import { computed, ref, useTemplateRef } from 'vue';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const themeButton = useTemplateRef('theme-button');
 const themeButtonBounding = useElementBounding(themeButton);
@@ -27,11 +30,11 @@ function selectTheme(theme: any) {
 
 <template>
   <div class="theme-button-container">
-    <button @click.prevent.stop="themeSelectorVisible = !themeSelectorVisible" ref="theme-button" data-tippy-content="Change theme" class="theme-button"></button>
+    <button @click.prevent.stop="themeSelectorVisible = !themeSelectorVisible" ref="theme-button" :data-tippy-content="t('Theme.themeChangeTheme')" class="theme-button"></button>
   </div>
 
   <div :style="themeSelectorStyle" class="theme-selector-container window">
-    <div class="theme-selector-title"><em>Select theme:</em></div>
+    <div class="theme-selector-title"><em>{{ t('Theme.themeSelectTheme') }}</em></div>
     <div @click="selectTheme(theme)" class="theme-selector-item" v-for="theme of Object.keys(themes)">{{ theme }}</div>
   </div>
 </template>

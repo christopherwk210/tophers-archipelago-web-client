@@ -7,7 +7,9 @@ import { initializeCustomCommands } from './lib/commands';
 import { watch } from 'vue';
 import { settings } from './state/settings';
 import DesignWindow from './components/DesignWindow.vue';
+import { translateInternals } from './lib/localization-util';
 
+translateInternals();
 initializeCustomCommands();
 
 watch(() => settings.value.notificationsUseDesktop, () => {

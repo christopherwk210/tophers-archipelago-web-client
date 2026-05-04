@@ -1,6 +1,6 @@
 import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import type { BouncedPacket, Item, JSONRecord, MessageNode, Player, SayPacket } from 'archipelago.js';
-import { reactive, ref } from 'vue';
+import { getCurrentInstance, reactive, ref } from 'vue';
 import { settings } from './settings';
 import { playSound } from '@/lib/audio';
 import { jsConfetti } from '@/lib/confetti';
@@ -8,6 +8,7 @@ import { loadPlayers, players } from './players';
 import { AppTab, appTabManager } from './tabs';
 import { HintStatus } from './hints';
 import { desktopNotify } from '@/lib/desktop-notifications';
+import { useLocalization } from '@/lib/localization-util';
 
 // Namespace dedicated to parsing archipelago.js messages into local data
 export namespace MessageParsing {
@@ -129,6 +130,8 @@ export namespace MessageParsing {
    * Converts basic Markdown syntax to HTML
    */
   function basicMarkdownToHtml(input: string) {
+    const { t } = useLocalization();
+
     let html = input;
 
     // Protect emoticons
@@ -159,7 +162,7 @@ export namespace MessageParsing {
       html = html.split(placeholder).join(emoticons[index]!);
     });
 
-    html = html.replace(/(burger king)/gi, '<strong data-tippy-content="Burger King" style="font-size: 1.1em; cursor: cell;">Burger King</strong>');
+    html = html.replace(/(burger king)/gi, `<strong data-tippy-content="${t('Texts.textBurgerKing')}" style="font-size: 1.1em; cursor: cell;">${t('Texts.textBurgerKing')}</strong>`);
 
     return html;
   }
@@ -306,6 +309,8 @@ export namespace MessageParsing {
 
   /** For when a player sends an item */
   export function addItemSentMessage(item: Item) {
+    const { t } = useLocalization();
+
     const isForMe = item.receiver.name === client.players.self.name && item.receiver.slot === client.players.self.slot;
     const isGift = !(item.sender.alias === item.receiver.alias && item.sender.slot === item.receiver.slot);
     const itemClass = getItemClass(item);
@@ -313,29 +318,29 @@ export namespace MessageParsing {
     if (isForMe && settings.value.notificationsItemSent) {
       if (itemClass.includes(ItemClass.PROGRESSION)) {
         if (settings.value.notificationsItemSentProgression) {
-          desktopNotify(`Progression Item Received`, {
-            body: `${item.sender.alias} sent you ${item.name}`
+          desktopNotify(`${t('Texts.textItemProgression')} ${t('Notifications.notifyItemGet')}`, {
+            body: t('Notifications.notifySentYou', { player: item.sender.alias, item: item.name })
           });
           playSound('notify');
         }
       } else if (itemClass.includes(ItemClass.USEFUL)) {
         if (settings.value.notificationsItemSentUseful) {
-          desktopNotify(`Useful Item Received`, {
-            body: `${item.sender.alias} sent you ${item.name}`
+          desktopNotify(`${t('Texts.textItemUseful')} ${t('Notifications.notifyItemGet')}`, {
+            body: t('Notifications.notifySentYou', { player: item.sender.alias, item: item.name })
           });
           playSound('notify');
         }
       } else if (itemClass.includes(ItemClass.TRAP)) {
         if (settings.value.notificationsItemSentTrap) {
-          desktopNotify(`Trap Item Received`, {
-            body: `${item.sender.alias} sent you ${item.name}`
+          desktopNotify(`${t('Texts.textItemTrap')} ${t('Notifications.notifyItemGet')}`, {
+            body: t('Notifications.notifySentYou', { player: item.sender.alias, item: item.name })
           });
           playSound('notify');
         }
       } else {
         if (settings.value.notificationsItemSentNormal) {
-          desktopNotify(`Item Received`, {
-            body: `${item.sender.alias} sent you ${item.name}`
+          desktopNotify(`${t('Notifications.notifyItemGet')}`, {
+            body: t('Notifications.notifySentYou', { player: item.sender.alias, item: item.name })
           });
           playSound('notify');
         }
@@ -400,10 +405,12 @@ export namespace MessageParsing {
   }
 
   export function addConnectedMessage(player: Player) {
+    const { t } = useLocalization();
+
     if (settings.value.notificationsPlayerConnected) {
       if (settings.value.notificationsUseDesktop) {
-        desktopNotify('Player Connected', {
-          body: `${player.alias} has joined!`
+        desktopNotify(t('Notifications.notifyPlayerConnected'), {
+          body: t('Notifications.notifyPlayerJoin', { player: player.alias })
         });
       }
 
@@ -506,21 +513,27 @@ export const commandHints = ref<CommandHint[]>([
     cmd: '!release',
     args: [],
     help: 'Releases all items contained in your world to other worlds. Typically, done automatically by the server, but can be configured to allow/require manual usage of this command.'
-  },
-
-  // {
-  //   cmd: '/clear',
-  //   args: [],
-  //   help: 'Clears the local chat history.',
-  //   isCustom: true
-  // },
-  // {
-  //   cmd: '/confetti',
-  //   args: [],
-  //   help: 'Triggers a confetti celebration for everyone using Topher\'s Archipelago Web Client, including you!',
-  //   isCustom: true
-  // }
+  }
 ]);
+
+export function translateCommandHints() {
+  const { t } = useLocalization();
+
+  commandHints.value.find(c => c.cmd === '!help')!.help          = t('Commands.cmdHelp');
+  commandHints.value.find(c => c.cmd === '!license')!.help       = t('Commands.cmdLicense');
+  commandHints.value.find(c => c.cmd === '!options')!.help       = t('Commands.cmdOptions');
+  commandHints.value.find(c => c.cmd === '!status')!.help        = t('Commands.cmdStatus');
+  commandHints.value.find(c => c.cmd === '!countdown')!.help     = t('Commands.cmdCountdown');
+  commandHints.value.find(c => c.cmd === '!alias')!.help         = t('Commands.cmdAlias');
+  commandHints.value.find(c => c.cmd === '!admin')!.help         = t('Commands.cmdAdmin');
+  commandHints.value.find(c => c.cmd === '!remaining')!.help     = t('Commands.cmdRemaining');
+  commandHints.value.find(c => c.cmd === '!missing')!.help       = t('Commands.cmdMissing');
+  commandHints.value.find(c => c.cmd === '!checked')!.help       = t('Commands.cmdChecked');
+  commandHints.value.find(c => c.cmd === '!hint')!.help          = t('Commands.cmdHint');
+  commandHints.value.find(c => c.cmd === '!hint_location')!.help = t('Commands.cmdHintLocation');
+  commandHints.value.find(c => c.cmd === '!collect')!.help       = t('Commands.cmdCollect');
+  commandHints.value.find(c => c.cmd === '!release')!.help       = t('Commands.cmdRelease');
+}
 
 export const chat = reactive({
   /** What is currently being typed in the box */

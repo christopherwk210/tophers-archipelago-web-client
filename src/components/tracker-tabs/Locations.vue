@@ -6,14 +6,17 @@ import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 import { ui } from '@/state/ui';
 import { settings } from '@/state/settings';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 onActivated(() => {
   loadLocations();
 });
 
 const columns: Column[] = [
-  { label: 'Checked', key: 'checked', style: 'width: 100px;' },
-  { label: 'Name', key: 'name' }
+  { label: t('Locations.locationColumnChecked'), key: 'checked', style: 'width: 100px;' },
+  { label: t('MiscUI.name'), key: 'name' }
 ];
 
 const selectedLocation = ref<TrackerLocation>();
@@ -40,15 +43,15 @@ const filteredLocations = computed(() => {
     <div class="actions">
       <div class="check-row" style="margin-right: auto">
         <input v-model="settings.locationHintFilterFound" type="checkbox" id="filterFound">
-        <label for="filterFound">Hide checked locations</label>
+        <label for="filterFound">{{ t('Locations.locationHideChecked') }}</label>
       </div>
 
-      <em v-if="!selectedLocation">Select a location</em>
+      <em v-if="!selectedLocation">{{ t('Locations.locationSelect') }}</em>
       <span v-else>{{ selectedLocation.name }}</span>
-      <button :disabled="!selectedLocation" @click="buyLocationHint()">Buy location hint</button>
+      <button :disabled="!selectedLocation" @click="buyLocationHint()">{{ t('Locations.locationBuy') }}</button>
     </div>
     <div>
-      <input v-model="search" style="margin-right: auto" placeholder="Search locations..." type="text">
+      <input v-model="search" style="margin-right: auto" :placeholder="t('Locations.locationSearch')" type="text">
     </div>
     <div class="sunken-panel">
       <AppTable :columns="columns" :data="filteredLocations" default-sort-by="checked" @row-selected="selectedLocation = $event">

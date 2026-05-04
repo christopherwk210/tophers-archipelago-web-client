@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ui } from '@/state/ui';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 function copyThemeToClipboard() {
   if (ui.modals.exportTheme === false) return;
@@ -11,18 +14,18 @@ function copyThemeToClipboard() {
   <div class="modal export-theme-modal" v-if="ui.modals.exportTheme !== false">
     <div class="window">
       <div class="title-bar">
-        <div class="title-bar-text">Export theme</div>
+        <div class="title-bar-text">{{ t('Theme.themeExportTheme') }}</div>
         <div class="title-bar-controls">
           <button aria-label="Close" @click="ui.modals.exportTheme = false"></button>
         </div>
       </div>
       <div class="window-body">
-        <p>Copy the text below to export your theme:</p>
-        <p><small>Note: This does not include custom CSS designs</small></p>
+        <p>{{ t('Theme.themeCopyText') }}</p>
+        <p><small>{{ t('Theme.themeCustomCSSNote') }}</small></p>
         <textarea readonly>{{ ui.modals.exportTheme }}</textarea>
         <div style="display: flex; justify-content: center; gap: 1em">
-          <button @click="copyThemeToClipboard">Copy</button>
-          <button @click="ui.modals.exportTheme = false">Close</button>
+          <button @click="copyThemeToClipboard">{{ t('Theme.themeCopy') }}</button>
+          <button @click="ui.modals.exportTheme = false">{{ t('Theme.themeClose') }}</button>
         </div>
       </div>
     </div>

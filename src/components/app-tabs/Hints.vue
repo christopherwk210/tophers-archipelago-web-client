@@ -10,18 +10,21 @@ import PlayerName from '../text-elements/PlayerName.vue';
 import ItemName from '../text-elements/ItemName.vue';
 import { client } from '@/lib/archipelago';
 import { useElementBounding, useEventListener } from '@vueuse/core';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 onActivated(async () => {
   loadHints();
 });
 
 const columns: Column[] = [
-  { label: 'Found', key: 'found' },
-  { label: 'Player', key: 'player' },
-  { label: 'Item', key: 'item' },
-  { label: 'Owner', key: 'owner' },
-  { label: 'Location', key: 'location' },
-  { label: 'Status', key: 'status', style: 'padding-right: 1em' }
+  { label: t('Texts.textFound'), key: 'found' },
+  { label: t('Hints.hintsColumnPlayer'), key: 'player' },
+  { label: t('Hints.hintItem'), key: 'item' },
+  { label: t('Hints.hintsColumnOwner'), key: 'owner' },
+  { label: t('MiscUI.location'), key: 'location' },
+  { label: t('MiscUI.status'), key: 'status', style: 'padding-right: 1em' }
 ];
 
 const computedColumns = computed(() => {
@@ -89,22 +92,22 @@ function changePriority(newStatus: HintStatus) {
   <div class="hints">
     <Transition>
       <div ref="priority-drop-down" v-if="changingPriority && priorityChangerStyle" :style="priorityChangerStyle" class="priority-drop-down">
-        <div @click="changePriority(HintStatus.NO_PRIORITY)" :style="{ color: getCssVarFromStatus(HintStatus.NO_PRIORITY) }">No Priority</div>
-        <div @click="changePriority(HintStatus.PRIORITY)" :style="{ color: getCssVarFromStatus(HintStatus.PRIORITY) }">Priority</div>
-        <div @click="changePriority(HintStatus.AVOID)" :style="{ color: getCssVarFromStatus(HintStatus.AVOID) }">Avoid</div>
+        <div @click="changePriority(HintStatus.NO_PRIORITY)" :style="{ color: getCssVarFromStatus(HintStatus.NO_PRIORITY) }">{{ t('Texts.textNoPriority') }}</div>
+        <div @click="changePriority(HintStatus.PRIORITY)" :style="{ color: getCssVarFromStatus(HintStatus.PRIORITY) }">{{ t('Texts.textPriority') }}</div>
+        <div @click="changePriority(HintStatus.AVOID)" :style="{ color: getCssVarFromStatus(HintStatus.AVOID) }">{{ t('Texts.textAvoid') }}</div>
       </div>
     </Transition>
 
     <div class="actions">
-      <button :disabled="hints.points < hints.cost" @click="ui.modals.buyItemHint = true">Buy item hint</button>
+      <button :disabled="hints.points < hints.cost" @click="ui.modals.buyItemHint = true">{{ t('Hints.hintBuyItemHint') }}</button>
       <div class="check-row" style="margin: 0.5em 0;">
         <input v-model="settings.hintsFilterFound" type="checkbox" id="filterFound">
-        <label for="filterFound">Hide found hints</label>
+        <label for="filterFound">{{ t('Hints.hintsHideFoundHints') }}</label>
       </div>
     </div>
     <div style="display: flex; justify-content: space-between; font-size: 0.875em;">
-      <span>Hint cost: {{ hints.cost }}</span>
-      <span>Available points: {{ hints.points }}</span>
+      <span>{{ t('Hints.hintCost') }} {{ hints.cost }}</span>
+      <span>{{ t('Hints.hintAvailablePoints') }} {{ hints.points }}</span>
     </div>
     <div class="sunken-panel">
       <AppTable :columns="computedColumns" :data="filteredHints" default-sort-by="player" @rowDoubleClicked="e => copyHint(e)">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLocalization } from '@/lib/localization-util';
 import { settings } from '@/state/settings';
 import {
   themeCSSlocation,
@@ -24,13 +25,13 @@ import {
 } from '@/state/theme';
 import { ui } from '@/state/ui';
 
-import themeGalleryImageDefault from '@/../media/theme-default.png';
-
 import { useDebounceFn } from '@vueuse/core';
 import { ref, watch } from 'vue';
 
+const { t } = useLocalization();
+
 function resetToDefault() {
-  const proceed = confirm('This will reset all theme settings to default. Do you want to continue?');
+  const proceed = confirm(t('Theme.themeResetDefault'));
   if (!proceed) return;
 
   resetThemeToDefault(selectedTheme.value);
@@ -45,7 +46,7 @@ async function importThemeClicked() {
   const result = importTheme(clipboardText);
 
   if (!result) {
-    alert('Failed to import theme. Please make sure you have the theme code copied to your clipboard.');
+    alert(t('Theme.themeFailedImport'));
   }
 }
 
@@ -61,7 +62,7 @@ watch(themeFontSize, () => updateFontSize());
 
 <template>
   <fieldset class="mt-3">
-    <legend><strong>Theme</strong></legend>
+    <legend><strong>{{ t('More.moreTabTheme') }}</strong></legend>
 
     <div style="margin-bottom: 1em">
       <select v-if="!ui.design.windowOpen" style="display: block; width: 100%; max-width: 300px;" v-model="selectedTheme">
@@ -74,109 +75,109 @@ watch(themeFontSize, () => updateFontSize());
       </div>
     </div>
     <div style="margin-bottom: 1em" v-if="selectedTheme === 'Custom...'">
-      <button data-tippy-content="<strong>Warning</strong>: This feature is for advanced users only. CSS knowledge is required.<br><br>Changes are saved when you close the design window." @click.prevent="ui.design.windowOpen = true">Open design window</button>
+      <button :data-tippy-content="t('Theme.themeDesignWarning')" @click.prevent="ui.design.windowOpen = true">{{ t('Theme.themeDesignOpen') }}</button>
     </div>
 
     <div style="margin: 1em 0" class="check-row">
       <input v-model="settings.showLoginThemeButton" type="checkbox" id="showLoginThemeButton">
-      <label for="showLoginThemeButton">Show theme button on login screen</label>
+      <label for="showLoginThemeButton">{{ t('Settings.settingsShowThemeBtn') }}</label>
     </div>
 
-    <label style="margin-bottom: 0.5em" for="fontSize">Font size (<strong>{{ themeCSSfontSize }}</strong>):</label>
+    <label style="margin-bottom: 0.5em" for="fontSize">{{ t('Theme.themeFontSize') }} (<strong>{{ themeCSSfontSize }}</strong>):</label>
     <div class="field-row" style="max-width: 300px; margin-bottom: 1em;">
-      <label for="fontSize">Small</label>
+      <label for="fontSize">{{ t('Theme.themeSmall') }}</label>
       <input v-model.number.lazy="themeFontSize" id="fontSize" type="range" min="14" max="20" value="16" step="1" />
-      <label for="fontSize">Large</label>
+      <label for="fontSize">{{ t('Theme.themeLarge') }}</label>
     </div>
 
     <div class="color-table">
       <div>
-        <div style="margin-bottom: 0.5em"><strong>Item name colors</strong></div>
+        <div style="margin-bottom: 0.5em"><strong>{{ t('Theme.themeItemNameColors') }}</strong></div>
         <div class="field-row">
           <input type="color" v-model="themeCSSitemNormal" />
-          <label>Class: Normal</label>
+          <label>{{ t('Theme.themeClassNormal') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSSitemUseful" />
-          <label>Class: Useful</label>
+          <label>{{ t('Theme.themeClassUseful') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSSitemProgression" />
-          <label>Class: Progression</label>
+          <label>{{ t('Theme.themeClassProgression') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSSitemTrap" />
-          <label>Class: Trap</label>
+          <label>{{ t('Theme.themeClassTrap') }}</label>
         </div>
       </div>
   
       <div>
-        <div style="margin-bottom: 0.5em;"><strong>Player name colors</strong></div>
+        <div style="margin-bottom: 0.5em;"><strong>{{ t('Theme.themePlayerNameColors') }}</strong></div>
         <div class="field-row">
           <input type="color" v-model="themeCSSplayerYou" />
-          <label>You</label>
+          <label>{{ t('Theme.themeYou') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSSplayerOther" />
-          <label>Others</label>
+          <label>{{ t('Theme.themeOthers') }}</label>
         </div>
       </div>
   
       <div>
-        <div style="margin-bottom: 0.5em;"><strong>Misc colors</strong></div>
+        <div style="margin-bottom: 0.5em;"><strong>{{ t('Theme.themeMiscColors') }}</strong></div>
         <div class="field-row">
           <input type="color" v-model="themeCSSlocation" />
-          <label>Location names</label>
+          <label>{{ t('Theme.themeLocationNames') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSStextHelp" />
-          <label>Help text</label>
+          <label>{{ t('Theme.themeHelpText') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSStextJoin" />
-          <label>Player joined</label>
+          <label>{{ t('Theme.themePlayerJoined') }}</label>
         </div>
       </div>
 
       <div>
-        <div style="margin-bottom: 0.5em;"><strong>Status colors</strong></div>
+        <div style="margin-bottom: 0.5em;"><strong>{{ t('Theme.themeStatusColors') }}</strong></div>
         <div class="field-row">
           <input type="color" v-model="themeCSSstatusFound" />
-          <label>Found</label>
+          <label>{{ t('Texts.textFound') }}</label>
         </div>
     
         <div class="field-row">
           <input type="color" v-model="themeCSSstatusPriority" />
-          <label>Priority</label>
+          <label>{{ t('Texts.textPriority') }}</label>
         </div>
 
         <div class="field-row">
           <input type="color" v-model="themeCSSstatusNoPriority" />
-          <label>No Priority</label>
+          <label>{{ t('Texts.textNoPriority') }}</label>
         </div>
 
         <div class="field-row">
           <input type="color" v-model="themeCSSstatusAvoid" />
-          <label>Avoid</label>
+          <label>{{ t('Texts.textAvoid') }}</label>
         </div>
 
         <div class="field-row">
           <input type="color" v-model="themeCSSstatusNone" />
-          <label>None</label>
+          <label>{{ t('Texts.textNone') }}</label>
         </div>
       </div>
     </div>
 
     <div class="action-row">
-      <button @click="exportThemeClicked">Export</button>
-      <button @click="importThemeClicked">Import from clipboard</button>
-      <button @click="resetToDefault">Reset to default</button>
+      <button @click="exportThemeClicked">{{ t('Theme.themeExport') }}</button>
+      <button @click="importThemeClicked">{{ t('Theme.themeImportFromClipboard') }}</button>
+      <button @click="resetToDefault">{{ t('Theme.themeResetToDefault') }}</button>
     </div>
   </fieldset>
 </template>

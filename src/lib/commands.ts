@@ -2,6 +2,7 @@ import { chat, commandHints } from '@/state/chat';
 import { tawcBounce } from './bounces';
 import { client } from './archipelago';
 import { ref } from 'vue';
+import { useLocalization } from './localization-util';
 
 class CustomCommand {
   private cmd: string = '';
@@ -56,25 +57,27 @@ const lastConfettiSendTimestamp = ref(new Date(0));
 const confettiCooldown = 1000;
 
 export function initializeCustomCommands() {
+  const { t } = useLocalization();
+
   chat.customCommands = {};
   commandHints.value = commandHints.value.filter(hint => !hint.isCustom);
 
   CustomCommand
     .create('/clear')
-    .setHelp('Clears the local chat history.')
+    .setHelp(t('Commands.cmdClear'))
     .setCallback(() => chat.messages = [])
     .build();
 
   CustomCommand
     .create('/confetti')
-    .setHelp('Triggers a confetti celebration for everyone using Topher\'s Archipelago Web Client, including you!')
+    .setHelp(t('Commands.cmdConfetti'))
     .setCallback(() => {
       const now = new Date();
 
       if (now.getTime() - lastConfettiSendTimestamp.value.getTime() < confettiCooldown) {
         chat.messages.push({
           type: 'none',
-          content: `<em>No spamming the confetti!</em>`
+          content: `<em>${t('Chat.chatConfettiSpam')}</em>`
         });
         return;
       }
@@ -86,7 +89,7 @@ export function initializeCustomCommands() {
   
   CustomCommand
     .create('/shrug')
-    .setHelp('Expands to ¯\\_(ツ)_/¯')
+    .setHelp(t('Commands.cmdExpands', { emoji: '¯\\_(ツ)_/¯' }))
     .setCallback(() => {
       chat.say = `¯\\_(ツ)_/¯`;
     })
@@ -94,7 +97,7 @@ export function initializeCustomCommands() {
   
   CustomCommand
     .create('/tableflip')
-    .setHelp('Expands to (╯°□°)╯︵ ┻━┻')
+    .setHelp(t('Commands.cmdExpands', { emoji: '(╯°□°)╯︵ ┻━┻' }))
     .setCallback(() => {
       chat.say = `(╯°□°)╯︵ ┻━┻`;
     })
@@ -102,7 +105,7 @@ export function initializeCustomCommands() {
 
   CustomCommand
     .create('/unflip')
-    .setHelp('Expands to ┬─┬ノ( º _ ºノ)')
+    .setHelp(t('Commands.cmdExpands', { emoji: '┬─┬ノ( º _ ºノ)' }))
     .setCallback(() => {
       chat.say = `┬─┬ノ( º _ ºノ)`;
     })

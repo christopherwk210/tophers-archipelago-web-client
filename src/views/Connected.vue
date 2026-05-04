@@ -13,8 +13,11 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { localAccounts } from '@/lib/accounts';
 import MouseToast from '@/components/MouseToast.vue';
 import { initKonami, uninitKonami } from '@/lib/easter-egg';
+import { translateInternals, useLocalization } from '@/lib/localization-util';
 
 const router = useRouter();
+
+const { t } = useLocalization();
 
 const url = ref(AppStorage.get('url') || '');
 
@@ -69,7 +72,7 @@ watch(accountSwitcher, () => {
 });
 
 init();
-
+translateInternals();
 initKonami();
 onBeforeUnmount(() => uninitKonami());
 </script>
@@ -88,11 +91,11 @@ onBeforeUnmount(() => uninitKonami());
         </div>
         <div class="title-bar-controls">
           <select v-model="accountSwitcher" v-if="hasMultipleAccounts" style="width: 160px">
-            <option disabled :value="-1">Switch account...</option>
+            <option disabled :value="-1">{{ t('Accounts.accountsSwitchAccount') }}</option>
             <option v-for="(account, accountIndex) of switchAccountList" :value="accountIndex">{{ account.slot }}</option>
-            <option :value="-2">Logout</option>
+            <option :value="-2">{{ t('Accounts.accountsLogout') }}</option>
           </select>
-          <button v-else @click="logout" style="padding: 0.2rem 0.5rem">Logout</button>
+          <button v-else @click="logout" style="padding: 0.2rem 0.5rem">{{ t('Accounts.accountsLogout') }}</button>
         </div>
       </div>
       <div class="window-body">

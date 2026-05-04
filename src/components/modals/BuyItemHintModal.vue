@@ -5,6 +5,9 @@ import { ui } from '@/state/ui';
 import { ref, watch } from 'vue';
 import { sendMessage } from '@/state/chat';
 import { hints } from '@/state/hints';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const items = ref<string[]>([]);
 const selectedItem = ref<string | null>(null);
@@ -35,24 +38,24 @@ function purchase() {
   <div class="modal buy-item-hint" v-if="ui.modals.buyItemHint">
     <div class="window">
       <div class="title-bar">
-        <div class="title-bar-text">Buy item hint</div>
+        <div class="title-bar-text">{{ t('Hints.hintBuyItemHint') }}</div>
         <div class="title-bar-controls">
           <button aria-label="Close" @click="ui.modals.buyItemHint = false"></button>
         </div>
       </div>
       <div class="window-body">
-        <div style="margin-bottom: 0.2em">Item:</div>
+        <div style="margin-bottom: 0.2em">{{ t('Hints.hintItem') }}:</div>
         <select v-model="selectedItem">
           <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
         </select>
 
         <div style="margin: 1em 0; font-size: 0.875em">
-          <div>Hint cost: {{ hints.cost }}</div>
-          <div>Available points: {{ hints.points }}</div>
+          <div>{{ t('Hints.hintCost') }} {{ hints.cost }}</div>
+          <div>{{ t('Hints.hintAvailablePoints') }} {{ hints.points }}</div>
         </div>
 
         <div style="display: flex; justify-content: center;">
-          <button @click="purchase">Purchase</button>
+          <button @click="purchase">{{ t('MiscUI.purchase') }}</button>
         </div>
       </div>
     </div>

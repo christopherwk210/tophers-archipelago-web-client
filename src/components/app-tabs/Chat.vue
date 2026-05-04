@@ -18,6 +18,9 @@ import { useElementBounding } from '@vueuse/core';
 import { copyHint, getCssVarFromStatus, getHintStatusName, HintStatus } from '@/state/hints';
 import { appTabManager } from '@/state/tabs';
 import { chatFilterHasFlag, ChatFilterFlag } from '@/state/settings';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const sayInput = useTemplateRef('sayInput');
 const messagesElement = useTemplateRef('messagesElement');
@@ -223,15 +226,38 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       <!-- Item sent -->
       <div v-else-if="message.type === 'item-sent' && !chatFilterHasFlag(ChatFilterFlag.ITEM_SENT)" class="message" :class="{ 'item-for-me': message.isForMe }">
         <img class="inline-img" :src="message.isForMe ? warningFill : warning">
-        <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />
 
-        <template v-if="message.isGift">
-          sent <ItemName :iclass="message.itemClass" :name="message.itemName" /> (<span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>) to <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />
-        </template>
+        <i18n-t v-if="message.isGift" keypath="Chat.chatComponentSentItem" tag="span" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />
+          </template>
 
-        <template v-else>
-          found their item <ItemName :iclass="message.itemClass" :name="message.itemName" /> (<span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>)
-        </template>
+          <template v-slot:item>
+            <ItemName :iclass="message.itemClass" :name="message.itemName" />
+          </template>
+
+          <template v-slot:location>
+            <span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>
+          </template>
+
+          <template v-slot:owner>
+            <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />
+          </template>
+        </i18n-t>
+
+        <i18n-t v-else keypath="Chat.chatComponentFoundItem" tag="span" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />
+          </template>
+
+          <template v-slot:item>
+            <ItemName :iclass="message.itemClass" :name="message.itemName" />
+          </template>
+
+          <template v-slot:location>
+            <span style="color: var(--theme-location);">{{ message.itemLocationName }}</span>
+          </template>
+        </i18n-t>
       </div>
 
       <!-- Item hinted -->
@@ -245,14 +271,39 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
           <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6 18h-3c-.48 0-1-.379-1-1v-14c0-.481.38-1 1-1h14c.621 0 1 .522 1 1v3h3c.621 0 1 .522 1 1v14c0 .621-.522 1-1 1h-14c-.48 0-1-.379-1-1zm1.5-10.5v13h13v-13zm9-1.5v-2.5h-13v13h2.5v-9.5c0-.481.38-1 1-1z" fill-rule="nonzero"/></svg>
         </button>
         <img class="inline-img" :src="message.found ? check : question">
-        <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />'s <ItemName :iclass="message.itemClass" :name="message.itemName" /> is at <em style="color: var(--theme-location);">{{ message.itemLocation }}</em> in <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />'s world.
+
+        <i18n-t keypath="Chat.chatComponentHint" tag="span" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.receiver" :slot="message.receiverSlot" :game="message.receiverGame" />
+          </template>
+
+          <template v-slot:item>
+            <ItemName :iclass="message.itemClass" :name="message.itemName" />
+          </template>
+
+          <template v-slot:location>
+            <em style="color: var(--theme-location);">{{ message.itemLocation }}</em>
+          </template>
+
+          <template v-slot:owner>
+            <PlayerName :alias="message.sender" :slot="message.senderSlot" :game="message.senderGame" />
+          </template>
+        </i18n-t>
+
         <span v-if="message.status" :style="{ color: getCssVarFromStatus(message.status) }">({{ getHintStatusName(message.status) }})</span>
       </div>
 
       <!-- Goaled -->
       <div v-else-if="message.type === 'goaled' && !chatFilterHasFlag(ChatFilterFlag.GOALED)" class="message">
         <img class="inline-img" :src="world">
-        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> (Team {{ message.team }}) has completed their goal!
+
+        <i18n-t keypath="Chat.chatComponentGoal" tag="span" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />
+          </template>
+
+          <template v-slot:team>{{ message.team }}</template>
+        </i18n-t>
       </div>
 
       <!-- Connected -->
@@ -270,12 +321,23 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
 
       <!-- Disconnected -->
       <div v-else-if="message.type === 'disconnected' && !chatFilterHasFlag(ChatFilterFlag.DISCONNECTED)" class="message">
-        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> has disconnected.
+        <i18n-t keypath="Chat.chatComponentDisconnected" tag="span" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />
+          </template>
+        </i18n-t>
       </div>
 
       <!-- Tags changed -->
       <div v-else-if="message.type === 'tag-change' && !chatFilterHasFlag(ChatFilterFlag.TAG_CHANGE)" class="message">
-        <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> (Team {{ message.team }}) has changed their tags:
+        <i18n-t keypath="Chat.chatComponentTagChange" tag="span" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />
+          </template>
+
+          <template v-slot:team>{{ message.team }}</template>
+        </i18n-t>
+
         <strong v-for="(tag, tagIndex) in message.tags" :key="tag">{{ tag }}<template v-if="tagIndex < message.tags.length - 1">, </template></strong>
       </div>
 
@@ -291,13 +353,20 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
       <!-- Confetti -->
       <div v-else-if="message.type === 'confetti'" class="message">
         <img class="inline-img" style="opacity: 0; pointer-events: none;" :src="info">
-        <span style="color: var(--theme-text-join);"><PlayerName :alias="message.player" :slot="message.slot" :game="message.game" /> <strong>sends confetti</strong></span> 🎉
+
+        <i18n-t keypath="Chat.chatComponentConfetti" tag="span" style="color: var(--theme-text-join);" scope="global">
+          <template v-slot:player>
+            <PlayerName :alias="message.player" :slot="message.slot" :game="message.game" />
+          </template>
+        </i18n-t>
+
+        🎉
       </div>
     </template>
 
     <!-- Display queued messages -->
     <div style="opacity: 0.75; font-style: italic;" v-for="item of chat.queue">
-      Sending: {{ item.say }}
+      {{ t('Chat.chatComponentSending') }} {{ item.say }}
     </div>
   </div>
 
@@ -305,7 +374,7 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
     <input
       ref="sayInput"
       @keydown="keyDown"
-      placeholder="Type here..."
+      :placeholder="t('Chat.chatTypeHere')"
       v-model="chat.say"
       id="say"
       type="text"

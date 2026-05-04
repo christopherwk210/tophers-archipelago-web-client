@@ -2,6 +2,7 @@ import { client, getItemClass, ItemClass } from '@/lib/archipelago';
 import { reactive, ref } from 'vue';
 import { showMouseToast } from './ui';
 import { settings } from './settings';
+import { useLocalization } from '@/lib/localization-util';
 
 export enum HintStatus {
   UNSPECIFIED = 0,
@@ -48,17 +49,19 @@ export function getCssVarFromStatus(status: HintStatus) {
 }
 
 export function getHintStatusName(status: HintStatus) {
+  const { t } = useLocalization();
+
   switch (status) {
     case HintStatus.PRIORITY:
-      return 'Priority';
+      return t('Texts.textPriority');
     case HintStatus.UNSPECIFIED:
-      return 'Unspecified';
+      return t('Texts.textUnspecified');
     case HintStatus.FOUND:
-      return 'Found';
+      return t('Texts.textFound');
     case HintStatus.AVOID:
-      return 'Avoid';
+      return t('Texts.textAvoid');
     case HintStatus.NO_PRIORITY:
-      return 'No Priority';
+      return t('Texts.textNoPriority');
   }
 }
 
@@ -93,7 +96,9 @@ export async function loadHints() {
 }
 
 export async function copyHint(item: LocalHint) {
-  showMouseToast('Hint copied to clipboard');
+  const { t } = useLocalization();
+
+  // showMouseToast(t('Hints.hintCopied'));
 
   const trueItemPlayer = item.player.replace('&lt;', '<').replace('&gt;', '>');
   const trueItemOwner = item.owner.replace('&lt;', '<').replace('&gt;', '>');
@@ -101,22 +106,35 @@ export async function copyHint(item: LocalHint) {
   let result: boolean | void;
   switch (settings.value.hintCopyType) {
     case 'markdown':
-      result = await navigator.clipboard.writeText(`\`${trueItemPlayer}\`'s __${item.item}__ is in \`${trueItemOwner}\`'s world at **${item.location}**`).catch(() => false);
+      result = await navigator.clipboard.writeText(t('Hints.hintCopyMarkdown', {
+        owner: trueItemPlayer,
+        item: item.item,
+        player: trueItemOwner,
+        location: item.location
+      })).catch(() => false);
       break;
     case 'plain':
-      result = await navigator.clipboard.writeText(`${trueItemPlayer}'s ${item.item} is in ${trueItemOwner}'s world at ${item.location}`).catch(() => false);
+      result = await navigator.clipboard.writeText(t('Hints.hintCopyBasic', {
+        owner: trueItemPlayer,
+        item: item.item,
+        player: trueItemOwner,
+        location: item.location
+      })).catch(() => false);
       break;
     case 'item-name':
       result = await navigator.clipboard.writeText(item.item).catch(() => false);
       break;
     case 'ascii':
-      result = await navigator.clipboard.writeText(`(╯°□°)╯ <( ${trueItemOwner.toUpperCase()} YOU HAVE MY ${item.item.toUpperCase()} AND I NEED IT )`).catch(() => false);
+      result = await navigator.clipboard.writeText(t('Hints.hintCopyScream', {
+        player: trueItemOwner.toUpperCase(),
+        item: item.item.toUpperCase()
+      })).catch(() => false);
       break;
   }
 
   if (result === false) {
-    showMouseToast('Failed to copy hint');
+    showMouseToast(t('Hints.hintCopyFailed'));
   } else {
-    showMouseToast('Hint copied to clipboard');
+    showMouseToast(t('Hints.hintCopied'));
   }
 }

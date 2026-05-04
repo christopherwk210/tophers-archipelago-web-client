@@ -4,6 +4,9 @@ import { useDraggable, useEventListener } from '@vueuse/core';
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { customCSS, setCustomCSS } from '@/lib/theme';
 import { saveAs } from 'file-saver';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 let monaco: typeof import('monaco-editor/esm/vs/editor/editor.api') | null = null;
 let editor: import('monaco-editor').editor.IStandaloneCodeEditor | null = null;
@@ -160,7 +163,7 @@ function close() {
 }
 
 function reset() {
-  const areYouSure = confirm('Are you sure you want to reset your custom theme? This action cannot be undone.');
+  const areYouSure = confirm(t('Theme.themeDesignerResetConfirm'));
   if (areYouSure) {
     model!.setValue('');
     editor!.focus();
@@ -172,7 +175,7 @@ function download() {
 }
 
 function loadSample() {
-  const areYouSure = confirm('This will overwrite your current CSS with the sample theme. Continue?');
+  const areYouSure = confirm(t('Theme.themeDesignerOverwrite'));
   if (!areYouSure) return;
 
   model!.setValue(sampleTheme);
@@ -184,14 +187,14 @@ function loadSample() {
   <Teleport to="body">
     <div ref="container" :style="windowStyle" data-design-window>
       <div ref="title" data-design-window-title>
-        <span style="padding-left: 0.5em">Design Window - Custom CSS</span>
+        <span style="padding-left: 0.5em">{{ t('Theme.themeDesignerTitle') }}</span>
         <div @click="close" data-design-window-close>✖</div>
       </div>
       <div data-design-window-body>
         <div data-design-window-toolbar>
-          <div @click="download" data-design-window-toolbar-btn>Download</div>
-          <div @click="loadSample" data-design-window-toolbar-btn>Load sample</div>
-          <div @click="reset" data-design-window-toolbar-btn>Reset</div>
+          <div @click="download" data-design-window-toolbar-btn>{{ t('MiscUI.download') }}</div>
+          <div @click="loadSample" data-design-window-toolbar-btn>{{ t('Theme.themeDesignerSample') }}</div>
+          <div @click="reset" data-design-window-toolbar-btn>{{ t('Theme.themeDesignerReset') }}</div>
         </div>
         <div data-design-window-editor-outlet>
           <div v-if="loadingEditor" data-editor-loading>

@@ -1,6 +1,7 @@
-import type { LocaleKey } from '@/localization';
+
 import { computed, defineComponent, h, ref, shallowReactive, isRef, type Ref, type ShallowReactive } from 'vue';
 import { I18nT } from 'vue-i18n';
+import type { LocaleKey } from './localization-util';
 
 // Tabs as an object for future extensibility
 export interface Tab {

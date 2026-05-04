@@ -3,6 +3,9 @@ import { localAccounts, type Account } from '@/lib/accounts';
 import { AppStorage } from '@/lib/storage';
 import { ui } from '@/state/ui';
 import { computed, ref, watch } from 'vue';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const url = ref('');
 const slot = ref('');
@@ -32,7 +35,7 @@ watch(() => ui.modals.editAccount, account => {
 function add() {
   if (addMode.value) {
     if (localAccounts.value.some(a => a.url === url.value && a.slot === slot.value)) {
-      alert('An account with that URL and slot already exists.');
+      alert(t('Accounts.accountsDuplicate'));
       return;
     }
   
@@ -53,33 +56,33 @@ function add() {
   <div class="modal edit-account-modal" v-if="ui.modals.editAccount">
     <div class="window">
       <div class="title-bar">
-        <div class="title-bar-text">{{ addMode ? 'Add Account' : 'Edit Account' }}</div>
+        <div class="title-bar-text">{{ addMode ? t('Accounts.accountsAdd') : t('Accounts.accountsEdit') }}</div>
         <div class="title-bar-controls">
           <button aria-label="Close" @click="ui.modals.editAccount = undefined"></button>
         </div>
       </div>
       <div class="window-body">
         <div class="field-row-stacked">
-          <label for="url">URL</label>
+          <label for="url">{{ t('Accounts.accountsUrl') }}</label>
           <input v-model="url" id="url" type="text" placeholder="archipelago.gg:12345" spellcheck="false" autocomplete="off" autocapitalize="none" />
         </div>
         <div class="mt-3 field-row-stacked">
-          <label for="name">Name/Slot</label>
+          <label for="name">{{ t('Accounts.accountsNameSlot') }}</label>
           <input v-model="slot" id="name" type="text" spellcheck="false" autocomplete="off" autocapitalize="none" />
         </div>
         <div class="mt-3 field-row-stacked">
-          <label for="password">Password</label>
-          <input placeholder="Leave blank if no password is needed" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
+          <label for="password">{{ t('Accounts.accountsPassword') }}</label>
+          <input :placeholder="t('Accounts.accountsLeaveBlank')" v-model="password" id="password" :type="showPassword ? 'text' : 'password'" spellcheck="false" autocomplete="off" autocapitalize="none" />
         </div>
         <div class="mt-1 field-row-stacked">
           <!-- show password checkbox -->
           <input v-model="showPassword" type="checkbox" id="show-password">
-          <label for="show-password">Show Password</label>
+          <label for="show-password">{{ t('Accounts.accountsShowPassword') }}</label>
         </div>
 
         <div style="display: flex; justify-content: center; gap: 1em; margin-top: 1em">
-          <button @click="add()">{{ addMode ? 'Add' : 'Save' }}</button>
-          <button @click="ui.modals.editAccount = undefined">Cancel</button>
+          <button @click="add()">{{ addMode ? t('Accounts.accountsAdd') : t('Accounts.accountsSave') }}</button>
+          <button @click="ui.modals.editAccount = undefined">{{ t('MiscUI.cancel') }}</button>
         </div>
       </div>
     </div>

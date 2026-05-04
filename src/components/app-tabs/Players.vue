@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { loadPlayers, players } from '@/state/players';
-import { computed, nextTick, onActivated } from 'vue';
+import { computed, onActivated } from 'vue';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import PlayerName from '../text-elements/PlayerName.vue';
 import { settings } from '@/state/settings';
 import { client } from '@/lib/archipelago';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 onActivated(async () => {
   if (settings.value.showPlayerProgress) client.messages.say('!status').catch(() => {});
@@ -20,22 +23,19 @@ async function onShowPlayerProgress(e: Event) {
 }
 
 const columns: Column[] = [
-  { label: 'Team', key: 'team' },
-  { label: 'Name', key: 'name' },
-  { label: 'Status', key: 'status' },
-  { label: 'Game', key: 'game' }
+  { label: t('Players.playersColumnTeam'), key: 'team' },
+  { label: t('MiscUI.name'), key: 'name' },
+  { label: t('MiscUI.status'), key: 'status' },
+  { label: t('Players.playersColumnGame'), key: 'game' }
 ];
 
 const columnsWithProgress: Column[] = [
-  { label: 'Team', key: 'team' },
-  { label: 'Name', key: 'name' },
-  { label: 'Progress', key: 'progress' },
-  { label: 'Status', key: 'status' },
-  { label: 'Game', key: 'game' }
+  { label: t('Players.playersColumnTeam'), key: 'team' },
+  { label: t('MiscUI.name'), key: 'name' },
+  { label: t('Players.playersColumnProgress'), key: 'progress' },
+  { label: t('MiscUI.status'), key: 'status' },
+  { label: t('Players.playersColumnGame'), key: 'game' }
 ];
-
-//const progressTooltip = `Visiting this tab while this box is checked will send the "!status" command in chat in order to get player completion progress.`;
-const progressTooltip = `Requires automatically sending the !status command. It won't show in your chat, but other players may see it.`;
 
 const filteredPlayers = computed(() => {
   // Remove the "Archipelago" player
@@ -48,21 +48,20 @@ const filteredPlayers = computed(() => {
     <div class="checks">
       <div class="check-row">
         <input @input="onShowPlayerProgress" v-model="settings.showPlayerProgress" type="checkbox" id="showPlayerProgress">
-        <label for="showPlayerProgress">Show player progress</label>
-        <!-- <label :data-tippy-content="progressTooltip" data-tippy-placement="bottom" for="showPlayerProgress">Show player progress</label> -->
+        <label for="showPlayerProgress">{{ t('Players.playersShowProgress') }}</label>
       </div>
       <div v-if="settings.showPlayerProgress" class="check-row" :class="{ disabled: !settings.showPlayerProgress }">
         <input @input="onShowPlayerProgress" v-model="settings.showPlayerDecimal" type="checkbox" id="showPlayerDecimal">
-        <label for="showPlayerDecimal">Use precise progress</label>
+        <label for="showPlayerDecimal">{{ t('Players.playersUsePreciseProgress') }}</label>
       </div>
       <div v-if="settings.showPlayerProgress" class="check-row" :class="{ disabled: !settings.showPlayerProgress }">
         <input @input="onShowPlayerProgress" v-model="settings.showPlayerCheckCount" type="checkbox" id="showPlayerChecksCount">
-        <label for="showPlayerChecksCount">Show checks count</label>
+        <label for="showPlayerChecksCount">{{ t('Players.playerShowChecksCount') }}</label>
       </div>
     </div>
     <div class="sunken-panel">
       <div v-if="players.length === 0">
-        <p class="loading">Loading players...</p>
+        <p class="loading">{{ t('Players.playersLoading') }}</p>
       </div>
       <AppTable v-else :columns="settings.showPlayerProgress ? columnsWithProgress : columns" :data="filteredPlayers" default-sort-by="status">
         <template #team="{ item }">
@@ -88,7 +87,7 @@ const filteredPlayers = computed(() => {
             <progress :value="item.progress" max="100" style="vertical-align: middle; margin-left: 0.5em; margin-right: 0.5em;"></progress>
             <span v-if="settings.showPlayerCheckCount">({{ item.progressCollected }} / {{ item.progressTotal }})</span>
           </td>
-          <td style="font-family: monospace !important; text-align: center;" v-else>N/a</td>
+          <td style="font-family: monospace !important; text-align: center;" v-else>{{ t('MiscUI.notAvailable') }}</td>
         </template>
       </AppTable>
     </div>

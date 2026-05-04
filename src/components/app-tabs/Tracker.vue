@@ -5,10 +5,13 @@ import Collected from '@/components/tracker-tabs/Collected.vue';
 import Locations from '@/components/tracker-tabs/Locations.vue';
 import { computed, onActivated } from 'vue';
 import { loadLocations, tracker } from '@/state/tracker';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const totalLocations = computed(() => tracker.locations.length);
 const totalCheckedLocations = computed(() => tracker.locations.filter(loc => loc.checked).length);
-const locationsLabel = computed(() => `Locations (${totalCheckedLocations.value} / ${totalLocations.value})`)
+const locationsLabel = computed(() => `${t('Tracker.trackerLocationsTab')} (${totalCheckedLocations.value} / ${totalLocations.value})`)
 
 onActivated(() => {
   // We need to load locations when the tracker tab loads so that the tab label is updated properly
@@ -16,7 +19,7 @@ onActivated(() => {
 });
 
 const tabManager = new TabManager([
-  { label: 'Collected', component: Collected },
+  { label: t('Tracker.trackerCollectedTab'), component: Collected },
   { label: locationsLabel, component: Locations }
 ] as const satisfies ComponentTab[]);
 

@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { changelogHTML } from '@/state/changelog';
+import { useLocalization } from '@/lib/localization-util';
+import { changelogHTML, parseChangelog } from '@/state/changelog';
+import { onActivated, onMounted } from 'vue';
+
+const { t } = useLocalization();
 </script>
 
 <template>
   <div class="inner-container changelog">
     <div style="margin-bottom: 0.5em">
-      <a target="_blank" href="https://github.com/christopherwk210/tophers-archipelago-web-client/blob/main/CHANGELOG.md"><button>View on GitHub</button></a>
+      <a target="_blank" href="https://github.com/christopherwk210/tophers-archipelago-web-client/blob/main/CHANGELOG.md"><button>{{ t('MiscUI.viewGithub') }}</button></a>
     </div>
     <div class="sunken-panel" v-html="changelogHTML"></div>
   </div>

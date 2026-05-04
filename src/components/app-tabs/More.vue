@@ -6,13 +6,16 @@ import type { ComponentTab } from '@/state/tabs';
 import Accounts from '../more-tabs/Accounts.vue';
 import Changes from '../more-tabs/Changes.vue';
 import Theme from '../more-tabs/Theme.vue';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const tabManager = new TabManager([
-  { label: 'Settings', component: Settings },
-  { label: 'Theme', component: Theme },
-  { label: 'Accounts', component: Accounts },
-  { label: 'Changelog', component: Changes },
-  { label: 'Help', component: Help }
+  { label: t('More.moreTabSettings'), component: Settings },
+  { label: t('More.moreTabTheme'), component: Theme },
+  { label: t('More.moreTabAccounts'), component: Accounts },
+  { label: t('More.moreTabChangelog'), component: Changes },
+  { label: t('More.moreTabHelp'), component: Help }
 ] as const satisfies ComponentTab[]);
 
 const Tabs = tabManager.createVueComponent();

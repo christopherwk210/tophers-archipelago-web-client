@@ -5,11 +5,13 @@ import { ref } from 'vue';
 import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 import { ui } from '@/state/ui';
+import { useLocalization } from '@/lib/localization-util';
+
+const { t } = useLocalization();
 
 const columns: Column[] = [
-  { label: 'Slot', key: 'slot' },
-  { label: 'Url', key: 'url' },
-  // { label: 'Has Password', key: 'password', style: 'width: 150px;' }
+  { label: t('Accounts.accountsSlot'), key: 'slot' },
+  { label: t('Accounts.accountsUrl'), key: 'url' }
 ];
 
 const selectedAccount = ref<Account>();
@@ -17,7 +19,7 @@ const selectedAccount = ref<Account>();
 function deleteAccount() {
   if (!selectedAccount.value) return;
 
-  const proceed = confirm(`Are you sure you want to delete "${selectedAccount.value.slot}"?`);
+  const proceed = confirm(t('Accounts.accountsDeleteConfirm', { slot: selectedAccount.value.slot }));
 
   if (proceed) {
     localAccounts.value = localAccounts.value.filter(a => a !== selectedAccount.value);
@@ -26,7 +28,7 @@ function deleteAccount() {
 }
 
 function deleteAll() {
-  const proceed = confirm('Are you sure you want to delete ALL accounts? This cannot be undone.');
+  const proceed = confirm(t('Accounts.accountsDeleteAllConfirm'));
 
   if (proceed) {
     localAccounts.value = [];
@@ -38,9 +40,9 @@ function deleteAll() {
 <template>
   <div class="inner-container">
     <div style="display: flex; gap: 1em; font-size: 0.875em;">
-      <button style="margin-right: auto" @click="ui.modals.editAccount = true">Add account...</button>
-      <button :disabled="!selectedAccount" @click="ui.modals.editAccount = selectedAccount">Edit</button>
-      <button :disabled="!selectedAccount" @click="deleteAccount">Delete</button>
+      <button style="margin-right: auto" @click="ui.modals.editAccount = true">{{ t('Accounts.accountsAddAccountEllipses') }}</button>
+      <button :disabled="!selectedAccount" @click="ui.modals.editAccount = selectedAccount">{{ t('Accounts.accountsEdit') }}</button>
+      <button :disabled="!selectedAccount" @click="deleteAccount">{{ t('Accounts.accountsDelete') }}</button>
     </div>
     <div class="sunken-panel">
       <AppTable :columns="columns" :data="localAccounts" default-sort-by="slot" @row-selected="selectedAccount = $event">
@@ -55,7 +57,7 @@ function deleteAll() {
     </div>
     <div style="display: flex; gap: 1em; font-size: 0.875em;">
       <div style="margin-right: auto"></div>
-      <button :disabled="localAccounts.length === 0" @click="deleteAll">Delete all</button>
+      <button :disabled="localAccounts.length === 0" @click="deleteAll">{{ t('Accounts.accountsDeleteAll') }}</button>
     </div>
   </div>
 </template>
