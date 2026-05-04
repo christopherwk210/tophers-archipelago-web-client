@@ -1,6 +1,6 @@
 import { app } from '@/app';
 import type { i18n_messages } from '@/localization';
-import { parseChangelog } from '@/state/changelog';
+import { parseChangelog, parseCreditsAndContributors } from '@/state/markdown';
 import { translateCommandHints } from '@/state/chat';
 import { getCurrentInstance } from 'vue';
 
@@ -21,4 +21,5 @@ export function useLocalization() {
 export function translateInternals() {
   translateCommandHints();
   parseChangelog();
+  parseCreditsAndContributors();
 }

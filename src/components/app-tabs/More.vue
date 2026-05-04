@@ -7,6 +7,7 @@ import Accounts from '../more-tabs/Accounts.vue';
 import Changes from '../more-tabs/Changes.vue';
 import Theme from '../more-tabs/Theme.vue';
 import { useLocalization } from '@/lib/localization-util';
+import Credits from '../more-tabs/Credits.vue';
 
 const { t } = useLocalization();
 
@@ -15,7 +16,8 @@ const tabManager = new TabManager([
   { label: t('More.moreTabTheme'), component: Theme },
   { label: t('More.moreTabAccounts'), component: Accounts },
   { label: t('More.moreTabChangelog'), component: Changes },
-  { label: t('More.moreTabHelp'), component: Help }
+  { label: t('More.moreTabHelp'), component: Help },
+  { label: t('More.moreTabCredits'), component: Credits }
 ] as const satisfies ComponentTab[]);
 
 const Tabs = tabManager.createVueComponent();

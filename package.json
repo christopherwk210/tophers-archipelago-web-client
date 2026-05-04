@@ -9,8 +9,9 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "postinstall": "patch-package",
-    "language": "node ./tools/parse-localization.js"
+    "postinstall": "patch-package && npm run credits",
+    "language": "node ./tools/parse-localization.js",
+    "credits": "npx @opengovsg/credits-generator"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
@@ -32,6 +33,7 @@
     "xp.css": "^0.2.6"
   },
   "devDependencies": {
+    "@opengovsg/credits-generator": "^1.0.7",
     "@tsconfig/node24": "^24.0.4",
     "@types/file-saver": "^2.0.7",
     "@types/howler": "^2.2.12",

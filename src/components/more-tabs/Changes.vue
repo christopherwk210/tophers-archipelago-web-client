@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useLocalization } from '@/lib/localization-util';
-import { changelogHTML, parseChangelog } from '@/state/changelog';
-import { onActivated, onMounted } from 'vue';
+import { changelogHTML } from '@/state/markdown';
 
 const { t } = useLocalization();
 </script>

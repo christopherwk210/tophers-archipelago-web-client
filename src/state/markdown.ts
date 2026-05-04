@@ -1,4 +1,7 @@
 import changelog from '@/../CHANGELOG.md?raw';
+import credits from '@/../CREDITS.md?raw';
+import contributors from '@/../CONTRIBUTORS.md?raw';
+
 import { useLocalization } from '@/lib/localization-util';
 import { marked } from 'marked';
 import { ref } from 'vue';
@@ -19,4 +22,23 @@ export async function parseChangelog() {
     .replace(/✨/g, `<span data-tippy-content="${t('Texts.textChangeQOL')}" class="changelog-emoji">✨</span>`)
     .replace(/🪛/g, `<span data-tippy-content="${t('Texts.textChangeSetting')}" class="changelog-emoji">🪛</span>`)
     .replace(/🐛/g, `<span data-tippy-content="${t('Texts.textBug')}" class="changelog-emoji">🐛</span>`)
+}
+
+export const creditsHTML = ref('');
+export const contributorsHTML = ref('');
+
+export function parseCreditsAndContributors() {
+  marked.parse(credits.replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/,''), {
+    async: true,
+    gfm: true
+  }).then(html => {
+    creditsHTML.value = html;
+  });
+
+  marked.parse(contributors.replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/,''), {
+    async: true,
+    gfm: true
+  }).then(html => {
+    contributorsHTML.value = html;
+  });
 }
