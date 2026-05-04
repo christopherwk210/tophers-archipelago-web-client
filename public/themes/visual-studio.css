@@ -383,3 +383,9 @@ input[type="range"]::-moz-range-track {
 .theme-button:active {
   background-position: 50% 50% !important;
 }
+
+pre {
+  background: transparent !important;
+  border: 1px solid #735fe7 !important;
+  box-shadow: none !important;
+}

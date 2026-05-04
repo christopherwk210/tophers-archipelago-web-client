@@ -3,8 +3,9 @@
 - 🪛 added setting to toggle showing connection url in title bar
 - ✨ added dotted underlines to indicate settings that have tooltip help text
 - ✨ moved "show theme button on login screen" to the theme tab
-- ✨ massive internal re-work of the theme designer resulting in better syntax highlighting, responsiveness, load times, and more
+- ✨ total internal re-work of the theme designer resulting in better syntax highlighting, responsiveness, load times, and more
 - 🐛 fixed name mismatch on the custom theme sample
+- 🐛 fixed pre tags looking ugly on the "visual studio" theme
 
 # April 30, 2026
 - 🪛 added new setting to use precise player progress in the players tab (up to 2 decimal places)
