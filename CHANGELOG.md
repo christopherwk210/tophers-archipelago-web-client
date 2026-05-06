@@ -1,4 +1,4 @@
-# May XXX, 2026
+# May 6, 2026
 - ⚙️ added localization support
 - ⚙️ added French translation (thank you @Random Penguin and @MajeurTest!)
 - ⚙️ added Spanish translation (thank you @M-Cool!)
