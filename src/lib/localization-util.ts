@@ -2,6 +2,7 @@ import { app } from '@/app';
 import { i18n_messages } from '@/localization';
 import { parseChangelog, parseCreditsAndContributors } from '@/state/markdown';
 import { translateCommandHints } from '@/state/chat';
+import { initializeTippy } from '@/state/tippy';
 
 type Base = typeof i18n_messages['en'];
 export type LocaleKey = { [C in keyof Base]: `${C}.${keyof Base[C] & string}` }[keyof Base];
@@ -10,8 +11,15 @@ export function useLocalization() {
   // const instance = getCurrentInstance();
 
   function t(key: LocaleKey, ...args: unknown[]) {
-    // return (instance?.appContext.config.globalProperties.$t as any)(key, ...args) ?? '';
-    return (app.config.globalProperties.$t as any)(key, ...args) ?? '';
+    const translation: string = (app.config.globalProperties.$t as any)(key, ...args) ?? '';
+    if (translation.trim().length === 0) {
+      const splitKey = key.split('.');
+      if (splitKey.length === 2) {
+        return ((i18n_messages as any)?.['en']?.[splitKey[0]!]?.[splitKey[1]!]) ?? '';
+      }
+    }
+
+    return translation;
   }
 
   return { t };
@@ -21,6 +29,7 @@ export function translateInternals() {
   translateCommandHints();
   parseChangelog();
   parseCreditsAndContributors();
+  initializeTippy();
 }
 
 export function getPreferredLocale(): keyof typeof i18n_messages {

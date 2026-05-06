@@ -12,11 +12,47 @@ import csv from 'csv-parser'
 
 const sheetID = '1lFzteyQHUxV8EbwPVv8x5LmmEkWN4SDU77boTkO9I-c';
 const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=Localization&range=A3:Z1000`;
+const urlStatus = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=Status`;
 
 const __dirname = import.meta.dirname;
 const dataFilePath = path.join(__dirname, '../src/localization.ts');
 
+async function getReadyLanguages() {
+  const response = await fetch(urlStatus).catch(e => console.log(e));
+  if (!response) {
+    console.error('Failed to fetch localization data.');
+    return;
+  }
+
+  const csvData = await response.text().catch(e => console.log(e));
+  if (!csvData) {
+    console.error('Failed to parse localization data.');
+    return;
+  }
+
+  // { Language: string; Status: string; }
+  const data = await new Promise(resolve => {
+    const results = [];
+    Readable.from([csvData])
+      .pipe(csv())
+      .on('data', row => results.push(row))
+      .on('end', () => resolve(results));
+  });
+
+  const readyLanguages = [];
+  for (const row of data) {
+    if (row.Status === 'Ready') {
+      readyLanguages.push(row.Language.toLowerCase());
+    }
+  }
+
+  return readyLanguages;
+}
+
 async function main() {
+  const readyLanguages = await getReadyLanguages();
+  if (readyLanguages === undefined) return;
+
   const response = await fetch(url).catch(e => console.log(e));
   if (!response) {
     console.error('Failed to fetch localization data.');
@@ -44,6 +80,7 @@ async function main() {
 
     for (const [language, translation] of Object.entries(translations)) {
       const lang = language.toLowerCase();
+      if (!readyLanguages.includes(lang)) continue;
       if (!messages[lang]) messages[lang] = {};
       if (!messages[lang][Category]) messages[lang][Category] = {};
       messages[lang][Category][ID] = translation;

@@ -22,7 +22,8 @@ watch(() => settings.value.notificationsUseDesktop, () => {
 }, { immediate: true });
 
 watch(locale, () => {
-  settings.value.generalSelectedLocale = locale.value;
+  settings.value.generalSelectedLocale = locale.value as any;
+  translateInternals();
 });
 
 watch(locale, () => {

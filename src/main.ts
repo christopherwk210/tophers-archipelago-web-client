@@ -10,6 +10,7 @@ import { loadTheme } from './state/theme';
 import { delegate } from 'tippy.js';
 import { createI18n } from 'vue-i18n';
 import { i18n_messages } from './localization';
+import { initializeTippy } from './state/tippy';
 
 loadSettings();
 loadTheme();
@@ -22,10 +23,7 @@ const i18n = createI18n({
   warnHtmlMessage: false
 });
 
-delegate(document.body, {
-  target: '[data-tippy-content]',
-  allowHTML: true
-});
+initializeTippy();
 
 app.use(i18n);
 app.use(router);

@@ -15,6 +15,7 @@ coverage
 *.local
 
 *.sh
+ideas
 
 # Editor directories and files
 .vscode/*

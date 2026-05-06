@@ -94,7 +94,7 @@ function selectNone() {
     <div class="chat-filter-grid">
       <div v-for="item of filterFlagMap">
         <input v-model="item.flag.value" type="checkbox" :id="item.name.value">
-        <label :data-tippy-content="item.tooltip" :for="item.name.value">{{ item.name }}</label>
+        <label :data-tippy-content="item.tooltip?.value" :for="item.name.value">{{ item.name }}</label>
       </div>
     </div>
     <div class="select-btn-row">
