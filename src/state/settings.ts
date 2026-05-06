@@ -2,7 +2,8 @@ import { AppStorage } from '@/lib/storage';
 import { ref, watch } from 'vue';
 import { Howler } from 'howler';
 import { BitField } from '@/lib/bit-field';
-import { getPreferredLocale } from '@/lib/localization-util';
+import { getPreferredLocale, translateInternals } from '@/lib/localization-util';
+import type { i18n_messages } from '@/localization';
 
 export enum ChatFilterFlag {
   UNCLASSIFIED = 1,
@@ -32,6 +33,7 @@ export const settings = ref({
   locationHintFilterFound: false,
   hintCopyButtonEnabled: true,
   hintCopyType: 'markdown' as 'markdown' | 'plain' | 'ascii' | 'item-name',
+  hintCopyLanguage: 'en' as 'default' | (keyof typeof i18n_messages),
 
   // Notification settings
   notificationsItemSent: true,
@@ -70,6 +72,7 @@ export function chatFilterHasFlag(flag: ChatFilterFlag) {
 watch(settings, () => {
   AppStorage.setJSON('settings', settings.value);
   Howler.volume(settings.value.notificationsVolume);
+  translateInternals();
 }, { deep: true });
 
 export function loadSettings() {

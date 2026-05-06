@@ -5,6 +5,7 @@
 - ⚙️ added chat message filtering by message type
 - ⚙️ added new "credits" tab that displays contributors and open source license information
 - 🪛 added setting to change language (on first load will automatically detect browser's preferred language)
+- 🪛 added setting to change language specifically for copying hints
 - 🪛 added setting to toggle showing connection url in title bar
 - ✨ added dotted underlines to indicate settings that have tooltip help text
 - ✨ moved "show theme button on login screen" to the theme tab

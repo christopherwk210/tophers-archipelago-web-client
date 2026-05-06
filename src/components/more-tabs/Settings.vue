@@ -47,8 +47,8 @@ watch(themeFontSize, () => updateFontSize());
       <legend><strong>{{ t('Settings.settingsGeneral') }}</strong></legend>
 
       <div style="margin-top: 0.5em">
-        <label for="attemptReconnect">{{ t('Settings.settingsLanguage') }}</label>
-        <select style="display: block; width: 100%; max-width: 300px; margin-top: 0.25em;" v-model="$i18n.locale">
+        <label for="language">{{ t('Settings.settingsLanguage') }}</label>
+        <select id="language" style="display: block; width: 100%; max-width: 300px; margin-top: 0.25em;" v-model="$i18n.locale">
           <option v-for="locale in $i18n.availableLocales" :value="locale">{{ (i18n_messages as any)[locale]['MiscUI']['languageName'] }}</option>
         </select>
       </div>
@@ -98,24 +98,36 @@ watch(themeFontSize, () => updateFontSize());
         <label :data-tippy-content="t('Settings.settingsEnableCopyBtnTooltip')" for="hintCopyButtonEnabled">{{ t('Settings.settingsEnableCopyBtn') }}</label>
       </div>
 
+      <div style="margin-top: 1em">
+        <label for="copyLanguage">{{ t('Settings.settingsCopyLanguage') }}</label>
+        <select id="copyLanguage" style="display: block; width: 100%; max-width: 300px; margin-top: 0.25em;" v-model="settings.hintCopyLanguage">
+          <option value="default">{{ t('MiscUI.default') }}</option>
+          <option v-for="locale in $i18n.availableLocales" :value="locale">{{ (i18n_messages as any)[locale]['MiscUI']['languageName'] }}</option>
+        </select>
+      </div>
+
       <div style="margin-top: 1em" class="check-row">
         <label>{{ t('Settings.settingsCopyHintAs') }}</label>
       </div>
       <div class="field-row radio-row">
         <input v-model="settings.hintCopyType" value="markdown" id="markdown" type="radio" name="markdown">
-        <label data-tippy-maxWidth="none" :data-tippy-content="t('Settings.settingsCopyMarkdownTooltip')" for="markdown">{{ t('Settings.settingsCopyMarkdown') }}</label>
+        <!-- <label data-tippy-maxWidth="none" :data-tippy-content="t('Settings.settingsCopyMarkdownTooltip')" for="markdown">{{ t('Settings.settingsCopyMarkdown') }}</label> -->
+        <label data-tippy-maxWidth="none" :data-tippy-content="settings.hintCopyLanguage === 'default' ? t('Settings.settingsCopyMarkdownTooltip') : (i18n_messages as any)[settings.hintCopyLanguage]['Settings']['settingsCopyMarkdownTooltip']" for="markdown">{{ t('Settings.settingsCopyMarkdown') }}</label>
       </div>
       <div class="field-row radio-row">
         <input v-model="settings.hintCopyType" value="plain" id="plain" type="radio" name="plain">
-        <label data-tippy-maxWidth="none" :data-tippy-content="t('Settings.settingsCopyBasicTooltip')" for="plain">{{ t('Settings.settingsCopyBasic') }}</label>
+        <!-- <label data-tippy-maxWidth="none" :data-tippy-content="t('Settings.settingsCopyBasicTooltip')" for="plain">{{ t('Settings.settingsCopyBasic') }}</label> -->
+        <label data-tippy-maxWidth="none" :data-tippy-content="settings.hintCopyLanguage === 'default' ? t('Settings.settingsCopyBasicTooltip') : (i18n_messages as any)[settings.hintCopyLanguage]['Settings']['settingsCopyBasicTooltip']" for="plain">{{ t('Settings.settingsCopyBasic') }}</label>
       </div>
       <div class="field-row radio-row">
         <input v-model="settings.hintCopyType" value="item-name" id="item-name" type="radio" name="item-name">
-        <label :data-tippy-content="t('Settings.settingsCopyItemTooltip')" for="item-name">{{ t('Settings.settingsCopyItem') }}</label>
+        <!-- <label :data-tippy-content="t('Settings.settingsCopyItemTooltip')" for="item-name">{{ t('Settings.settingsCopyItem') }}</label> -->
+        <label :data-tippy-content="settings.hintCopyLanguage === 'default' ? t('Settings.settingsCopyItemTooltip') : (i18n_messages as any)[settings.hintCopyLanguage]['Settings']['settingsCopyItem']" for="item-name">{{ t('Settings.settingsCopyItem') }}</label>
       </div>
       <div class="field-row radio-row">
         <input v-model="settings.hintCopyType" value="ascii" id="ascii" type="radio" name="ascii">
-        <label data-tippy-maxWidth="none" :data-tippy-content="t('Settings.settingsCopyScreamTooltip')" for="ascii">{{ t('Settings.settingsCopyScream') }}</label>
+        <!-- <label data-tippy-maxWidth="none" :data-tippy-content="t('Settings.settingsCopyScreamTooltip')" for="ascii">{{ t('Settings.settingsCopyScream') }}</label> -->
+        <label data-tippy-maxWidth="none" :data-tippy-content="settings.hintCopyLanguage === 'default' ? t('Settings.settingsCopyScreamTooltip') : (i18n_messages as any)[settings.hintCopyLanguage]['Settings']['settingsCopyScreamTooltip']" for="ascii">{{ t('Settings.settingsCopyScream') }}</label>
       </div>
     </fieldset>
 
