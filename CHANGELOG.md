@@ -1,6 +1,6 @@
 # May 6, 2026
 - ⚙️ added localization support
-- ⚙️ added French translation (thank you @Random Penguin and @MajeurTest!)
+- ⚙️ added French translation (thank you @RandomPenguin and @MajeurTest!)
 - ⚙️ added Spanish translation (thank you @M-Cool!)
 - ⚙️ added chat message filtering by message type
 - ⚙️ added new "credits" tab that displays contributors and open source license information

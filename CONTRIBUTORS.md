@@ -6,7 +6,7 @@
   - Assistance with integrating item status/priorities
 - **@MajeurTest**
   - French translations
-- **@Random Penguin**
+- **@RandomPenguin**
   - French translations
 - **@M-Cool**
   - Spanish translations
