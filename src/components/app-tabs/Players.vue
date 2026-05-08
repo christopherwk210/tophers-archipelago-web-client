@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loadPlayers, players } from '@/state/players';
+import { clientStatusMapTranslation, loadPlayers, players } from '@/state/players';
 import { computed, onActivated } from 'vue';
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import PlayerName from '../text-elements/PlayerName.vue';
@@ -22,20 +22,20 @@ async function onShowPlayerProgress(e: Event) {
   }
 }
 
-const columns: Column[] = [
+const columns = computed<Column[]>(() => [
   { label: t('Players.playersColumnTeam'), key: 'team' },
   { label: t('MiscUI.name'), key: 'name' },
   { label: t('MiscUI.status'), key: 'status' },
   { label: t('Players.playersColumnGame'), key: 'game' }
-];
+]);
 
-const columnsWithProgress: Column[] = [
+const columnsWithProgress = computed<Column[]>(() => [
   { label: t('Players.playersColumnTeam'), key: 'team' },
   { label: t('MiscUI.name'), key: 'name' },
   { label: t('Players.playersColumnProgress'), key: 'progress' },
   { label: t('MiscUI.status'), key: 'status' },
   { label: t('Players.playersColumnGame'), key: 'game' }
-];
+]);
 
 const filteredPlayers = computed(() => {
   // Remove the "Archipelago" player
@@ -73,7 +73,16 @@ const filteredPlayers = computed(() => {
         </template>
 
         <template #status="{ item }">
-          <td><span :class="[item.status]">{{ item.status }}</span></td>
+          <td>
+            <span :class="[item.status]">
+              <template v-if="item.clientStatus !== -1 && clientStatusMapTranslation[item.clientStatus]">
+                {{ t(clientStatusMapTranslation[item.clientStatus]!) }}
+              </template>
+              <template v-else>
+                {{ item.status }}
+              </template>
+            </span>
+          </td>
         </template>
 
         <template #progress="{ item }">

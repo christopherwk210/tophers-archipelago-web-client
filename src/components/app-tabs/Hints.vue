@@ -18,21 +18,21 @@ onActivated(async () => {
   loadHints();
 });
 
-const columns: Column[] = [
+const columns = computed<Column[]>(() => [
   { label: t('Texts.textFound'), key: 'found' },
   { label: t('Hints.hintsColumnPlayer'), key: 'player' },
-  { label: t('Hints.hintItem'), key: 'item' },
+  { label: t('Texts.textItem'), key: 'item' },
   { label: t('Hints.hintsColumnOwner'), key: 'owner' },
   { label: t('MiscUI.location'), key: 'location' },
   { label: t('MiscUI.status'), key: 'status', style: 'padding-right: 1em' }
-];
+]);
 
 const computedColumns = computed(() => {
   if (settings.value.hintCopyButtonEnabled) {
-    return [{ label: '', key: 'actions', style: 'width: 30px' }, ...columns];
+    return [{ label: '', key: 'actions', style: 'width: 30px' }, ...columns.value];
   }
 
-  return columns;
+  return columns.value;
 });
 
 const filteredHints = computed(() => {

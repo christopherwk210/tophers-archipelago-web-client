@@ -15,24 +15,24 @@ onActivated(() => {
   loadCollectedItems();
 });
 
-const columns: Column[] = [
+const columns = computed<Column[]>(() => [
   { label: '', key: '_check_image' },
   { label: t('Collected.collectedOrder'), key: 'order' },
   { label: t('MiscUI.name'), key: 'name' },
   { label: t('Collected.collectedSender'), key: 'sender' },
   { label: t('Collected.collectedSourceGame'), key: 'locationGame' },
-  { label: t('Locations.locationSelect'), key: 'location' }
-];
+  { label: t('MiscUI.location'), key: 'location' }
+]);
 
 const search = ref('');
 const filteredCollected = computed(() => {
   return tracker.collected.filter(item => item.name.toLowerCase().includes(search.value.toLowerCase()));
 });
 
-const simplifiedColumns: Column[] = [
+const simplifiedColumns = computed<Column[]>(() => [
   { label: t('Collected.collectedQuantity'), key: 'count', style: 'width: 80px' },
   { label: t('MiscUI.name'), key: 'name' }
-];
+]);
 
 const simplifiedCollected = computed(() => {
   const itemCounts: Record<string, { count: number; iclass: ItemClass[]; }> = {};

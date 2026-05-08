@@ -14,10 +14,10 @@ onActivated(() => {
   loadLocations();
 });
 
-const columns: Column[] = [
+const columns = computed<Column[]>(() => [
   { label: t('Locations.locationColumnChecked'), key: 'checked', style: 'width: 100px;' },
   { label: t('MiscUI.name'), key: 'name' }
-];
+]);
 
 const selectedLocation = ref<TrackerLocation>();
 

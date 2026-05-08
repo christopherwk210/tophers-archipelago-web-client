@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppTable, { type Column } from '@/components/AppTable.vue';
 import { localAccounts, type Account } from '@/lib/accounts';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import check from '@/assets/icons/check.png';
 import minus from '@/assets/icons/minus.png';
 import { ui } from '@/state/ui';
@@ -9,10 +9,10 @@ import { useLocalization } from '@/lib/localization-util';
 
 const { t } = useLocalization();
 
-const columns: Column[] = [
+const columns = computed<Column[]>(() => [
   { label: t('Accounts.accountsSlot'), key: 'slot' },
   { label: t('Accounts.accountsUrl'), key: 'url' }
-];
+]);
 
 const selectedAccount = ref<Account>();
 

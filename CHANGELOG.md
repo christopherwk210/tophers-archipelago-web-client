@@ -1,3 +1,9 @@
+# May 8, 2026
+- 🐛 fixed location column in tracker tab using the wrong translation
+- 🐛 fixed table columns not updating their translation on language change
+- 🐛 fixed player connection status not translating
+- 🐛 fixed hints table item column using the wrong translation
+
 # May 6, 2026
 - ⚙️ added localization support
 - ⚙️ added French translation (thank you @RandomPenguin and @MajeurTest!)
