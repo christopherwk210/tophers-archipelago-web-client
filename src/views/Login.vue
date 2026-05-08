@@ -82,6 +82,7 @@ async function connect() {
     slot: playerSlot.slot,
     game: playerSlot.game,
     team: playerSlot.team,
+    clientStatus: playerSlot.slot
   }));
 
   // Reset the loading state
