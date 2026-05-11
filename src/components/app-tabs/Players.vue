@@ -101,7 +101,7 @@ const filteredPlayers = computed(() => {
       </AppTable>
     </div>
     <div class="totals">
-      <strong class="totals-label">{{ t('Players.playersTotals') }}</strong>
+      <strong class="totals-label"><code>{{ t('Players.playersTotals') }}</code></strong>
       <span>
         {{ t('Players.playersCompletedLabel') }}
         <strong>{{ filteredPlayers.filter(player => player.status === 'Completed').length }}/{{ filteredPlayers.length }}</strong>
@@ -173,8 +173,10 @@ td {
   flex-wrap: wrap;
 }
 
-.totals-label {
-  font-family: monospace !important;
+.totals-label code {
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
 }
 
 .totals {
