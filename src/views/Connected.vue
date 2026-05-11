@@ -90,7 +90,7 @@ onBeforeUnmount(() => uninitKonami());
           </em>
         </div>
         <div class="title-bar-controls">
-          <select v-model="accountSwitcher" v-if="hasMultipleAccounts" style="width: 160px">
+          <select v-model="accountSwitcher" v-if="hasMultipleAccounts" class="account-switcher-drop-down">
             <option disabled :value="-1">{{ t('Accounts.accountsSwitchAccount') }}</option>
             <option v-for="(account, accountIndex) of switchAccountList" :value="accountIndex">{{ account.slot }}</option>
             <option :value="-2">{{ t('Accounts.accountsLogout') }}</option>
@@ -158,6 +158,12 @@ input {
 
 .title-bar-url {
   margin-left: 1em;
+}
+
+.account-switcher-drop-down {
+  field-sizing: content;
+  width: 100%;
+  max-width: 200px;
 }
 
 @media (max-width: 500px) {

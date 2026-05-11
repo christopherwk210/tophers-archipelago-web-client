@@ -19,10 +19,5 @@ Features:
 - Audio notifications
 - Sortable & searchable tables
 - No download required
+- Translated into multiple languages
 - TONS more
-
-Libraries:
-
-- [archipelago.js](https://github.com/ThePhar/archipelago.js)
-- [98.css](https://github.com/jdan/98.css)
-- [vue](https://github.com/vuejs/core)

@@ -100,6 +100,24 @@ const filteredPlayers = computed(() => {
         </template>
       </AppTable>
     </div>
+    <div class="totals">
+      <strong class="totals-label">{{ t('Players.playersTotals') }}</strong>
+      <span>
+        {{ t('Players.playersCompletedLabel') }}
+        <strong>{{ filteredPlayers.filter(player => player.status === 'Completed').length }}/{{ filteredPlayers.length }}</strong>
+      </span>
+      <template v-if="settings.showPlayerProgress && filteredPlayers.every(player => player.progressTotal !== undefined) && filteredPlayers.every(player => player.progressCollected !== undefined)">
+        <span>|</span>
+        <span>
+          {{ t('Players.playersChecksLabel') }}
+          <strong>{{ filteredPlayers.reduce((acc, player) => acc + player.progressCollected!, 0) }}/{{ filteredPlayers.reduce((acc, player) => acc + player.progressTotal!, 0) }}</strong>
+        </span>
+        <span>|</span>
+        <span>
+          <strong>{{ Math.round((filteredPlayers.reduce((acc, player) => acc + player.progressCollected!, 0) / filteredPlayers.reduce((acc, player) => acc + player.progressTotal!, 0)) * 100) }}%</strong>
+        </span>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -153,5 +171,14 @@ td {
   gap: 1em;
   margin-top: 0.5em;
   flex-wrap: wrap;
+}
+
+.totals-label {
+  font-family: monospace !important;
+}
+
+.totals {
+  display: flex;
+  gap: 1em;
 }
 </style>

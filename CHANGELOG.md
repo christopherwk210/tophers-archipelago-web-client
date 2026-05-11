@@ -1,3 +1,8 @@
+# May 11, 2026
+- ⚙️ added "totals" section to the bottom of the players tab
+- ✨ account switcher drop down box now resizes to fit text on most browsers to better support translations
+- ✨ updated translations
+
 # May 8, 2026
 - 🐛 fixed location column in tracker tab using the wrong translation
 - 🐛 fixed table columns not updating their translation on language change
