@@ -30,6 +30,7 @@ ideas
 *.tsbuildinfo
 
 .eslintcache
+build/
 
 # Cypress
 /cypress/videos/

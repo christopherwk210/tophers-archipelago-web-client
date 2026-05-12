@@ -1,0 +1,39 @@
+{
+  "applicationId": "com.topheranselmo.tawc",
+  "version": "1.0.0",
+  "applicationName": "Topher's Archipelago Web Client",
+  "author": "Topher Anselmo",
+  "defaultMode": "browser",
+  "description": "Topher's Archipelago Web Client",
+  "documentRoot": "/dist/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": false,
+  "storageLocation": "system",
+  "nativeAllowList": [
+    "app.*"
+  ],
+  "logging": {
+    "enabled": false
+  },
+  "modes": {
+    "window": {
+      "title": "Topher's Archipelago Web Client",
+      "width": 1024,
+      "height": 768,
+      "minWidth": 400,
+      "minHeight": 500,
+      "icon": "/dist/web-app-manifest-192x192.png",
+      "center": true,
+      "exitProcessOnClose": true
+    }
+  },
+  "cli": {
+    "binaryName": "tawc",
+    "resourcesPath": "/dist/",
+    "extensionsPath": "/extensions/",
+    "binaryVersion": "6.7.0",
+    "clientVersion": "6.7.0",
+    "distributionPath": "/build"
+  }
+}

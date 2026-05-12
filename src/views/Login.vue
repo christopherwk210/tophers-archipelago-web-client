@@ -123,8 +123,7 @@ async function cancel() {
   window.location.reload();
 }
 
-// const hasMultipleAccounts = computed(() => localAccounts.value.length > 1);
-const hasMultipleAccounts = computed(() => true);
+const hasMultipleAccounts = computed(() => localAccounts.value.length > 1);
 const switchAccountList = computed(() => localAccounts.value);
 
 const accountSwitcher = ref(-1);

@@ -11,7 +11,8 @@
     "type-check": "vue-tsc --build",
     "postinstall": "patch-package && npm run credits",
     "language": "node ./tools/parse-localization.js",
-    "credits": "npx @opengovsg/credits-generator"
+    "credits": "npx @opengovsg/credits-generator",
+    "neu:build": "neu build --release"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
@@ -33,6 +34,7 @@
     "xp.css": "^0.2.6"
   },
   "devDependencies": {
+    "@neutralinojs/neu": "^11.7.1",
     "@opengovsg/credits-generator": "^1.0.7",
     "@tsconfig/node24": "^24.0.4",
     "@types/file-saver": "^2.0.7",
