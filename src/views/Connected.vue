@@ -9,17 +9,17 @@ import { useIntervalFn } from '@vueuse/core';
 import { client } from '@/lib/archipelago';
 import { AppStorage } from '@/lib/storage';
 import { settings } from '@/state/settings';
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { localAccounts } from '@/lib/accounts';
 import MouseToast from '@/components/MouseToast.vue';
 import { initKonami, uninitKonami } from '@/lib/easter-egg';
 import { translateInternals, useLocalization } from '@/lib/localization-util';
+import { Server } from '@/server';
+import Cursors from '@/server/Cursors.vue';
 
 const router = useRouter();
 
 const { t } = useLocalization();
-
-const url = ref(AppStorage.get('url') || '');
 
 function logout() {
   router.push('/');
@@ -74,7 +74,17 @@ watch(accountSwitcher, () => {
 init();
 translateInternals();
 initKonami();
-onBeforeUnmount(() => uninitKonami());
+
+const server: Server = new Server();
+
+onMounted(() => {
+  server.mount(self.slot, self.url);
+});
+
+onBeforeUnmount(() => {
+  uninitKonami();
+  server.unmount();
+});
 </script>
 
 <template>
@@ -86,7 +96,7 @@ onBeforeUnmount(() => uninitKonami());
           <span style="margin: 0 1em">|</span>
           <em style="font-weight: 400;">
             {{ self.slot }}
-            <span v-if="settings.uiShowUrlTitle" class="title-bar-url">{{ url }}</span>
+            <span v-if="settings.uiShowUrlTitle" class="title-bar-url">{{ self.url }}</span>
           </em>
         </div>
         <div class="title-bar-controls">
@@ -108,6 +118,7 @@ onBeforeUnmount(() => uninitKonami());
     </div>
 
     <MouseToast />
+    <Cursors v-if="settings.serverCursorsEnable" :cursor-manager="server.cursorManager.value" />
   </div>
 </template>
 

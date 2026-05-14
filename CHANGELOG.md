@@ -1,3 +1,8 @@
+# May 14, 2026
+- ⚙️ added multiplayer cursors
+- 🪛 added setting to toggle multiplayer cursors
+- 🪛 added settings to customize your cursor and use it locally
+
 # May 11, 2026
 - ⚙️ added "totals" section to the bottom of the players tab
 - ✨ account switcher drop down box now resizes to fit text on most browsers to better support translations

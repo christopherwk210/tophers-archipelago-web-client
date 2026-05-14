@@ -147,3 +147,9 @@ label[data-tippy-content], button[data-tippy-content] {
   text-decoration: underline dotted;
   text-decoration-thickness: 1px;
 }
+
+.cursor-image {
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.4));
+  width: 32px;
+  height: 32px;
+}

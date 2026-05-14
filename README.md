@@ -20,4 +20,6 @@ Features:
 - Sortable & searchable tables
 - No download required
 - Translated into multiple languages
-- TONS more
+- Multiplayer features
+
+Multiplayer features rely on a server, code found [here](https://github.com/christopherwk210/tawc-server).

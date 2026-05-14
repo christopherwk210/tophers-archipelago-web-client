@@ -4,6 +4,8 @@ import { Howler } from 'howler';
 import { BitField } from '@/lib/bit-field';
 import { getPreferredLocale, translateInternals } from '@/lib/localization-util';
 import type { i18n_messages } from '@/localization';
+import { cursorAssets, type CursorImage } from '@/server/cursor-assets';
+import { useCssVar } from '@vueuse/core';
 
 export enum ChatFilterFlag {
   UNCLASSIFIED = 1,
@@ -61,15 +63,60 @@ export const settings = ref({
   uiShowUrlTitle: true,
   
   // Chat settings
-  chatFilterFlags: filterFlags.value
+  chatFilterFlags: filterFlags.value,
+
+  // Server settings
+  serverCursorsEnable: true,
+  serverCursorsShowLocal: false,
+  serverCursorsOpacity: 0.6,
+  serverCursorsImage: 'dot_large' as CursorImage,
+  serverCursorsColor: '#ffffff'
 } satisfies Record<string, any>);
 
 export function chatFilterHasFlag(flag: ChatFilterFlag) {
   return new BitField<ChatFilterFlag>(settings.value.chatFilterFlags).has(flag);
 }
 
+// const cursorPrimaryFill = useCssVar('--tawc-cursor-my-primary-fill');
+// const cursorSecondaryFill = useCssVar('--tawc-cursor-my-secondary-fill');
+const cursorOffsetX = useCssVar('--tawc-cursor-my-offset-x');
+const cursorOffsetY = useCssVar('--tawc-cursor-my-offset-y');
+const cursorUrl = useCssVar('--tawc-cursor-my-url');
+const globalCursorOpacity = useCssVar('--tawc-cursor-opacity');
+
+function updateCursor() {
+  globalCursorOpacity.value = settings.value.serverCursorsOpacity.toString();
+
+  if (settings.value.serverCursorsShowLocal) {
+    document.body.classList.add('use-local-cursors');
+  } else {
+    document.body.classList.remove('use-local-cursors');
+  }
+
+  const cursorAsset = cursorAssets[settings.value.serverCursorsImage];
+
+  const hex = settings.value.serverCursorsColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  const secondaryColor = `rgb(${Math.max(0, r - 30)}, ${Math.max(0, g - 30)}, ${Math.max(0, b - 30)})`;
+
+  // cursorPrimaryFill.value = settings.value.serverCursorsColor;
+  // cursorSecondaryFill.value = secondaryColor;
+  cursorOffsetX.value = Math.abs(cursorAsset.offset.x).toString();
+  cursorOffsetY.value = Math.abs(cursorAsset.offset.y).toString();
+
+  const updatedCursorSVG = cursorAsset.asset_raw
+    .replace(/var\(--tawc-cursor-primary-fill\)/g, settings.value.serverCursorsColor)
+    .replace(/var\(--tawc-cursor-secondary-fill\)/g, secondaryColor);
+
+  cursorUrl.value = `url("data:image/svg+xml;base64,${btoa(updatedCursorSVG)}")`;
+}
+
 // Automatically store settings when they change
 watch(settings, () => {
+  updateCursor();
   AppStorage.setJSON('settings', settings.value);
   Howler.volume(settings.value.notificationsVolume);
   translateInternals();

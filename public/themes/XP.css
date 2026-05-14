@@ -24,6 +24,10 @@
   background: #2267cb !important;
 }
 
+input[type=checkbox]:checked+label:after {
+  top: unset;
+}
+
 @media (max-width: 660px) {
   .login:before {
     font-size: 1.5rem;

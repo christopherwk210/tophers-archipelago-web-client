@@ -10,3 +10,7 @@
   - French translations
 - **@M-Cool**
   - Spanish translations
+
+## Extra credits:
+
+- Cursor icons: https://kenney.nl/

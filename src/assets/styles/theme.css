@@ -19,8 +19,22 @@
   --theme-status-no-priority: #00adad;
 
   --theme-font-size: 16px;
+
+  --tawc-cursor-primary-fill: #ffffff;
+  --tawc-cursor-secondary-fill: #cccccc;
+  --tawc-cursor-opacity: 0.6;
+
+  --tawc-cursor-my-primary-fill: #ffffff;
+  --tawc-cursor-my-secondary-fill: #cccccc;
+  --tawc-cursor-my-offset-x: 0;
+  --tawc-cursor-my-offset-y: 0;
+  --tawc-cursor-my-url: url('');
 }
 
 #app menu[role=tablist]>li>a {
   cursor: default;
+}
+
+.use-local-cursors, .use-local-cursors * {
+  cursor: var(--tawc-cursor-my-url) var(--tawc-cursor-my-offset-x) var(--tawc-cursor-my-offset-y), auto !important;
 }

@@ -8,6 +8,7 @@ import ChatSettings from './Settings/ChatSettings.vue';
 import { useLocalization } from '@/lib/localization-util';
 import { useI18n } from 'vue-i18n';
 import { i18n_messages } from '@/localization';
+import ServerSettings from './Settings/ServerSettings.vue';
 
 const { t } = useLocalization();
 
@@ -193,6 +194,8 @@ watch(themeFontSize, () => updateFontSize());
         </div>
       </div>
     </fieldset>
+
+    <ServerSettings />
 
     <fieldset class="mt-3">
       <legend><strong>{{ t('Settings.settingsMisc') }}</strong></legend>
