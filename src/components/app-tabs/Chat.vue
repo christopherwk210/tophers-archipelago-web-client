@@ -215,7 +215,7 @@ function getLinkMediaType(link: string): 'video' | 'image' | null {
 
       <!-- User command message -->
       <div v-else-if="message.type === 'user-command'" class="message">
-        <pre style="background: #c0c0c0">{{ message.content }}</pre>
+        <pre style="background: #c0c0c0" v-sanitize="message.content"></pre>
       </div>
 
       <!-- Tutorial message -->
@@ -472,5 +472,9 @@ input {
 .copy-btn svg {
   width: 1.2em;
   height: 1.2em;
+}
+
+.message pre {
+  white-space: pre-wrap;
 }
 </style>

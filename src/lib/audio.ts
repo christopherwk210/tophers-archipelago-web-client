@@ -15,6 +15,6 @@ const sounds = {
 
 export function playSound(name: keyof typeof sounds) {
   const sound = sounds[name];
-  if (sound.playing()) sound.stop();
+  sound.stop();
   sound.play();
 }

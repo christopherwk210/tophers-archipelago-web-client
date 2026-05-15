@@ -41,6 +41,15 @@ const filteredPlayers = computed(() => {
   // Remove the "Archipelago" player
   return players.value.filter(player => player.name !== 'Archipelago');
 });
+
+const totalProgress = computed(() => {
+  const progress = ((filteredPlayers.value.reduce((acc, player) => acc + player.progressCollected!, 0) / filteredPlayers.value.reduce((acc, player) => acc + player.progressTotal!, 0)) * 100)
+  if (settings.value.showPlayerDecimal) {
+    return progress.toFixed(2);
+  } else {
+    return Math.round(progress);
+  }
+});
 </script>
 
 <template>
@@ -100,6 +109,7 @@ const filteredPlayers = computed(() => {
         </template>
       </AppTable>
     </div>
+
     <div class="totals">
       <strong class="totals-label"><code>{{ t('Players.playersTotals') }}</code></strong>
       <span>
@@ -114,7 +124,7 @@ const filteredPlayers = computed(() => {
         </span>
         <span>|</span>
         <span>
-          <strong>{{ Math.round((filteredPlayers.reduce((acc, player) => acc + player.progressCollected!, 0) / filteredPlayers.reduce((acc, player) => acc + player.progressTotal!, 0)) * 100) }}%</strong>
+          <strong>{{ totalProgress }}%</strong>
         </span>
       </template>
     </div>

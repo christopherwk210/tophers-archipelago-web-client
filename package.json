@@ -30,6 +30,7 @@
     "vue": "^3.5.28",
     "vue-i18n": "^11.4.0",
     "vue-router": "^5.0.2",
+    "vue-sanitize-directive": "^0.2.1",
     "xp.css": "^0.2.6"
   },
   "devDependencies": {

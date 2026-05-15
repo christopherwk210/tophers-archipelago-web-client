@@ -1,3 +1,10 @@
+# May 15, 2026
+- ✨ when using precise progress on the player tab, the total progress at the bottom now also displays up to two decimal places
+- ✨ updated translations
+- 🐛 fixed command related messages causing horizontal scrollbars on small screen sizes
+- 🐛 fixed some messages from the archipelago not rendering HTML character entities properly
+- 🐛 when releasing, the item notify sound now only plays once
+
 # May 14, 2026
 - ⚙️ added multiplayer cursors
 - 🪛 added setting to toggle multiplayer cursors
